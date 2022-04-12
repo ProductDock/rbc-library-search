@@ -9,8 +9,8 @@ import java.util.*;
 public record SearchApi(BookIndexRepository bookRepository, BookService bookService) {
 
     @GetMapping
-    public CountableCollectionDto findBook(@RequestParam(required = false) Optional<List<String>> topics,
-                                           @RequestParam int page) {
+    public SearchBooksResponse findBook(@RequestParam(required = false) Optional<List<String>> topics,
+                                        @RequestParam int page) {
         return bookService.getBooks(topics, page);
     }
 }

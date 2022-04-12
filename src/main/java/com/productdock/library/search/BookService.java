@@ -3,7 +3,6 @@ package com.productdock.library.search;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,13 +12,9 @@ public record BookService(BookIndexRepository bookIndexRepository,
                           BookMapper bookMapper) {
 
 
-    public CountableCollectionDto getBooks(Optional<List<String>> topics, int page) {
-        List<String> topicsForQuery = new ArrayList<>();
-        if (topics.isPresent())
-            topicsForQuery = topics.get();
-
-        SearchHits<BookIndex> hits = searchQueryExecutor.execute(topicsForQuery,page);
-        return bookMapper.toCountableCollectionDto(hits.getTotalHits(),
-                hits.stream().map(hit -> bookMapper.toBookDto(hit.getContent())).toList());
+    public SearchBooksResponse getBooks(Optional<List<String>> topics, int page) {
+        SearchHits<BookIndex> hits = searchQueryExecutor.execute(topics,page);
+        return new SearchBooksResponse(hits.getTotalHits(),
+                bookMapper.toBookDtoCollection(hits.stream().map(hit -> hit.getContent()).toList()));
     }
 }
