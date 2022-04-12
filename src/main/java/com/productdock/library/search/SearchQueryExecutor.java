@@ -1,5 +1,6 @@
 package com.productdock.library.search;
 
+import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHits;
@@ -13,13 +14,14 @@ import java.util.Optional;
 @Service
 public record SearchQueryExecutor(ElasticsearchOperations elasticsearchOperations) {
 
-    private static final int PAGE_SIZE = 2;
+    private static final int PAGE_SIZE = 18;
 
     public SearchHits<BookIndex> execute(Optional<List<String>> topicsFilter, int page) {
-        QueryBuilderDecorator queryBuilder = new QueryBuilderDecorator();
-        topicsFilter.ifPresent(list -> queryBuilder.addTopicsCriteria(list));
+        BoolQueryBuilder boolQueryBuilder = new BoolQueryBuilder();
+        QueryBuilderDecorator enrichedBuilder = new QueryBuilderDecorator(boolQueryBuilder);
+        topicsFilter.ifPresent(list -> enrichedBuilder.addTopicsCriteria(list));
         Query searchQuery = new NativeSearchQueryBuilder()
-                .withQuery(queryBuilder.getBuilder())
+                .withQuery(boolQueryBuilder)
                 .withPageable(PageRequest.of(page, PAGE_SIZE))
                 .build();
 

@@ -1,20 +1,18 @@
 package com.productdock.library.search;
 
-import lombok.Getter;
 import lombok.NonNull;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 
 import java.util.List;
 
-public class QueryBuilderDecorator extends BoolQueryBuilder {
+public class QueryBuilderDecorator  {
 
     @NonNull
-    @Getter
     private BoolQueryBuilder builder;
 
-    public QueryBuilderDecorator() {
-        builder = new BoolQueryBuilder();
+    public QueryBuilderDecorator(BoolQueryBuilder builder) {
+        this.builder = builder;
     }
 
     public void addTopicsCriteria(List<String> topics) {
