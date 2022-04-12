@@ -13,7 +13,7 @@ public record BookService(BookIndexRepository bookIndexRepository,
 
 
     public SearchBooksResponse getBooks(Optional<List<String>> topics, int page) {
-        SearchHits<BookIndex> hits = searchQueryExecutor.execute(topics,page);
+        SearchHits<BookIndex> hits = searchQueryExecutor.execute(topics, page);
         return new SearchBooksResponse(hits.getTotalHits(),
                 bookMapper.toBookDtoCollection(hits.stream().map(hit -> hit.getContent()).toList()));
     }

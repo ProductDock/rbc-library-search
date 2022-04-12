@@ -6,7 +6,7 @@ import org.elasticsearch.index.query.QueryBuilders;
 
 import java.util.List;
 
-public class QueryBuilderDecorator  {
+public class QueryBuilderDecorator {
 
     @NonNull
     private BoolQueryBuilder builder;
@@ -16,7 +16,7 @@ public class QueryBuilderDecorator  {
     }
 
     public void addTopicsCriteria(List<String> topics) {
-        for (String topic: topics) {
+        for (String topic : topics) {
             builder.should(QueryBuilders.matchQuery(SearchFields.TOPICS_NAME, topic));
         }
     }
