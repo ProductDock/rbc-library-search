@@ -55,6 +55,12 @@ public class SearchServiceShould {
                 secondHit
         ).collect(toList());
 
-        return new SearchHitsImpl<>(bookIndices.size(), null, 0, null, bookIndices, null, null);
+        return new SearchHitsImpl<>(bookIndices.size(),
+                null,
+                0,
+                null,
+                bookIndices,
+                null,
+                null);
     }
 }
