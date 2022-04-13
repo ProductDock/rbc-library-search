@@ -12,9 +12,14 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public record SearchQueryExecutor(ElasticsearchOperations elasticsearchOperations) {
+public class SearchQueryExecutor {
 
     private static final int PAGE_SIZE = 18;
+    private ElasticsearchOperations elasticsearchOperations;
+
+    SearchQueryExecutor(ElasticsearchOperations elasticsearchOperations) {
+        this.elasticsearchOperations = elasticsearchOperations;
+    }
 
     public SearchHits<BookIndex> execute(Optional<List<String>> topicsFilter, int page) {
         BoolQueryBuilder boolQueryBuilder = new BoolQueryBuilder();

@@ -1,8 +1,6 @@
 package com.productdock.library.search;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
@@ -10,6 +8,7 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import java.util.Set;
 
+@Builder
 @Getter
 @Setter
 @AllArgsConstructor
@@ -29,6 +28,7 @@ public class BookIndex {
     @Field(type = FieldType.Text)
     private String cover;
 
+    @Singular
     @Field(type = FieldType.Nested, includeInParent = true)
     private Set<Topic> topics;
 }

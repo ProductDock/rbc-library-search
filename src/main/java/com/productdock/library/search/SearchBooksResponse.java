@@ -9,5 +9,5 @@ public class SearchBooksResponse {
     @NonNull
     public long count;
     @NonNull
-    public Iterable<BookDto> items;
+    public Iterable<BookDto> books;
 }
