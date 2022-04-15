@@ -15,13 +15,8 @@ public class KafkaTestProducer {
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
 
-    public void send(String topic, InsertBook payload) {
-        String message = "";
-        try {
-            message = OBJECT_MAPPER.writeValueAsString(payload);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+    public void send(String topic, InsertBook payload) throws JsonProcessingException {
+        String message =  OBJECT_MAPPER.writeValueAsString(payload);
         kafkaTemplate.send(topic, message);
     }
 }

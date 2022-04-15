@@ -1,6 +1,7 @@
 package com.productdock.library.search;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.productdock.library.search.data.provider.KafkaTestProducer;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ public class IndexingNewBookTest extends IntegrationTestBase {
     private String topic;
 
     @Test
-    void shouldSaveBookIndex_whenMessageReceived() {
+    void shouldSaveBookIndex_whenMessageReceived() throws Exception {
         var insertBook = defaultInsertBookMessageBuilder().id("123").author("Book author").build();
 
         producer.send(topic, insertBook);
