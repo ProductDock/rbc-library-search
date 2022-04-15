@@ -1,4 +1,4 @@
-package com.productdock.library.search;
+package com.productdock.library.search.elastic.document;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

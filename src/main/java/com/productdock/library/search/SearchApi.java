@@ -6,7 +6,7 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/api/search")
-public record SearchApi(BookIndexRepository bookRepository, BookService bookService) {
+public record SearchApi(BookService bookService) {
 
     @GetMapping
     public SearchBooksResponse findBook(@RequestParam(required = false) Optional<List<String>> topics,

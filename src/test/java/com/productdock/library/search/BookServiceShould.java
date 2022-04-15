@@ -1,5 +1,6 @@
 package com.productdock.library.search;
 
+import com.productdock.library.search.elastic.document.BookDocument;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -25,7 +26,7 @@ public class BookServiceShould {
     private BookService bookService;
 
     @Mock
-    private BookIndexRepository bookIndexRepository;
+    private BookDocumentRepository bookDocumentRepository;
 
     @Mock
     private SearchQueryExecutor searchQueryExecutor;
@@ -46,11 +47,11 @@ public class BookServiceShould {
         assertThat(books.books).hasSize(2);
     }
 
-    private SearchHits<BookIndex> aBookSearchHits() {
-        SearchHit<BookIndex> firstHit = mock(SearchHit.class);
-        SearchHit<BookIndex> secondHit = mock(SearchHit.class);
+    private SearchHits<BookDocument> aBookSearchHits() {
+        SearchHit<BookDocument> firstHit = mock(SearchHit.class);
+        SearchHit<BookDocument> secondHit = mock(SearchHit.class);
 
-        List<SearchHit<BookIndex>> bookIndices = of(
+        List<SearchHit<BookDocument>> bookIndices = of(
                 firstHit,
                 secondHit
         ).collect(toList());

@@ -1,12 +1,13 @@
 package com.productdock.library.search;
 
+import com.productdock.library.search.elastic.document.Topic;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static com.productdock.library.search.data.provider.BookIndexMother.defaultBook;
-import static com.productdock.library.search.data.provider.BookIndexMother.defaultBookBuilder;
+import static com.productdock.library.search.data.provider.BookDocumentMother.defaultBook;
+import static com.productdock.library.search.data.provider.BookDocumentMother.defaultBookBuilder;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -23,7 +24,7 @@ public class SearchApiTest extends IntegrationTestBase {
     private MockMvc mockMvc;
 
     @Autowired
-    private BookIndexRepository bookIndexRepository;
+    private BookDocumentRepository bookDocumentRepository;
 
 
     @Nested
@@ -61,7 +62,7 @@ public class SearchApiTest extends IntegrationTestBase {
             topic.setName(topicName);
             var book = defaultBookBuilder().title(title).topic(topic).build();
 
-            bookIndexRepository.save(book);
+            bookDocumentRepository.save(book);
         }
     }
 
@@ -96,12 +97,12 @@ public class SearchApiTest extends IntegrationTestBase {
 
         private void givenAnyBook() {
             var book = defaultBook();
-            bookIndexRepository.save(book);
+            bookDocumentRepository.save(book);
         }
 
         private void givenSecondPageOfResults() {
             var book = defaultBookBuilder().title("Second Page Title").build();
-            bookIndexRepository.save(book);
+            bookDocumentRepository.save(book);
         }
 
     }

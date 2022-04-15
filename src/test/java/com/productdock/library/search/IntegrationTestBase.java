@@ -1,6 +1,7 @@
 package com.productdock.library.search;
 
 import com.productdock.library.search.config.ElasticsearchTestContainer;
+import com.productdock.library.search.elastic.document.BookDocument;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -44,7 +45,7 @@ public class IntegrationTestBase {
     }
 
     private void recreateIndex() {
-        IndexOperations indexOperations = elasticsearchOperations.indexOps(BookIndex.class);
+        IndexOperations indexOperations = elasticsearchOperations.indexOps(BookDocument.class);
         if (indexOperations.exists()) {
             indexOperations.delete();
         }

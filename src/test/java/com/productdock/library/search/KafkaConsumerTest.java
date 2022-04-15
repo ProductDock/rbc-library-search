@@ -21,7 +21,7 @@ public class KafkaConsumerTest extends IntegrationTestBase {
     private KafkaTestProducer producer;
 
     @Autowired
-    private BookIndexRepository bookIndexRepository;
+    private BookDocumentRepository bookDocumentRepository;
 
     @Value("${spring.kafka.topic.insert-book-topic}")
     private String topic;
@@ -33,8 +33,8 @@ public class KafkaConsumerTest extends IntegrationTestBase {
         producer.send(topic, insertBook);
         await()
                 .atMost(Duration.ofSeconds(20))
-                .until(() -> bookIndexRepository.findById("123").isPresent());
-        assertThat(bookIndexRepository.findById("123").get().getAuthor()).isEqualTo("Book author");
+                .until(() -> bookDocumentRepository.findById("123").isPresent());
+        assertThat(bookDocumentRepository.findById("123").get().author).isEqualTo("Book author");
     }
 
 

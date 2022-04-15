@@ -1,5 +1,6 @@
 package com.productdock.library.search;
 
+import com.productdock.library.search.elastic.document.BookDocument;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
@@ -21,7 +22,7 @@ public class SearchQueryExecutor {
         this.elasticsearchOperations = elasticsearchOperations;
     }
 
-    public SearchHits<BookIndex> execute(Optional<List<String>> topicsFilter, int page) {
+    public SearchHits<BookDocument> execute(Optional<List<String>> topicsFilter, int page) {
         BoolQueryBuilder boolQueryBuilder = new BoolQueryBuilder();
         QueryBuilderDecorator enrichedBuilder = new QueryBuilderDecorator(boolQueryBuilder);
         topicsFilter.ifPresent(list -> enrichedBuilder.addTopicsCriteria(list));
@@ -30,6 +31,6 @@ public class SearchQueryExecutor {
                 .withPageable(PageRequest.of(page, PAGE_SIZE))
                 .build();
 
-        return elasticsearchOperations.search(searchQuery, BookIndex.class);
+        return elasticsearchOperations.search(searchQuery, BookDocument.class);
     }
 }
