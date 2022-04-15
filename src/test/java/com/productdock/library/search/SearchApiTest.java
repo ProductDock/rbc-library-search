@@ -59,7 +59,7 @@ public class SearchApiTest extends IntegrationTestBase {
 
         private void givenABookBelongingToTopic(String topicName, String title) {
             var topic = new Topic();
-            topic.setName(topicName);
+            topic.name = topicName;
             var book = defaultBookBuilder().title(title).topic(topic).build();
 
             bookDocumentRepository.save(book);
