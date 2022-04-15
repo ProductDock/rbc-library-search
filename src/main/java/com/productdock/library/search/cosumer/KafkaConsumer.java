@@ -13,6 +13,6 @@ public record KafkaConsumer(BookService bookService,
     @KafkaListener(topics = "${spring.kafka.topic.insert-book-topic}",
             containerFactory = "insertBookMessageKafkaListenerContainerFactory")
     public synchronized void listen(InsertBook insertBookMessage) {
-        bookService.save(bookMapper.toBookIndex(insertBookMessage));
+        bookService.save(bookMapper.toBookDocument(insertBookMessage));
     }
 }

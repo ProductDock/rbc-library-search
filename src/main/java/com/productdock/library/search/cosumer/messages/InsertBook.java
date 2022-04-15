@@ -3,6 +3,7 @@ package com.productdock.library.search.cosumer.messages;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
+import lombok.Singular;
 
 import java.util.List;
 
@@ -15,6 +16,7 @@ public class InsertBook {
     public String title;
     public String cover;
     public String author;
+    @Singular
     public List<BookTopic> topics;
 }
 

@@ -18,9 +18,8 @@ public class InsertBookMessageMother {
     private static final String defaultTopicId = "1";
     private static final String defaultTopicName = "::topic::";
 
-    private static final List<BookTopic> defaultTopics = of(
-            BookTopic.builder().id(defaultTopicId).name(defaultTopicName).build()
-    ).collect(toList());
+    private static final BookTopic defaultTopic =
+            BookTopic.builder().id(defaultTopicId).name(defaultTopicName).build();
 
     public static InsertBook.InsertBookBuilder defaultInsertBookMessageBuilder() {
         return InsertBook.builder()
@@ -28,7 +27,7 @@ public class InsertBookMessageMother {
                 .title(defaultTitle)
                 .author(defaultAuthor)
                 .cover(defaultCover)
-                .topics(defaultTopics);
+                .topic(defaultTopic);
     }
 
     public static InsertBook defaultInsertBookMessage() {

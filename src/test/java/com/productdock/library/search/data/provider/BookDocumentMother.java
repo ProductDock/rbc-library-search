@@ -9,7 +9,7 @@ public class BookDocumentMother {
     private static final String defaultAuthor = "::author::";
     private static final String defaultCover = null;
 
-    public static BookDocument.BookDocumentBuilder defaultBookBuilder() {
+    public static BookDocument.BookDocumentBuilder defaultBookDocumentBuilder() {
         return BookDocument.builder()
                 .id(defaultId)
                 .title(defaultTitle)
@@ -17,8 +17,8 @@ public class BookDocumentMother {
                 .cover(defaultCover);
     }
 
-    public static BookDocument defaultBook() {
-        return defaultBookBuilder().build();
+    public static BookDocument defaultBookDocument() {
+        return defaultBookDocumentBuilder().build();
     }
 
 

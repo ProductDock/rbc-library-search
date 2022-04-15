@@ -10,6 +10,6 @@ public interface BookMapper {
 
     BookDto toBookDto(BookDocument bookDocument);
 
-    BookDocument toBookIndex(InsertBook insertBookMessage);
+    BookDocument toBookDocument(InsertBook insertBookMessage);
 
 }

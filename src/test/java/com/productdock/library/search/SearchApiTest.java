@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static com.productdock.library.search.data.provider.BookDocumentMother.defaultBook;
-import static com.productdock.library.search.data.provider.BookDocumentMother.defaultBookBuilder;
+import static com.productdock.library.search.data.provider.BookDocumentMother.defaultBookDocument;
+import static com.productdock.library.search.data.provider.BookDocumentMother.defaultBookDocumentBuilder;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -60,7 +60,7 @@ public class SearchApiTest extends IntegrationTestBase {
         private void givenABookBelongingToTopic(String topicName, String title) {
             var topic = new Topic();
             topic.name = topicName;
-            var book = defaultBookBuilder().title(title).topic(topic).build();
+            var book = defaultBookDocumentBuilder().title(title).topic(topic).build();
 
             bookDocumentRepository.save(book);
         }
@@ -96,12 +96,12 @@ public class SearchApiTest extends IntegrationTestBase {
         }
 
         private void givenAnyBook() {
-            var book = defaultBook();
+            var book = defaultBookDocument();
             bookDocumentRepository.save(book);
         }
 
         private void givenSecondPageOfResults() {
-            var book = defaultBookBuilder().title("Second Page Title").build();
+            var book = defaultBookDocumentBuilder().title("Second Page Title").build();
             bookDocumentRepository.save(book);
         }
 
