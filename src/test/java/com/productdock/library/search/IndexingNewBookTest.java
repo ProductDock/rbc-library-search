@@ -1,7 +1,6 @@
 package com.productdock.library.search;
 
 
-import com.productdock.library.search.cosumer.messages.InsertBook;
 import com.productdock.library.search.data.provider.KafkaTestProducer;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 
 @SpringBootTest
-public class KafkaConsumerTest extends IntegrationTestBase {
+public class IndexingNewBookTest extends IntegrationTestBase {
 
     @Autowired
     private KafkaTestProducer producer;
@@ -28,14 +27,17 @@ public class KafkaConsumerTest extends IntegrationTestBase {
 
     @Test
     void shouldSaveBookIndex_whenMessageReceived() {
-        InsertBook insertBook = defaultInsertBookMessageBuilder().id("123").author("Book author").build();
+        var insertBook = defaultInsertBookMessageBuilder().id("123").author("Book author").build();
 
         producer.send(topic, insertBook);
+
         await()
                 .atMost(Duration.ofSeconds(20))
                 .until(() -> bookDocumentRepository.findById("123").isPresent());
-        assertThat(bookDocumentRepository.findById("123").get().author).isEqualTo("Book author");
+
+        var insertedBookDocument = bookDocumentRepository.findById("123").get();
+
+        assertThat(insertedBookDocument).isNotNull();
+        assertThat(insertedBookDocument.author).isEqualTo("Book author");
     }
-
-
 }
