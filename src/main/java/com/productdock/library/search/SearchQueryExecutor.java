@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+import static com.productdock.library.search.BookQueryBuilder.bookQueryBuilder;
+
 @Service
 public class SearchQueryExecutor {
 
@@ -23,11 +25,9 @@ public class SearchQueryExecutor {
     }
 
     public SearchHits<BookDocument> execute(Optional<List<String>> topicsFilter, int page) {
-        BoolQueryBuilder boolQueryBuilder = new BoolQueryBuilder();
-        QueryBuilderDecorator enrichedBuilder = new QueryBuilderDecorator(boolQueryBuilder);
-        topicsFilter.ifPresent(list -> enrichedBuilder.addTopicsCriteria(list));
+        var queryBuilder = bookQueryBuilder().withTopicsCriteria(topicsFilter).build();
         Query searchQuery = new NativeSearchQueryBuilder()
-                .withQuery(boolQueryBuilder)
+                .withQuery(queryBuilder)
                 .withPageable(PageRequest.of(page, PAGE_SIZE))
                 .build();
 
