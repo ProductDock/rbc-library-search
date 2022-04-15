@@ -1,31 +1,19 @@
 package com.productdock.library.search;
 
-import com.productdock.library.search.config.ElasticsearchTestContainer;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
-import org.springframework.data.elasticsearch.core.IndexOperations;
-import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.test.web.servlet.MockMvc;
-import org.testcontainers.elasticsearch.ElasticsearchContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
 import static com.productdock.library.search.data.provider.BookIndexMother.defaultBook;
 import static com.productdock.library.search.data.provider.BookIndexMother.defaultBookBuilder;
 import static org.hamcrest.Matchers.hasSize;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
-@Testcontainers
 @SpringBootTest
-@AutoConfigureMockMvc
-@EmbeddedKafka(partitions = 1, brokerProperties = { "listeners=PLAINTEXT://localhost:9091", "port=9091" })
-public class SearchApiTest {
+public class SearchApiTest extends IntegrationTestBase {
 
     public static final int RESULTS_PAGE_SIZE = 19;
     public static final String FIRST_PAGE = "0";
@@ -35,41 +23,8 @@ public class SearchApiTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private BookService bookService;
-
-    @Autowired
     private BookIndexRepository bookIndexRepository;
 
-    @Autowired
-    private ElasticsearchOperations elasticsearchOperations;
-
-    @Container
-    private static ElasticsearchContainer elasticsearchContainer = new ElasticsearchTestContainer();
-
-    @BeforeAll
-    static void setUp() {
-        elasticsearchContainer.start();
-    }
-
-    @AfterAll
-    static void destroy() {
-        elasticsearchContainer.stop();
-    }
-
-    @BeforeEach
-    void testIsContainerRunning() {
-        assertTrue(elasticsearchContainer.isRunning());
-        recreateIndex();
-    }
-
-    private void recreateIndex() {
-        IndexOperations indexOperations = elasticsearchOperations.indexOps(BookIndex.class);
-        if (indexOperations.exists()) {
-            indexOperations.delete();
-        }
-        indexOperations.createWithMapping();
-        indexOperations.refresh();
-    }
 
     @Nested
     class SearchWithFilters {
@@ -106,7 +61,7 @@ public class SearchApiTest {
             topic.setName(topicName);
             var book = defaultBookBuilder().title(title).topic(topic).build();
 
-            bookService.save(book);
+            bookIndexRepository.save(book);
         }
     }
 

@@ -41,7 +41,7 @@ public class KafkaConsumerConfig {
 
     @Bean
     public ConcurrentKafkaListenerContainerFactory<String, InsertBook>
-    notificationDTOKafkaListenerContainerFactory() {
+    insertBookMessageKafkaListenerContainerFactory() {
 
         ConcurrentKafkaListenerContainerFactory<String, InsertBook> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();

@@ -19,10 +19,6 @@ public record BookService(BookIndexRepository bookIndexRepository,
     }
 
     public void save(BookIndex bookIndex) {
-        try {
-             bookIndexRepository.save(bookIndex);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        bookIndexRepository.save(bookIndex);
     }
 }
