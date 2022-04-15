@@ -1,6 +1,7 @@
 package com.productdock.library.search;
 
 import com.productdock.library.search.elastic.document.BookDocument;
+import lombok.AllArgsConstructor;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
@@ -15,14 +16,11 @@ import java.util.Optional;
 import static com.productdock.library.search.BookQueryBuilder.bookQueryBuilder;
 
 @Service
+@AllArgsConstructor
 public class SearchQueryExecutor {
 
     private static final int PAGE_SIZE = 18;
     private ElasticsearchOperations elasticsearchOperations;
-
-    SearchQueryExecutor(ElasticsearchOperations elasticsearchOperations) {
-        this.elasticsearchOperations = elasticsearchOperations;
-    }
 
     public SearchHits<BookDocument> execute(Optional<List<String>> topicsFilter, int page) {
         var queryBuilder = bookQueryBuilder().withTopicsCriteria(topicsFilter).build();
