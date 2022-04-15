@@ -1,0 +1,20 @@
+server:
+  port: 8081
+
+elasticsearch:
+  port: 9200
+  host: localhost
+  cluster-name: books-cluster
+
+spring:
+  kafka:
+    enabled: true
+    bootstrap-servers: ${kafka.server.url:localhost:9092}
+    value-seriliazer: org.apache.kafka.common.serialization.StringSerializer
+    key-serializer: org.apache.kafka.common.serialization.StringSerializer
+    consumer:
+      enable-auto-commit: true #necessary setting
+      auto-offset-reset: latest
+      group-id: ${consumer.group:group}
+    topic:
+      insert-book-topic: ${kafka.topic:insert-book-topic}

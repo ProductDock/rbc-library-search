@@ -7,6 +7,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.IndexOperations;
+import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.test.web.servlet.MockMvc;
 import org.testcontainers.elasticsearch.ElasticsearchContainer;
 import org.testcontainers.junit.jupiter.Container;
@@ -23,6 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Testcontainers
 @SpringBootTest
 @AutoConfigureMockMvc
+@EmbeddedKafka(partitions = 1, brokerProperties = { "listeners=PLAINTEXT://localhost:9091", "port=9091" })
 public class SearchApiTest {
 
     public static final int RESULTS_PAGE_SIZE = 19;
@@ -31,6 +33,9 @@ public class SearchApiTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private BookService bookService;
 
     @Autowired
     private BookIndexRepository bookIndexRepository;
@@ -62,10 +67,8 @@ public class SearchApiTest {
         if (indexOperations.exists()) {
             indexOperations.delete();
         }
-
         indexOperations.createWithMapping();
         indexOperations.refresh();
-
     }
 
     @Nested
@@ -103,7 +106,7 @@ public class SearchApiTest {
             topic.setName(topicName);
             var book = defaultBookBuilder().title(title).topic(topic).build();
 
-            bookIndexRepository.save(book);
+            bookService.save(book);
         }
     }
 

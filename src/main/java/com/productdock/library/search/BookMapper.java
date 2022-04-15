@@ -1,5 +1,6 @@
 package com.productdock.library.search;
 
+import com.productdock.library.search.cosumer.messages.InsertBook;
 import org.mapstruct.*;
 
 
@@ -7,4 +8,7 @@ import org.mapstruct.*;
 public interface BookMapper {
 
     BookDto toBookDto(BookIndex bookIndex);
+
+    BookIndex toBookIndex(InsertBook insertBookMessage);
+
 }

@@ -19,10 +19,10 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
 @ExtendWith(MockitoExtension.class)
-public class SearchServiceShould {
+public class BookServiceShould {
 
     @InjectMocks
-    private SearchService searchService;
+    private BookService bookService;
 
     @Mock
     private BookIndexRepository bookIndexRepository;
@@ -40,7 +40,7 @@ public class SearchServiceShould {
 
         given(searchQueryExecutor.execute(topicsFilter, firstPage)).willReturn(aBookSearchHits());
 
-        var books = searchService.getBooks(topicsFilter, 0);
+        var books = bookService.getBooks(topicsFilter, 0);
 
         assertThat(books.count).isEqualTo(2);
         assertThat(books.books).hasSize(2);
