@@ -1,5 +1,11 @@
 package com.productdock.library.search;
 
-public interface SearchFields {
-    String TOPICS_NAME = "topics.name";
+public enum SearchFields {
+    TOPICS_NAME("topics.name");
+
+    public final String label;
+
+    SearchFields(String label) {
+        this.label = label;
+    }
 }

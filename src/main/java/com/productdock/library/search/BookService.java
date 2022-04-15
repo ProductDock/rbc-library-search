@@ -18,7 +18,7 @@ public record BookService(BookDocumentRepository bookDocumentRepository,
         return new SearchBooksResponse(hits.getTotalHits(), bookHitsDto);
     }
 
-    public void save(BookDocument bookIndex) {
-        bookDocumentRepository.save(bookIndex);
+    public void save(BookDocument bookDocument) {
+        bookDocumentRepository.save(bookDocument);
     }
 }

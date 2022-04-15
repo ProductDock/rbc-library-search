@@ -17,7 +17,7 @@ public class QueryBuilderDecorator {
 
     public void addTopicsCriteria(List<String> topics) {
         for (String topic : topics) {
-            builder.should(QueryBuilders.matchQuery(SearchFields.TOPICS_NAME, topic));
+            builder.should(QueryBuilders.matchQuery(SearchFields.TOPICS_NAME.label, topic));
         }
     }
 }
