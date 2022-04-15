@@ -22,6 +22,8 @@ import static org.mockito.Mockito.mock;
 @ExtendWith(MockitoExtension.class)
 public class BookServiceShould {
 
+    private static final Optional<List<String>> ANY_TOPIC = Optional.of(List.of("TOPIC"));
+
     @InjectMocks
     private BookService bookService;
 
@@ -36,24 +38,20 @@ public class BookServiceShould {
 
     @Test
     void getBooksByTopics() {
-        var topicsFilter = Optional.of(List.of("TOPIC"));
         var firstPage = 0;
 
-        given(searchQueryExecutor.execute(topicsFilter, firstPage)).willReturn(aBookSearchHits());
+        given(searchQueryExecutor.execute(ANY_TOPIC, firstPage)).willReturn(aBookSearchHits());
 
-        var books = bookService.getBooks(topicsFilter, 0);
+        var books = bookService.getBooks(ANY_TOPIC, 0);
 
         assertThat(books.count).isEqualTo(2);
         assertThat(books.books).hasSize(2);
     }
 
     private SearchHits<BookDocument> aBookSearchHits() {
-        SearchHit<BookDocument> firstHit = mock(SearchHit.class);
-        SearchHit<BookDocument> secondHit = mock(SearchHit.class);
-
-        List<SearchHit<BookDocument>> bookIndices = of(
-                firstHit,
-                secondHit
+        List bookIndices = of(
+                mock(SearchHit.class),
+                mock(SearchHit.class)
         ).collect(toList());
 
         return new SearchHitsImpl<>(bookIndices.size(),
