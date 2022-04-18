@@ -6,8 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.List;
+
 import static com.productdock.library.search.data.provider.BookDocumentMother.defaultBookDocument;
 import static com.productdock.library.search.data.provider.BookDocumentMother.defaultBookDocumentBuilder;
+import static java.util.Arrays.stream;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -42,28 +46,41 @@ public class SearchApiTest extends IntegrationTestBase {
 
         @Test
         void getFirstPage_whenThereAreResults() throws Exception {
-            givenABookBelongingToTopic("PRODUCT", "Title Product");
-            givenABookBelongingToTopic("MARKETING", "Title Marketing");
-            givenABookBelongingToTopic("DESIGN", "Title Design");
+            givenABookBelongingToTopic("Title Product", "PRODUCT");
+            givenABookBelongingToTopic("Title Marketing", "MARKETING");
+            givenABookBelongingToTopic("Title Design", "DESIGN");
+            givenABookBelongingToTopic("Title Product & Marketing", "PRODUCT", "MARKETING");
 
             mockMvc.perform(get("/api/search")
                             .param("page", FIRST_PAGE)
-                            .param("topics", "MARKETING")
-                            .param("topics", "DESIGN"))
+                            .param("topics", "DESIGN")
+                            .param("topics", "MARKETING"))
                     .andExpect(status().isOk())
-                    .andExpect(jsonPath("$.count").value(2))
-                    .andExpect(jsonPath("$.books").value(hasSize(2)))
-                    .andExpect(jsonPath("$.books[0].title").value("Title Marketing"))
-                    .andExpect(jsonPath("$.books[1].title").value("Title Design"));
+                    .andExpect(jsonPath("$.count").value(3))
+                    .andExpect(jsonPath("$.books").value(hasSize(3)))
+                    .andExpect(jsonPath("$.books[*].title",
+                            containsInAnyOrder("Title Marketing", "Title Design", "Title Product & Marketing")));
         }
 
-        private void givenABookBelongingToTopic(String topicName, String title) {
-            var topic = new Topic();
-            topic.name = topicName;
-            var book = defaultBookDocumentBuilder().title(title).topic(topic).build();
-
+        private void givenABookBelongingToTopic(String title, String... topicNames) {
+            var topics = createTopicEntitiesWithNames(topicNames);
+            var book = defaultBookDocumentBuilder().title(title).topics(topics).build();
             bookDocumentRepository.save(book);
         }
+
+        private List<Topic> createTopicEntitiesWithNames(String... topicNames) {
+            return stream(topicNames)
+                    .map(topicName -> Topic.builder().name(topicName).build())
+                    .toList();
+        }
+
+//        private void givenABookBelongingToTopic(String topicName, String title) {
+//            var topic = new Topic();
+//            topic.name = topicName;
+//            var book = defaultBookDocumentBuilder().title(title).topic(topic).build();
+//
+//            bookDocumentRepository.save(book);
+//        }
     }
 
     @Nested
