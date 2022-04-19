@@ -51,6 +51,8 @@ public class BookQueryBuilderShould {
 
     private void assertThatNoFiltersExist(String queryString) {
         List<String> read = JsonPath.parse(queryString).read("$['bool'][*]");
+
+        assertThat(read).isNotEmpty();
         assertThat(read).doesNotContain("should");
     }
 }

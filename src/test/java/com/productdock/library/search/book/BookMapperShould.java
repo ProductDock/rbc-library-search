@@ -1,5 +1,6 @@
 package com.productdock.library.search.book;
 
+import org.assertj.core.api.AutoCloseableSoftAssertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,10 +26,12 @@ public class BookMapperShould {
 
         var bookDto = bookMapper.toBookDto(bookDocument);
 
-        assertThat(bookDto.id).isEqualTo(bookDocument.id);
-        assertThat(bookDto.title).isEqualTo(bookDocument.title);
-        assertThat(bookDto.author).isEqualTo(bookDocument.author);
-        assertThat(bookDto.cover).isEqualTo(bookDocument.cover);
+        try (var softly = new AutoCloseableSoftAssertions()) {
+            softly.assertThat(bookDto.id).isEqualTo(bookDocument.id);
+            softly.assertThat(bookDto.title).isEqualTo(bookDocument.title);
+            softly.assertThat(bookDto.author).isEqualTo(bookDocument.author);
+            softly.assertThat(bookDto.cover).isEqualTo(bookDocument.cover);
+        }
     }
 
     @Test
