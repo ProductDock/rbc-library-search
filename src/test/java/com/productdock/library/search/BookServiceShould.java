@@ -28,9 +28,6 @@ public class BookServiceShould {
     private BookService bookService;
 
     @Mock
-    private BookDocumentRepository bookDocumentRepository;
-
-    @Mock
     private SearchQueryExecutor searchQueryExecutor;
 
     @Mock
