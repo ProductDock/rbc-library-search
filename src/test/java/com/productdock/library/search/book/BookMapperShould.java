@@ -9,12 +9,11 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static com.productdock.library.search.data.provider.BookDocumentMother.defaultBookDocumentBuilder;
 import static com.productdock.library.search.data.provider.InsertBookMessageMother.defaultInsertBookMessageBuilder;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.tuple;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {BookMapperImpl.class})
-public class BookMapperShould {
+class BookMapperShould {
 
     @Autowired
     private BookMapper bookMapper;
@@ -27,10 +26,10 @@ public class BookMapperShould {
         var bookDto = bookMapper.toBookDto(bookDocument);
 
         try (var softly = new AutoCloseableSoftAssertions()) {
-            softly.assertThat(bookDto.id).isEqualTo(bookDocument.id);
-            softly.assertThat(bookDto.title).isEqualTo(bookDocument.title);
-            softly.assertThat(bookDto.author).isEqualTo(bookDocument.author);
-            softly.assertThat(bookDto.cover).isEqualTo(bookDocument.cover);
+            softly.assertThat(bookDto.id).isEqualTo(bookDocument.getId());
+            softly.assertThat(bookDto.title).isEqualTo(bookDocument.getTitle());
+            softly.assertThat(bookDto.author).isEqualTo(bookDocument.getAuthor());
+            softly.assertThat(bookDto.cover).isEqualTo(bookDocument.getCover());
         }
     }
 
@@ -41,14 +40,15 @@ public class BookMapperShould {
 
         var bookDocument = bookMapper.toBookDocument(insertBookMessage);
 
-        assertThat(bookDocument.id).isEqualTo(insertBookMessage.id);
-        assertThat(bookDocument.title).isEqualTo(insertBookMessage.title);
-        assertThat(bookDocument.author).isEqualTo(insertBookMessage.author);
-        assertThat(bookDocument.cover).isEqualTo(insertBookMessage.cover);
+        try (var softly = new AutoCloseableSoftAssertions()) {
+            softly.assertThat(bookDocument.getId()).isEqualTo(insertBookMessage.getId());
+            softly.assertThat(bookDocument.getTitle()).isEqualTo(insertBookMessage.getTitle());
+            softly.assertThat(bookDocument.getAuthor()).isEqualTo(insertBookMessage.getAuthor());
+            softly.assertThat(bookDocument.getCover()).isEqualTo(insertBookMessage.getCover());
+            softly.assertThat(bookDocument.getTopics())
+                    .extracting("id", "name")
+                    .containsExactly(tuple("1", "::topic::"));
 
-        assertThat(bookDocument.topics)
-                .extracting("id", "name")
-                .containsExactly(tuple("1", "::topic::"));
-
+        }
     }
 }

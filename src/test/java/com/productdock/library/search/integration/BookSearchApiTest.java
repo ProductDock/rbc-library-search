@@ -19,7 +19,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
-public class BookSearchApiTest extends IntegrationTestBase {
+class BookSearchApiTest extends IntegrationTestBase {
 
     public static final int RESULTS_PAGE_SIZE = 19;
     public static final String FIRST_PAGE = "0";

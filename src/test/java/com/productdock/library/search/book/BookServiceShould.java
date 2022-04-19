@@ -21,7 +21,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
 @ExtendWith(MockitoExtension.class)
-public class BookServiceShould {
+class BookServiceShould {
 
     private static final Optional<List<String>> ANY_TOPIC = Optional.of(List.of("TOPIC"));
 

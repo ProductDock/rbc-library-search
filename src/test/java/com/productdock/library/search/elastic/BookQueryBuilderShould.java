@@ -11,7 +11,7 @@ import static java.util.stream.Collectors.toList;
 import static java.util.stream.Stream.of;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class BookQueryBuilderShould {
+class BookQueryBuilderShould {
 
     @Test
     void buildQueryWhenFilteringByTopics() {

@@ -1,22 +1,20 @@
 package com.productdock.library.search.kafka.cosumer.messages;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-import lombok.Singular;
+import lombok.*;
 
 import java.util.List;
 
+@Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 public class InsertBookMessage {
 
-    public String id;
-    public String title;
-    public String cover;
-    public String author;
+    private String id;
+    private String title;
+    private String cover;
+    private String author;
     @Singular
-    public List<BookTopic> topics;
+    private List<BookTopic> topics;
 }
 

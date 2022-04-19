@@ -1,14 +1,13 @@
 package com.productdock.library.search.kafka.cosumer.messages;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+@Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 public class BookTopic {
 
-    public String id;
-    public String name;
+    private String id;
+    private String name;
 }

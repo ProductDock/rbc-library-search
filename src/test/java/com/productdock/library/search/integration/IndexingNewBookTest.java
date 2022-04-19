@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 
 @SpringBootTest
-public class IndexingNewBookTest extends IntegrationTestBase {
+class IndexingNewBookTest extends IntegrationTestBase {
 
     @Autowired
     private KafkaTestProducer producer;
@@ -38,6 +38,6 @@ public class IndexingNewBookTest extends IntegrationTestBase {
         var insertedBookDocument = bookDocumentRepository.findById("123").get();
 
         assertThat(insertedBookDocument).isNotNull();
-        assertThat(insertedBookDocument.author).isEqualTo("Book author");
+        assertThat(insertedBookDocument.getAuthor()).isEqualTo("Book author");
     }
 }

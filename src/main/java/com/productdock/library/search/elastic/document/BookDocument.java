@@ -1,7 +1,6 @@
 package com.productdock.library.search.elastic.document;
 
-import lombok.Builder;
-import lombok.Singular;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
@@ -9,24 +8,25 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import java.util.Set;
 
+@Data
 @Builder
 @Document(indexName = "book_index")
 public class BookDocument {
 
     @Id
     @Field(type = FieldType.Text)
-    public String id;
+    private String id;
 
     @Field(type = FieldType.Text)
-    public String title;
+    private String title;
 
     @Field(type = FieldType.Text)
-    public String author;
+    private String author;
 
     @Field(type = FieldType.Text)
-    public String cover;
+    private String cover;
 
     @Singular
     @Field(type = FieldType.Nested, includeInParent = true)
-    public Set<Topic> topics;
+    private Set<Topic> topics;
 }

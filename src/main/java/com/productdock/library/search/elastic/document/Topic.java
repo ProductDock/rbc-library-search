@@ -1,19 +1,18 @@
 package com.productdock.library.search.elastic.document;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
+@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Topic {
 
     @Field(type = FieldType.Text)
-    public String id;
+    private String id;
 
     @Field(type = FieldType.Text)
-    public String name;
+    private String name;
 }
