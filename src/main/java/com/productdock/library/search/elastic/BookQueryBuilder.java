@@ -17,7 +17,7 @@ public class BookQueryBuilder {
     }
 
     public BookQueryBuilder withTopicsCriteria(Optional<List<String>> topicsFilter) {
-        topicsFilter.ifPresent(list -> addTopicsCriteria(list));
+        topicsFilter.ifPresent(this::addTopicsCriteria);
         return this;
     }
 
