@@ -1,0 +1,58 @@
+name: Build and Deploy Production
+
+on:
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+  workflow_dispatch:
+
+env:
+  DOCKER_IMAGE_NAME: gcr.io/${{ secrets.GCE_PROJECT }}/${{ github.event.repository.name }}
+  GCE_INSTANCE: prod-pd-library-services
+  GCE_INSTANCE_ZONE: europe-west3-c
+
+jobs:
+  setup-build-publish-deploy:
+    name: Build Production Job
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    steps:
+      - name: 'Get version from tag name'
+        id: get_version
+        run: |
+          version=${GITHUB_REF/refs\/tags\//}
+          echo $version
+          echo "VERSION=$(echo $version)" >> $GITHUB_ENV
+
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - id: auth_to_gcp
+        name: 'Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@v0'
+        with:
+          workload_identity_provider: 'projects/817921738258/locations/global/workloadIdentityPools/rbc-github-pool/providers/rbc-github-action-provider'
+          service_account: 'prod-pd-library-vm@prod-pd-library.iam.gserviceaccount.com'
+
+      - name: 'Set up Cloud SDK'
+        uses: google-github-actions/setup-gcloud@v0
+      - run: |-
+          gcloud auth configure-docker
+
+      - name: 'Build docker image with Version tag'
+        run: |-
+          docker build --tag "$DOCKER_IMAGE_NAME:$VERSION" .
+
+      - name: 'Publish docker image'
+        run: |-
+          docker push "$DOCKER_IMAGE_NAME:$VERSION"
+
+      - name: 'Deploy Docker image to Compute engine'
+        run: |-
+          gcloud compute ssh --project=prod-pd-library --zone=$GCE_INSTANCE_ZONE --ssh-key-expire-after=5m --command="bash /home/pd-library/update-search-image.sh $VERSION" $GCE_INSTANCE
