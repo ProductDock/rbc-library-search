@@ -1,4 +1,4 @@
-package com.productdock.library.search;
+package com.productdock.library.search.elastic;
 
 import com.productdock.library.search.elastic.document.BookDocument;
 import lombok.AllArgsConstructor;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-import static com.productdock.library.search.BookQueryBuilder.bookQueryBuilder;
+import static com.productdock.library.search.elastic.BookQueryBuilder.bookQueryBuilder;
 
 @Service
 @AllArgsConstructor

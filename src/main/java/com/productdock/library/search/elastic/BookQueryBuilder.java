@@ -1,5 +1,6 @@
-package com.productdock.library.search;
+package com.productdock.library.search.elastic;
 
+import com.productdock.library.search.book.BookSearchFields;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 
@@ -22,7 +23,7 @@ public class BookQueryBuilder {
 
     private void addTopicsCriteria(List<String> topics) {
         for (String topic : topics) {
-            builder.should(QueryBuilders.matchQuery(SearchFields.TOPICS_NAME.label, topic));
+            builder.should(QueryBuilders.matchQuery(BookSearchFields.TOPICS_NAME.label, topic));
         }
     }
 

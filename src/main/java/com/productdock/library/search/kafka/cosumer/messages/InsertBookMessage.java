@@ -1,4 +1,4 @@
-package com.productdock.library.search.cosumer.messages;
+package com.productdock.library.search.kafka.cosumer.messages;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,7 +10,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class InsertBook {
+public class InsertBookMessage {
 
     public String id;
     public String title;

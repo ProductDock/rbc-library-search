@@ -1,5 +1,6 @@
-package com.productdock.library.search;
+package com.productdock.library.search.book;
 
+import com.productdock.library.search.elastic.SearchQueryExecutor;
 import com.productdock.library.search.elastic.document.BookDocument;
 import org.springframework.stereotype.Service;
 

@@ -1,4 +1,4 @@
-package com.productdock.library.search;
+package com.productdock.library.search.book;
 
 import java.io.Serializable;
 

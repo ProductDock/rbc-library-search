@@ -1,4 +1,4 @@
-package com.productdock.library.search;
+package com.productdock.library.search.integration;
 
 import com.productdock.library.search.config.ElasticsearchTestContainer;
 import com.productdock.library.search.elastic.document.BookDocument;

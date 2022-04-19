@@ -1,7 +1,7 @@
 package com.productdock.library.search.data.provider;
 
-import com.productdock.library.search.cosumer.messages.BookTopic;
-import com.productdock.library.search.cosumer.messages.InsertBook;
+import com.productdock.library.search.kafka.cosumer.messages.BookTopic;
+import com.productdock.library.search.kafka.cosumer.messages.InsertBookMessage;
 
 
 public class InsertBookMessageMother {
@@ -17,8 +17,8 @@ public class InsertBookMessageMother {
     private static final BookTopic defaultTopic =
             BookTopic.builder().id(defaultTopicId).name(defaultTopicName).build();
 
-    public static InsertBook.InsertBookBuilder defaultInsertBookMessageBuilder() {
-        return InsertBook.builder()
+    public static InsertBookMessage.InsertBookMessageBuilder defaultInsertBookMessageBuilder() {
+        return InsertBookMessage.builder()
                 .id(defaultId)
                 .title(defaultTitle)
                 .author(defaultAuthor)
@@ -26,7 +26,7 @@ public class InsertBookMessageMother {
                 .topic(defaultTopic);
     }
 
-    public static InsertBook defaultInsertBookMessage() {
+    public static InsertBookMessage defaultInsertBookMessage() {
         return defaultInsertBookMessageBuilder().build();
     }
 }

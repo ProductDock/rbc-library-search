@@ -1,5 +1,6 @@
-package com.productdock.library.search;
+package com.productdock.library.search.integration;
 
+import com.productdock.library.search.book.BookDocumentRepository;
 import com.productdock.library.search.data.provider.KafkaTestProducer;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

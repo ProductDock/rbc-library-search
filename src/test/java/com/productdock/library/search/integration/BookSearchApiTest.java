@@ -1,7 +1,9 @@
-package com.productdock.library.search;
+package com.productdock.library.search.integration;
 
+import com.productdock.library.search.book.BookDocumentRepository;
 import com.productdock.library.search.elastic.document.Topic;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
@@ -15,10 +17,9 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @SpringBootTest
-public class SearchApiTest extends IntegrationTestBase {
+public class BookSearchApiTest extends IntegrationTestBase {
 
     public static final int RESULTS_PAGE_SIZE = 19;
     public static final String FIRST_PAGE = "0";

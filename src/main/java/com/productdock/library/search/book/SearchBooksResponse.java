@@ -1,4 +1,4 @@
-package com.productdock.library.search;
+package com.productdock.library.search.book;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package com.productdock.library.search;
+package com.productdock.library.search.elastic;
 
 import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.Test;
@@ -6,12 +6,10 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.Optional;
 
-import static com.productdock.library.search.BookQueryBuilder.bookQueryBuilder;
-import static java.util.stream.Stream.of;
-
-import static org.assertj.core.api.Assertions.assertThat;
-
+import static com.productdock.library.search.elastic.BookQueryBuilder.bookQueryBuilder;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Stream.of;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class BookQueryBuilderShould {
 

@@ -1,6 +1,6 @@
-package com.productdock.library.search.cosumer.config;
+package com.productdock.library.search.kafka.cosumer.config;
 
-import com.productdock.library.search.cosumer.messages.InsertBook;
+import com.productdock.library.search.kafka.cosumer.messages.InsertBookMessage;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,7 +25,7 @@ public class KafkaConsumerConfig {
     private String groupId = "rbc-library";
 
     @Bean
-    public ConsumerFactory<String, InsertBook> insertBookMessageConsumerFactory() {
+    public ConsumerFactory<String, InsertBookMessage> insertBookMessageConsumerFactory() {
         Map<String, Object> props = new HashMap<>();
         props.put(
                 ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,
@@ -36,14 +36,14 @@ public class KafkaConsumerConfig {
         return new DefaultKafkaConsumerFactory<>(
                 props,
                 new StringDeserializer(),
-                new JsonDeserializer<>(InsertBook.class));
+                new JsonDeserializer<>(InsertBookMessage.class));
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, InsertBook>
+    public ConcurrentKafkaListenerContainerFactory<String, InsertBookMessage>
     insertBookMessageKafkaListenerContainerFactory() {
 
-        ConcurrentKafkaListenerContainerFactory<String, InsertBook> factory =
+        ConcurrentKafkaListenerContainerFactory<String, InsertBookMessage> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(insertBookMessageConsumerFactory());
         return factory;
