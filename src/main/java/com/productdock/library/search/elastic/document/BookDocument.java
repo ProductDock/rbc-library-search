@@ -1,6 +1,8 @@
 package com.productdock.library.search.elastic.document;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.Data;
+import lombok.Singular;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;

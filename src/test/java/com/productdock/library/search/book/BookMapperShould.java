@@ -1,5 +1,6 @@
 package com.productdock.library.search.book;
 
+import com.productdock.library.search.BookMapperImpl;
 import org.assertj.core.api.AutoCloseableSoftAssertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
