@@ -73,14 +73,6 @@ public class SearchApiTest extends IntegrationTestBase {
                     .map(topicName -> Topic.builder().name(topicName).build())
                     .toList();
         }
-
-//        private void givenABookBelongingToTopic(String topicName, String title) {
-//            var topic = new Topic();
-//            topic.name = topicName;
-//            var book = defaultBookDocumentBuilder().title(title).topic(topic).build();
-//
-//            bookDocumentRepository.save(book);
-//        }
     }
 
     @Nested

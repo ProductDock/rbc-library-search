@@ -1,7 +1,5 @@
 package com.productdock.library.search;
 
-
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.productdock.library.search.data.provider.KafkaTestProducer;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

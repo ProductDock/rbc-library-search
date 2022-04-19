@@ -3,10 +3,6 @@ package com.productdock.library.search.data.provider;
 import com.productdock.library.search.cosumer.messages.BookTopic;
 import com.productdock.library.search.cosumer.messages.InsertBook;
 
-import java.util.List;
-
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.Stream.of;
 
 public class InsertBookMessageMother {
 

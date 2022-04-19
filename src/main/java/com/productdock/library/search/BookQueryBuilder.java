@@ -1,6 +1,5 @@
 package com.productdock.library.search;
 
-import lombok.NonNull;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 

@@ -2,7 +2,6 @@ package com.productdock.library.search;
 
 import com.productdock.library.search.elastic.document.BookDocument;
 import lombok.AllArgsConstructor;
-import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHits;
