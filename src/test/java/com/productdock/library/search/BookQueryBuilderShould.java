@@ -17,14 +17,16 @@ public class BookQueryBuilderShould {
 
     @Test
     void buildQueryWhenFilteringByTopics() {
-        Optional<List<String>> topics = Optional.of(
-                of("MARKETING", "DEVELOPMENT").collect(toList())
-        );
+        var topics = topicsOf("MARKETING", "DEVELOPMENT");
 
-        var queryString = bookQueryBuilder().withTopicsCriteria(topics).build().toString();
+        var query = bookQueryBuilder().withTopicsCriteria(topics).build().toString();
 
-        assertThatTopicsAreMatching(topics, queryString);
-        assertThatOperatorsAreMatching(of("OR", "OR").toList(), queryString);
+        assertThatTopicsAreMatching(topics.get(), query);
+        assertThatOperatorsAreMatching(of("OR", "OR").toList(), query);
+    }
+
+    private Optional<List<String>> topicsOf(String... topics) {
+        return Optional.of(of(topics).collect(toList()));
     }
 
     private void assertThatOperatorsAreMatching(List<String> expectedOperators, String queryString) {
@@ -34,18 +36,19 @@ public class BookQueryBuilderShould {
 
     }
 
-    private void assertThatTopicsAreMatching(Optional<List<String>> topics, String queryString) {
+    private void assertThatTopicsAreMatching(List<String> topics, String queryString) {
         List<String> topicQueries = JsonPath.parse(queryString)
                 .read("$['bool']['should'][*]['match']['topics.name']['query']");
-        assertThat(topicQueries).containsAll(topics.get());
+        assertThat(topicQueries).containsAll(topics);
     }
 
     @Test
     void buildQueryWithoutTopics() {
         Optional<List<String>> topics = Optional.ofNullable(null);
 
-        var queryString = bookQueryBuilder().withTopicsCriteria(topics).build().toString();
-        assertThatNoFiltersExist(queryString);
+        var query = bookQueryBuilder().withTopicsCriteria(topics).build().toString();
+
+        assertThatNoFiltersExist(query);
     }
 
     private void assertThatNoFiltersExist(String queryString) {
