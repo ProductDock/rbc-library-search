@@ -1,0 +1,11 @@
+spring:
+  elasticsearch:
+    rest:
+      uris: localhost:9222
+  kafka:
+    bootstrap-servers: localhost:9091
+    consumer:
+      auto-offset-reset: earliest
+      group-id: rbc-library
+    topic:
+      insert-book-topic: embedded-insert-book-topic
