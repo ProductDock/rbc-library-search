@@ -3,7 +3,6 @@ package com.productdock.library.search.data.provider;
 import com.productdock.library.search.kafka.cosumer.messages.BookTopic;
 import com.productdock.library.search.kafka.cosumer.messages.InsertBookMessage;
 
-
 public class InsertBookMessageMother {
 
     private static final String defaultId = null;
