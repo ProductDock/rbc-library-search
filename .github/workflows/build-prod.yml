@@ -47,7 +47,7 @@ jobs:
 
       - name: 'Build docker image with Version tag'
         run: |-
-          docker build --tag "$DOCKER_IMAGE_NAME:$VERSION" .
+          docker build --build-arg ACTIVE_PROFILE=prod --tag "$DOCKER_IMAGE_NAME:$VERSION" .
 
       - name: 'Publish docker image'
         run: |-
