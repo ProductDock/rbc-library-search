@@ -1,6 +1,10 @@
 server:
   port: 8081
 
+cors:
+  allowed:
+    origins: http://localhost:3000
+
 elasticsearch:
   port: 9200
   host: localhost
