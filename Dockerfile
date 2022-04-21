@@ -9,6 +9,6 @@ ENV SPRING_PROFILES_ACTIVE=$ACTIVE_PROFILE
 WORKDIR /app
 COPY entrypoint.sh /entrypoint.sh
 COPY --from=builder /app/target/rbc-library-search-0.0.1-SNAPSHOT.jar rbc-library-search-0.0.1-SNAPSHOT.jar
-EXPOSE 8080
+EXPOSE 8081
 RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
