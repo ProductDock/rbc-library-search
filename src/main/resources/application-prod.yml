@@ -5,15 +5,10 @@ cors:
   allowed:
     origins: http://library.productdock.rs
 
-elasticsearch:
-  port: 9200
-  host: 10.156.15.204
-  cluster-name: books-cluster
-
 spring:
   kafka:
     enabled: true
-    bootstrap-servers: ${kafka.server.url:10.156.15.204:9092}
+    bootstrap-servers: ${kafka.server.url:9092}
     value-seriliazer: org.apache.kafka.common.serialization.StringSerializer
     key-serializer: org.apache.kafka.common.serialization.StringSerializer
     consumer:
@@ -22,3 +17,6 @@ spring:
       group-id: ${consumer.group:group}
     topic:
       insert-book-topic: ${kafka.topic:insert-book-topic}
+  elasticsearch:
+    rest:
+      uris: ${elasticsearch.server.url}:9200
