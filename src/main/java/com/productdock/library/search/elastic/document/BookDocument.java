@@ -8,6 +8,7 @@ import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -31,4 +32,8 @@ public class BookDocument {
     @Singular
     @Field(type = FieldType.Nested, includeInParent = true)
     private Set<Topic> topics;
+
+    @Singular
+    @Field(type = FieldType.Nested, includeInParent = true)
+    private List<Record> records;
 }
