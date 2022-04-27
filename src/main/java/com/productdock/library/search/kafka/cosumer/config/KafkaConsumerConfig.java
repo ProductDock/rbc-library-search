@@ -1,6 +1,7 @@
 package com.productdock.library.search.kafka.cosumer.config;
 
 import com.productdock.library.search.kafka.cosumer.messages.InsertBookMessage;
+import com.productdock.library.search.kafka.cosumer.messages.RentalMessage;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -46,6 +47,29 @@ public class KafkaConsumerConfig {
         ConcurrentKafkaListenerContainerFactory<String, InsertBookMessage> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(insertBookMessageConsumerFactory());
+        return factory;
+    }
+
+    @Bean
+    public ConsumerFactory<String, RentalMessage> rentalMessageConsumerFactory() {
+        Map<String, Object> props = new HashMap<>();
+        props.put(
+                ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,
+                bootstrapAddress);
+        props.put(
+                ConsumerConfig.GROUP_ID_CONFIG,
+                groupId);
+        return new DefaultKafkaConsumerFactory<>(
+                props,
+                new StringDeserializer(),
+                new JsonDeserializer<>(RentalMessage.class));
+    }
+
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, RentalMessage> rentalMessageKafkaListenerContainerFactory() {
+
+        ConcurrentKafkaListenerContainerFactory<String, RentalMessage> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(rentalMessageConsumerFactory());
         return factory;
     }
 }
