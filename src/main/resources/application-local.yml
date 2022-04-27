@@ -17,6 +17,7 @@ spring:
       group-id: ${consumer.group:group}
     topic:
       insert-book-topic: ${kafka.topic:insert-book-topic}
+      book-status: ${kafka.status:book-status}
   elasticsearch:
     rest:
       uris: ${elasticsearch.server.url:localhost}:9200
