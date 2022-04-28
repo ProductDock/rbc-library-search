@@ -31,7 +31,7 @@ class BookMapperShould {
         record.setEmail("natasa@gmail.com");
         record.setStatus(BookStatus.RENTED);
         records.add(record);
-        bookDocument.setRecords(records);
+        bookDocument.getBookStatusWrapper().setRecords(records);
 
         var bookDto = bookMapper.toBookDto(bookDocument);
 

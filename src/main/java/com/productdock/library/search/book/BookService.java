@@ -31,7 +31,7 @@ public record BookService(BookDocumentRepository bookDocumentRepository,
                 .findById(rentalMessage.getBookId());
         if (bookDocument.isPresent()){
             var book = bookDocument.get();
-            book.setRecords(recordDocumentMapper.toRecords(rentalMessage.getRecords()));
+            book.getBookStatusWrapper().setRecords(recordDocumentMapper.toRecords(rentalMessage.getRecords()));
             bookDocumentRepository.save(book);
         }
     }
