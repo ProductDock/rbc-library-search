@@ -5,8 +5,7 @@ import com.productdock.library.search.kafka.cosumer.messages.InsertBookMessage;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
-
-@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring")
+@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring", uses = {RecordDtoMapper.class})
 public interface BookMapper {
 
     BookDto toBookDto(BookDocument bookDocument);

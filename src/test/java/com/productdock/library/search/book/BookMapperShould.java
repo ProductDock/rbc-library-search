@@ -1,5 +1,6 @@
 package com.productdock.library.search.book;
 
+import com.productdock.library.search.elastic.document.Record;
 import org.assertj.core.api.AutoCloseableSoftAssertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -7,12 +8,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.productdock.library.search.data.provider.BookDocumentMother.defaultBookDocumentBuilder;
 import static com.productdock.library.search.data.provider.InsertBookMessageMother.defaultInsertBookMessageBuilder;
 import static org.assertj.core.api.AssertionsForClassTypes.tuple;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {BookMapperImpl.class})
+@ContextConfiguration(classes = {BookMapperImpl.class, RecordDtoMapperImpl.class})
 class BookMapperShould {
 
     @Autowired
@@ -22,6 +26,12 @@ class BookMapperShould {
     void mapBookDocumentToBookDto() {
         var bookDocument = defaultBookDocumentBuilder()
                 .id("123").title("Book title").author("Book author").cover("Book cover").build();
+        List<Record> records = new ArrayList<>();
+        Record record = new Record();
+        record.setEmail("natasa@gmail.com");
+        record.setStatus(BookStatus.RENTED);
+        records.add(record);
+        bookDocument.setRecords(records);
 
         var bookDto = bookMapper.toBookDto(bookDocument);
 
