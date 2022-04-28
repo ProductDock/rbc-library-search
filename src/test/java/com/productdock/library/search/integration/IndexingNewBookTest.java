@@ -27,7 +27,7 @@ class IndexingNewBookTest extends IntegrationTestBase {
 
     @Test
     void shouldSaveBookIndex_whenMessageReceived() throws Exception {
-        var insertBook = defaultInsertBookMessageBuilder().id("123").author("Book author").build();
+        var insertBook = defaultInsertBookMessageBuilder().bookId("123").author("Book author").build();
 
         producer.send(topic, insertBook);
 

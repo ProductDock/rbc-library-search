@@ -18,7 +18,7 @@ public class InsertBookMessageMother {
 
     public static InsertBookMessage.InsertBookMessageBuilder defaultInsertBookMessageBuilder() {
         return InsertBookMessage.builder()
-                .id(defaultId)
+                .bookId(defaultId)
                 .title(defaultTitle)
                 .author(defaultAuthor)
                 .cover(defaultCover)

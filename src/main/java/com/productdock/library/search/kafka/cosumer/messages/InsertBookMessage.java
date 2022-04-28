@@ -10,7 +10,7 @@ import java.util.List;
 @NoArgsConstructor
 public class InsertBookMessage {
 
-    private String id;
+    private String bookId;
     private String title;
     private String cover;
     private String author;

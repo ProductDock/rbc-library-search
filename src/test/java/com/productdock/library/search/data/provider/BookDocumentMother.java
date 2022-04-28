@@ -11,7 +11,7 @@ public class BookDocumentMother {
 
     public static BookDocument.BookDocumentBuilder defaultBookDocumentBuilder() {
         return BookDocument.builder()
-                .id(defaultId)
+                .bookId(defaultId)
                 .title(defaultTitle)
                 .author(defaultAuthor)
                 .cover(defaultCover);

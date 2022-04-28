@@ -25,7 +25,7 @@ class BookMapperShould {
     @Test
     void mapBookDocumentToBookDto() {
         var bookDocument = defaultBookDocumentBuilder()
-                .id("123").title("Book title").author("Book author").cover("Book cover").build();
+                .bookId("123").title("Book title").author("Book author").cover("Book cover").build();
         List<Record> records = new ArrayList<>();
         Record record = new Record();
         record.setEmail("natasa@gmail.com");
@@ -36,7 +36,7 @@ class BookMapperShould {
         var bookDto = bookMapper.toBookDto(bookDocument);
 
         try (var softly = new AutoCloseableSoftAssertions()) {
-            softly.assertThat(bookDto.id).isEqualTo(bookDocument.getId());
+            softly.assertThat(bookDto.id).isEqualTo(bookDocument.getBookId());
             softly.assertThat(bookDto.title).isEqualTo(bookDocument.getTitle());
             softly.assertThat(bookDto.author).isEqualTo(bookDocument.getAuthor());
             softly.assertThat(bookDto.cover).isEqualTo(bookDocument.getCover());
@@ -46,12 +46,12 @@ class BookMapperShould {
     @Test
     void mapInsertBookMessageToBookDocument() {
         var insertBookMessage = defaultInsertBookMessageBuilder()
-                .id("123").title("Book title").author("Book author").cover("Book cover").build();
+                .bookId("123").title("Book title").author("Book author").cover("Book cover").build();
 
         var bookDocument = bookMapper.toBookDocument(insertBookMessage);
 
         try (var softly = new AutoCloseableSoftAssertions()) {
-            softly.assertThat(bookDocument.getId()).isEqualTo(insertBookMessage.getId());
+            softly.assertThat(bookDocument.getBookId()).isEqualTo(insertBookMessage.getBookId());
             softly.assertThat(bookDocument.getTitle()).isEqualTo(insertBookMessage.getTitle());
             softly.assertThat(bookDocument.getAuthor()).isEqualTo(insertBookMessage.getAuthor());
             softly.assertThat(bookDocument.getCover()).isEqualTo(insertBookMessage.getCover());

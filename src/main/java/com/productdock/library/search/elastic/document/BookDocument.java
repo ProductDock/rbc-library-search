@@ -18,7 +18,7 @@ public class BookDocument {
 
     @Id
     @Field(type = FieldType.Text)
-    private String id;
+    private String bookId;
 
     @Field(type = FieldType.Text)
     private String title;
