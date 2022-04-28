@@ -1,5 +1,6 @@
 package com.productdock.library.search.kafka.cosumer.config;
 
+import com.productdock.library.search.kafka.cosumer.messages.BookAvailabilityMessage;
 import com.productdock.library.search.kafka.cosumer.messages.InsertBookMessage;
 import com.productdock.library.search.kafka.cosumer.messages.RentalMessage;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
@@ -23,17 +24,21 @@ public class KafkaConsumerConfig {
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapAddress;
 
-    private String groupId = "rbc-library";
-
-    @Bean
-    public ConsumerFactory<String, InsertBookMessage> insertBookMessageConsumerFactory() {
+    private Map<String, Object> getProps() {
         Map<String, Object> props = new HashMap<>();
         props.put(
                 ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,
                 bootstrapAddress);
+        String groupId = "rbc-library";
         props.put(
                 ConsumerConfig.GROUP_ID_CONFIG,
                 groupId);
+        return props;
+    }
+
+    @Bean
+    public ConsumerFactory<String, InsertBookMessage> insertBookMessageConsumerFactory() {
+        Map<String, Object> props = getProps();
         return new DefaultKafkaConsumerFactory<>(
                 props,
                 new StringDeserializer(),
@@ -52,13 +57,7 @@ public class KafkaConsumerConfig {
 
     @Bean
     public ConsumerFactory<String, RentalMessage> rentalMessageConsumerFactory() {
-        Map<String, Object> props = new HashMap<>();
-        props.put(
-                ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,
-                bootstrapAddress);
-        props.put(
-                ConsumerConfig.GROUP_ID_CONFIG,
-                groupId);
+        Map<String, Object> props = getProps();
         return new DefaultKafkaConsumerFactory<>(
                 props,
                 new StringDeserializer(),
@@ -72,4 +71,23 @@ public class KafkaConsumerConfig {
         factory.setConsumerFactory(rentalMessageConsumerFactory());
         return factory;
     }
+
+    @Bean
+    public ConsumerFactory<String, BookAvailabilityMessage> bookAvailabilityConsumerFactory() {
+        Map<String, Object> props = getProps();
+        return new DefaultKafkaConsumerFactory<>(
+                props,
+                new StringDeserializer(),
+                new JsonDeserializer<>(BookAvailabilityMessage.class)
+        );
+    }
+
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, BookAvailabilityMessage> bookAvailabilityMessageKafkaListenerContainerFactory() {
+
+        ConcurrentKafkaListenerContainerFactory<String, BookAvailabilityMessage> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(bookAvailabilityConsumerFactory());
+        return factory;
+    }
+
 }
