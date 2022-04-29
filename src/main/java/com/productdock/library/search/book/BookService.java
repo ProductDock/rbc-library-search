@@ -43,7 +43,7 @@ public record BookService(BookDocumentRepository bookDocumentRepository,
     private BookDocument getBookDocument(String bookId) {
         var bookDocument = bookDocumentRepository.findById(bookId);
         if (bookDocument.isEmpty()) {
-            throw new NoSuchElementException();
+            throw new RuntimeException("Book index for bookId not found.");
         }
         return bookDocument.get();
     }
