@@ -34,4 +34,6 @@ public class BookDocument {
 
     @Field(type = FieldType.Nested, includeInParent = true)
     private BookStatusWrapper bookStatusWrapper;
+
+
 }

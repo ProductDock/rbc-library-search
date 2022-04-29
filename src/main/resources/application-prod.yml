@@ -18,6 +18,7 @@ spring:
     topic:
       insert-book-topic: ${kafka.topic:insert-book-topic}
       book-status: ${kafka.status:book-status}
+      book-availability: ${kafka.status:book-availability}
   elasticsearch:
     rest:
       uris: ${elasticsearch.server.url}:9200
