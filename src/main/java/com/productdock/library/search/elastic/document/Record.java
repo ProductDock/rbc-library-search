@@ -1,10 +1,7 @@
 package com.productdock.library.search.elastic.document;
 
 import com.productdock.library.search.book.BookStatus;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
@@ -12,11 +9,13 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@RequiredArgsConstructor
 public class Record {
 
     @Field(type = FieldType.Text)
     private String email;
 
+    @NonNull
     @Field(type = FieldType.Text)
     private BookStatus status;
 }

@@ -16,7 +16,7 @@ import static com.productdock.library.search.data.provider.InsertBookMessageMoth
 import static org.assertj.core.api.AssertionsForClassTypes.tuple;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {BookMapperImpl.class, RecordDtoMapperImpl.class})
+@ContextConfiguration(classes = {BookMapper.class, RecordDtoMapperImpl.class})
 class BookMapperShould {
 
     @Autowired
