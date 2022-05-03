@@ -20,6 +20,7 @@ public class BookMapper {
 
     public BookDto toBookDto(BookDocument bookDocument) {
         var bookDto = new BookDto();
+        bookDto.id = bookDocument.getBookId();
         bookDto.title = bookDocument.getTitle();
         bookDto.author = bookDocument.getAuthor();
         bookDto.cover = bookDocument.getCover();
