@@ -3,12 +3,13 @@ package com.productdock.library.search.book;
 import com.productdock.library.search.elastic.RecordDocumentMapper;
 import com.productdock.library.search.elastic.SearchQueryExecutor;
 import com.productdock.library.search.elastic.document.BookDocument;
+import com.productdock.library.search.elastic.document.BookStatusWrapper;
 import com.productdock.library.search.kafka.cosumer.messages.BookAvailabilityMessage;
 import com.productdock.library.search.kafka.cosumer.messages.RentalMessage;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -29,14 +30,18 @@ public record BookService(BookDocumentRepository bookDocumentRepository,
     }
 
     public void updateBookRecords(RentalMessage rentalMessage) {
-        BookDocument bookDocument = getBookDocument(rentalMessage.getBookId());
-        bookDocument.getBookStatusWrapper().setRecords(recordDocumentMapper.toRecords(rentalMessage.getRecords()));
+        var bookDocument = getBookDocument(rentalMessage.getBookId());
+        var bookStatusWrapper = getOrCreateBookStatusWrapper(bookDocument);
+        bookStatusWrapper.setRecords(recordDocumentMapper.toRecords(rentalMessage.getRecords()));
+        bookDocument.setBookStatusWrapper(bookStatusWrapper);
         bookDocumentRepository.save(bookDocument);
     }
 
     public void updateAvailabilityBookCount(BookAvailabilityMessage bookAvailabilityMessage) {
-        BookDocument bookDocument = getBookDocument(bookAvailabilityMessage.getBookId());
-        bookDocument.getBookStatusWrapper().setAvailableBooksCount(bookAvailabilityMessage.getAvailableBookCount());
+        var bookDocument = getBookDocument(bookAvailabilityMessage.getBookId());
+        var bookStatusWrapper = getOrCreateBookStatusWrapper(bookDocument);
+        bookStatusWrapper.setAvailableBooksCount(bookAvailabilityMessage.getAvailableBookCount());
+        bookDocument.setBookStatusWrapper(bookStatusWrapper);
         bookDocumentRepository.save(bookDocument);
     }
 
@@ -46,5 +51,12 @@ public record BookService(BookDocumentRepository bookDocumentRepository,
             throw new RuntimeException("Book index for bookId not found.");
         }
         return bookDocument.get();
+    }
+
+    private BookStatusWrapper getOrCreateBookStatusWrapper(BookDocument bookDocument) {
+        if (bookDocument.getBookStatusWrapper() == null) {
+            return new BookStatusWrapper(0, new ArrayList<>());
+        }
+        return bookDocument.getBookStatusWrapper();
     }
 }
