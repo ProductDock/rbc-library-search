@@ -1,6 +1,7 @@
 package com.productdock.library.search.data.provider;
 
 import com.productdock.library.search.elastic.document.BookDocument;
+import com.productdock.library.search.elastic.document.BookStatusWrapper;
 
 public class BookDocumentMother {
 
@@ -14,7 +15,8 @@ public class BookDocumentMother {
                 .bookId(defaultId)
                 .title(defaultTitle)
                 .author(defaultAuthor)
-                .cover(defaultCover);
+                .cover(defaultCover)
+                .bookStatusWrapper(new BookStatusWrapper());
     }
 
     public static BookDocument defaultBookDocument() {
