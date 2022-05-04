@@ -22,7 +22,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.tuple;
 import static org.awaitility.Awaitility.await;
 
 @SpringBootTest
-public class UpdateBookRecordsTest extends IntegrationTestBase {
+class UpdateBookRecordsTest extends IntegrationTestBase {
 
     @Autowired
     private KafkaTestProducer producer;

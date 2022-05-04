@@ -44,7 +44,7 @@ public record BookService(BookDocumentRepository bookDocumentRepository,
     }
 
     private BookDocument getBookDocument(String bookId) {
-        return bookDocumentRepository.findById(bookId).get();
+        return bookDocumentRepository.findById(bookId).orElseThrow();
     }
 
 }
