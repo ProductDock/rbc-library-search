@@ -26,7 +26,7 @@ public class BookMapper {
         bookDto.cover = bookDocument.getCover();
 
         var records = getBookDocumentRecords(bookDocument);
-        int availableBookCount = bookDocument.getBookStatusWrapper().getAvailableBooksCount();
+        int availableBookCount = getAvailableBooksCount(bookDocument);
         for (int i = 1; i <= availableBookCount; i++) {
             var bookRecord = Record.builder().status(BookStatus.AVAILABLE).build();
             records.add(bookRecord);
@@ -42,6 +42,14 @@ public class BookMapper {
             return Collections.emptyList();
         }
         return bookStatusWrapper.getRecords();
+    }
+
+    private int getAvailableBooksCount(BookDocument bookDocument) {
+        var bookStatusWrapper = bookDocument.getBookStatusWrapper();
+        if (bookStatusWrapper == null) {
+            return 0;
+        }
+        return bookStatusWrapper.getAvailableBooksCount();
     }
 
     public BookDocument toBookDocument(InsertBookMessage insertBookMessage) {
