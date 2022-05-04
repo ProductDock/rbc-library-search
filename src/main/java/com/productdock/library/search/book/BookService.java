@@ -46,11 +46,7 @@ public record BookService(BookDocumentRepository bookDocumentRepository,
     }
 
     private BookDocument getBookDocument(String bookId) {
-        var bookDocument = bookDocumentRepository.findById(bookId);
-        if (bookDocument.isEmpty()) {
-            throw new RuntimeException("Book index for bookId not found.");
-        }
-        return bookDocument.get();
+        return bookDocumentRepository.findById(bookId).get();
     }
 
     private BookStatusWrapper getOrCreateBookStatusWrapper(BookDocument bookDocument) {
