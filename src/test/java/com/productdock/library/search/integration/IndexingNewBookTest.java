@@ -32,7 +32,7 @@ class IndexingNewBookTest extends IntegrationTestBase {
         producer.send(topic, insertBook);
 
         await()
-                .atMost(Duration.ofSeconds(20))
+                .atMost(Duration.ofSeconds(5))
                 .until(() -> bookDocumentRepository.findById("123").isPresent());
 
         var insertedBookDocument = bookDocumentRepository.findById("123").get();

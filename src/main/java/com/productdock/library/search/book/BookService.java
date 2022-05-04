@@ -3,12 +3,10 @@ package com.productdock.library.search.book;
 import com.productdock.library.search.elastic.RecordDocumentMapper;
 import com.productdock.library.search.elastic.SearchQueryExecutor;
 import com.productdock.library.search.elastic.document.BookDocument;
-import com.productdock.library.search.elastic.document.BookStatusWrapper;
 import com.productdock.library.search.kafka.cosumer.messages.BookAvailabilityMessage;
 import com.productdock.library.search.kafka.cosumer.messages.RentalMessage;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,7 +29,7 @@ public record BookService(BookDocumentRepository bookDocumentRepository,
 
     public void updateBookRecords(RentalMessage rentalMessage) {
         var bookDocument = getBookDocument(rentalMessage.getBookId());
-        var bookStatusWrapper = getOrCreateBookStatusWrapper(bookDocument);
+        var bookStatusWrapper = bookDocument.getBookStatusWrapper();
         bookStatusWrapper.setRecords(recordDocumentMapper.toRecords(rentalMessage.getRecords()));
         bookDocument.setBookStatusWrapper(bookStatusWrapper);
         bookDocumentRepository.save(bookDocument);
@@ -39,7 +37,7 @@ public record BookService(BookDocumentRepository bookDocumentRepository,
 
     public void updateAvailabilityBookCount(BookAvailabilityMessage bookAvailabilityMessage) {
         var bookDocument = getBookDocument(bookAvailabilityMessage.getBookId());
-        var bookStatusWrapper = getOrCreateBookStatusWrapper(bookDocument);
+        var bookStatusWrapper = bookDocument.getBookStatusWrapper();
         bookStatusWrapper.setAvailableBooksCount(bookAvailabilityMessage.getAvailableBookCount());
         bookDocument.setBookStatusWrapper(bookStatusWrapper);
         bookDocumentRepository.save(bookDocument);
@@ -49,10 +47,4 @@ public record BookService(BookDocumentRepository bookDocumentRepository,
         return bookDocumentRepository.findById(bookId).get();
     }
 
-    private BookStatusWrapper getOrCreateBookStatusWrapper(BookDocument bookDocument) {
-        if (bookDocument.getBookStatusWrapper() == null) {
-            return new BookStatusWrapper(0, new ArrayList<>());
-        }
-        return bookDocument.getBookStatusWrapper();
-    }
 }

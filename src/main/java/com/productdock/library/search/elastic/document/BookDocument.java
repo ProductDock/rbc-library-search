@@ -1,16 +1,17 @@
 package com.productdock.library.search.elastic.document;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.Singular;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
+import java.util.ArrayList;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
 @Builder
 @Document(indexName = "book_index")
 public class BookDocument {
@@ -35,5 +36,8 @@ public class BookDocument {
     @Field(type = FieldType.Nested, includeInParent = true)
     private BookStatusWrapper bookStatusWrapper;
 
+    public BookDocument() {
+        bookStatusWrapper = new BookStatusWrapper(0, new ArrayList<>());
+    }
 
 }
