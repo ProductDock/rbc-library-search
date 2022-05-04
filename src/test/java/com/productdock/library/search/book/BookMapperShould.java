@@ -40,8 +40,61 @@ class BookMapperShould {
             softly.assertThat(bookDto.title).isEqualTo(bookDocument.getTitle());
             softly.assertThat(bookDto.author).isEqualTo(bookDocument.getAuthor());
             softly.assertThat(bookDto.cover).isEqualTo(bookDocument.getCover());
+            softly.assertThat(bookDto.records)
+                    .extracting("email", "status")
+                    .containsExactly(tuple("natasa@gmail.com", BookStatus.RENTED));
         }
     }
+
+    @Test
+    void mapBookDocumentToBookDto_whenBookStatusWrapperMissing() {
+        var bookDocument = defaultBookDocumentBuilder()
+                .bookId("123")
+                .title("Book title")
+                .author("Book author")
+                .cover("Book cover")
+                .bookStatusWrapper(null)
+                .build();
+
+        var bookDto = bookMapper.toBookDto(bookDocument);
+
+        try (var softly = new AutoCloseableSoftAssertions()) {
+            softly.assertThat(bookDto.id).isEqualTo(bookDocument.getBookId());
+            softly.assertThat(bookDto.title).isEqualTo(bookDocument.getTitle());
+            softly.assertThat(bookDto.author).isEqualTo(bookDocument.getAuthor());
+            softly.assertThat(bookDto.cover).isEqualTo(bookDocument.getCover());
+            softly.assertThat(bookDto.records).isEmpty();
+        }
+    }
+
+    @Test
+    void mapBookDocumentToBookDto_whenBookStatusWrapperHasOneRecordAndOneAvailableBookCount() {
+        var bookDocument = defaultBookDocumentBuilder()
+                .bookId("123").title("Book title").author("Book author").cover("Book cover").build();
+        List<Record> records = new ArrayList<>();
+        Record record = new Record();
+        record.setEmail("natasa@gmail.com");
+        record.setStatus(BookStatus.RENTED);
+        records.add(record);
+        bookDocument.getBookStatusWrapper().setRecords(records);
+        bookDocument.getBookStatusWrapper().setAvailableBooksCount(1);
+
+        var bookDto = bookMapper.toBookDto(bookDocument);
+
+        try (var softly = new AutoCloseableSoftAssertions()) {
+            softly.assertThat(bookDto.id).isEqualTo(bookDocument.getBookId());
+            softly.assertThat(bookDto.title).isEqualTo(bookDocument.getTitle());
+            softly.assertThat(bookDto.author).isEqualTo(bookDocument.getAuthor());
+            softly.assertThat(bookDto.cover).isEqualTo(bookDocument.getCover());
+            softly.assertThat(bookDto.records).hasSize(2);
+            softly.assertThat(bookDto.records)
+                    .extracting("email", "status")
+                    .containsExactlyInAnyOrder(
+                            tuple(null, BookStatus.AVAILABLE),
+                            tuple("natasa@gmail.com", BookStatus.RENTED));
+        }
+    }
+
 
     @Test
     void mapInsertBookMessageToBookDocument() {
@@ -61,4 +114,5 @@ class BookMapperShould {
 
         }
     }
+
 }

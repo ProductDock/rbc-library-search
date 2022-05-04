@@ -13,3 +13,5 @@ spring:
       group-id: rbc-library
     topic:
       insert-book-topic: embedded-insert-book-topic
+      book-status: embedded-book-status
+      book-availability: embedded-book-availability
