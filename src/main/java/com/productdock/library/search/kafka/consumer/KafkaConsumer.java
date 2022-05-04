@@ -1,10 +1,10 @@
-package com.productdock.library.search.kafka.cosumer;
+package com.productdock.library.search.kafka.consumer;
 
 import com.productdock.library.search.book.BookMapper;
 import com.productdock.library.search.book.BookService;
-import com.productdock.library.search.kafka.cosumer.messages.BookAvailabilityMessage;
-import com.productdock.library.search.kafka.cosumer.messages.InsertBookMessage;
-import com.productdock.library.search.kafka.cosumer.messages.RentalMessage;
+import com.productdock.library.search.kafka.consumer.messages.BookAvailabilityMessage;
+import com.productdock.library.search.kafka.consumer.messages.InsertBookMessage;
+import com.productdock.library.search.kafka.consumer.messages.RentalMessage;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 

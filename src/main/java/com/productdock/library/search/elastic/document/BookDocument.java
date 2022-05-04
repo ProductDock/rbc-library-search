@@ -1,5 +1,6 @@
 package com.productdock.library.search.elastic.document;
 
+import com.productdock.library.search.book.BookStatus;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
@@ -7,6 +8,7 @@ import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -34,10 +36,54 @@ public class BookDocument {
     private Set<Topic> topics;
 
     @Field(type = FieldType.Nested, includeInParent = true)
-    private BookStatusWrapper bookStatusWrapper;
+    private RentalState rentalState;
 
     public BookDocument() {
-        bookStatusWrapper = new BookStatusWrapper(0, new ArrayList<>());
+        rentalState = new RentalState(0, new ArrayList<>());
     }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class Topic {
+
+        @Field(type = FieldType.Text)
+        private String id;
+
+        @Field(type = FieldType.Text)
+        private String name;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class RentalState {
+
+        @Field(type = FieldType.Integer)
+        private int availableBooksCount;
+
+        @Singular
+        @Field(type = FieldType.Nested, includeInParent = true)
+        private List<Record> records;
+
+        @Data
+        @Builder
+        @NoArgsConstructor
+        @AllArgsConstructor
+        @RequiredArgsConstructor
+        public static class Record {
+
+            @Field(type = FieldType.Text)
+            private String email;
+
+            @NonNull
+            @Field(type = FieldType.Text)
+            private BookStatus status;
+        }
+    }
+
+
 
 }

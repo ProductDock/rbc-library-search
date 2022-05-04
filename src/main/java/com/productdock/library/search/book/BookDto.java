@@ -8,6 +8,11 @@ public class BookDto {
     public String title;
     public String author;
     public String cover;
-    public List<RecordDto> records;
+    public List<Record> records;
 
+    public static class Record {
+
+        public String email;
+        public BookStatus status;
+    }
 }

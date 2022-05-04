@@ -1,20 +1,21 @@
 package com.productdock.library.search.book;
 
-import com.productdock.library.search.elastic.RecordDocumentMapper;
+import com.productdock.library.search.elastic.RentalStateRecordMapper;
 import com.productdock.library.search.elastic.SearchQueryExecutor;
 import com.productdock.library.search.elastic.document.BookDocument;
-import com.productdock.library.search.kafka.cosumer.messages.BookAvailabilityMessage;
-import com.productdock.library.search.kafka.cosumer.messages.RentalMessage;
+import com.productdock.library.search.kafka.consumer.messages.BookAvailabilityMessage;
+import com.productdock.library.search.kafka.consumer.messages.RentalMessage;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 @Service
 public record BookService(BookDocumentRepository bookDocumentRepository,
                           SearchQueryExecutor searchQueryExecutor,
                           BookMapper bookMapper,
-                          RecordDocumentMapper recordDocumentMapper) {
+                          RentalStateRecordMapper recordDocumentMapper) {
 
 
     public SearchBooksResponse getBooks(Optional<List<String>> topics, int page) {
@@ -28,18 +29,19 @@ public record BookService(BookDocumentRepository bookDocumentRepository,
     }
 
     public void updateBookRecords(RentalMessage rentalMessage) {
-        var bookDocument = getBookDocument(rentalMessage.getBookId());
-        var bookStatusWrapper = bookDocument.getBookStatusWrapper();
-        bookStatusWrapper.setRecords(recordDocumentMapper.toRecords(rentalMessage.getRecords()));
-        bookDocument.setBookStatusWrapper(bookStatusWrapper);
-        bookDocumentRepository.save(bookDocument);
+        updateBook(rentalMessage.getBookId(),
+                state -> state.setRecords(recordDocumentMapper.toRecords(rentalMessage.getRecords())));
     }
 
     public void updateAvailabilityBookCount(BookAvailabilityMessage bookAvailabilityMessage) {
-        var bookDocument = getBookDocument(bookAvailabilityMessage.getBookId());
-        var bookStatusWrapper = bookDocument.getBookStatusWrapper();
-        bookStatusWrapper.setAvailableBooksCount(bookAvailabilityMessage.getAvailableBookCount());
-        bookDocument.setBookStatusWrapper(bookStatusWrapper);
+        updateBook(bookAvailabilityMessage.getBookId(),
+                state -> state.setAvailableBooksCount(bookAvailabilityMessage.getAvailableBookCount()));
+    }
+
+    private void updateBook(String bookId, Consumer<BookDocument.RentalState> updater) {
+        var bookDocument = getBookDocument(bookId);
+        var bookRentalState = bookDocument.getRentalState();
+        updater.accept(bookRentalState);
         bookDocumentRepository.save(bookDocument);
     }
 

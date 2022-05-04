@@ -1,6 +1,6 @@
 package com.productdock.library.search.book;
 
-import com.productdock.library.search.elastic.document.Record;
+import com.productdock.library.search.elastic.document.BookDocument;
 import org.assertj.core.api.AutoCloseableSoftAssertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,7 +16,7 @@ import static com.productdock.library.search.data.provider.InsertBookMessageMoth
 import static org.assertj.core.api.AssertionsForClassTypes.tuple;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {BookMapper.class, RecordDtoMapperImpl.class})
+@ContextConfiguration(classes = {BookMapper.class, BookDtoRecordMapperImpl.class})
 class BookMapperShould {
 
     @Autowired
@@ -26,12 +26,12 @@ class BookMapperShould {
     void mapBookDocumentToBookDto() {
         var bookDocument = defaultBookDocumentBuilder()
                 .bookId("123").title("Book title").author("Book author").cover("Book cover").build();
-        List<Record> records = new ArrayList<>();
-        Record record = new Record();
+        List<BookDocument.RentalState.Record> records = new ArrayList<>();
+        var record = new BookDocument.RentalState.Record();
         record.setEmail("natasa@gmail.com");
         record.setStatus(BookStatus.RENTED);
         records.add(record);
-        bookDocument.getBookStatusWrapper().setRecords(records);
+        bookDocument.getRentalState().setRecords(records);
 
         var bookDto = bookMapper.toBookDto(bookDocument);
 
@@ -53,7 +53,7 @@ class BookMapperShould {
                 .title("Book title")
                 .author("Book author")
                 .cover("Book cover")
-                .bookStatusWrapper(null)
+                .rentalState(null)
                 .build();
 
         var bookDto = bookMapper.toBookDto(bookDocument);
@@ -71,13 +71,13 @@ class BookMapperShould {
     void mapBookDocumentToBookDto_whenBookStatusWrapperHasOneRecordAndOneAvailableBookCount() {
         var bookDocument = defaultBookDocumentBuilder()
                 .bookId("123").title("Book title").author("Book author").cover("Book cover").build();
-        List<Record> records = new ArrayList<>();
-        Record record = new Record();
+        List<BookDocument.RentalState.Record> records = new ArrayList<>();
+        var record = new BookDocument.RentalState.Record();
         record.setEmail("natasa@gmail.com");
         record.setStatus(BookStatus.RENTED);
         records.add(record);
-        bookDocument.getBookStatusWrapper().setRecords(records);
-        bookDocument.getBookStatusWrapper().setAvailableBooksCount(1);
+        bookDocument.getRentalState().setRecords(records);
+        bookDocument.getRentalState().setAvailableBooksCount(1);
 
         var bookDto = bookMapper.toBookDto(bookDocument);
 

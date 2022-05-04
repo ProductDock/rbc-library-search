@@ -1,10 +1,7 @@
 package com.productdock.library.search.book;
 
 import com.productdock.library.search.elastic.document.BookDocument;
-import com.productdock.library.search.elastic.document.Record;
-import com.productdock.library.search.elastic.document.Topic;
-import com.productdock.library.search.kafka.cosumer.messages.BookTopic;
-import com.productdock.library.search.kafka.cosumer.messages.InsertBookMessage;
+import com.productdock.library.search.kafka.consumer.messages.InsertBookMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +13,7 @@ import java.util.List;
 public class BookMapper {
 
     @Autowired
-    private RecordDtoMapper recordDtoMapper;
+    private BookDtoRecordMapper recordDtoMapper;
 
     public BookDto toBookDto(BookDocument bookDocument) {
         var bookDto = new BookDto();
@@ -28,7 +25,7 @@ public class BookMapper {
         var records = getBookDocumentRecords(bookDocument);
         int availableBookCount = getAvailableBooksCount(bookDocument);
         for (int i = 1; i <= availableBookCount; i++) {
-            var bookRecord = Record.builder().status(BookStatus.AVAILABLE).build();
+            var bookRecord = BookDocument.RentalState.Record.builder().status(BookStatus.AVAILABLE).build();
             records.add(bookRecord);
         }
         bookDto.records = recordDtoMapper.toRecordsDto(records);
@@ -36,20 +33,20 @@ public class BookMapper {
         return bookDto;
     }
 
-    private List<Record> getBookDocumentRecords(BookDocument bookDocument) {
-        var bookStatusWrapper = bookDocument.getBookStatusWrapper();
-        if (bookStatusWrapper == null) {
+    private List<BookDocument.RentalState.Record> getBookDocumentRecords(BookDocument bookDocument) {
+        var bookRentalState = bookDocument.getRentalState();
+        if (bookRentalState == null) {
             return Collections.emptyList();
         }
-        return bookStatusWrapper.getRecords();
+        return bookRentalState.getRecords();
     }
 
     private int getAvailableBooksCount(BookDocument bookDocument) {
-        var bookStatusWrapper = bookDocument.getBookStatusWrapper();
-        if (bookStatusWrapper == null) {
+        var bookRentalState = bookDocument.getRentalState();
+        if (bookRentalState == null) {
             return 0;
         }
-        return bookStatusWrapper.getAvailableBooksCount();
+        return bookRentalState.getAvailableBooksCount();
     }
 
     public BookDocument toBookDocument(InsertBookMessage insertBookMessage) {
@@ -62,14 +59,14 @@ public class BookMapper {
                 .build();
     }
 
-    protected Topic bookTopicToTopic(BookTopic bookTopic) {
-        return Topic.builder()
+    protected BookDocument.Topic bookTopicToTopic(InsertBookMessage.Topic bookTopic) {
+        return BookDocument.Topic.builder()
                 .id(bookTopic.getId())
                 .name(bookTopic.getName())
                 .build();
     }
 
-    protected Collection<Topic> bookTopicListToTopicCollection(List<BookTopic> list) {
+    protected Collection<BookDocument.Topic> bookTopicListToTopicCollection(List<InsertBookMessage.Topic> list) {
         return list.stream().map(this::bookTopicToTopic).toList();
     }
 }

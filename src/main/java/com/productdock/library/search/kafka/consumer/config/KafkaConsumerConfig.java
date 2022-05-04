@@ -1,8 +1,8 @@
-package com.productdock.library.search.kafka.cosumer.config;
+package com.productdock.library.search.kafka.consumer.config;
 
-import com.productdock.library.search.kafka.cosumer.messages.BookAvailabilityMessage;
-import com.productdock.library.search.kafka.cosumer.messages.InsertBookMessage;
-import com.productdock.library.search.kafka.cosumer.messages.RentalMessage;
+import com.productdock.library.search.kafka.consumer.messages.BookAvailabilityMessage;
+import com.productdock.library.search.kafka.consumer.messages.InsertBookMessage;
+import com.productdock.library.search.kafka.consumer.messages.RentalMessage;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;

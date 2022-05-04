@@ -1,4 +1,4 @@
-package com.productdock.library.search.kafka.cosumer.messages;
+package com.productdock.library.search.kafka.consumer.messages;
 
 import lombok.*;
 

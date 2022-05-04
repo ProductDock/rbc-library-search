@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.productdock.library.search.book.BookDocumentRepository;
 import com.productdock.library.search.book.BookStatus;
 import com.productdock.library.search.data.provider.KafkaTestProducer;
-import com.productdock.library.search.kafka.cosumer.messages.BookRecord;
+import com.productdock.library.search.kafka.consumer.messages.RentalMessage;
 import lombok.NonNull;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +43,7 @@ class UpdateBookRecordsTest extends IntegrationTestBase {
     void shouldUpdateBookRecords_WhenRentalMessageReceived() throws JsonProcessingException {
         givenBookWithId();
         var rentalMessage = defaultRentalMessageBuilder()
-                .record(new BookRecord("email", BookStatus.RENTED)).build();
+                .record(new RentalMessage.Record("email", BookStatus.RENTED)).build();
 
         producer.send(bookStatusTopic, rentalMessage);
 
@@ -54,15 +54,15 @@ class UpdateBookRecordsTest extends IntegrationTestBase {
 
         var bookDocument = bookDocumentRepository.findById(BOOK_ID).get();
 
-        assertThat(bookDocument.getBookStatusWrapper().getRecords()).hasSize(1);
-        assertThat(bookDocument.getBookStatusWrapper().getRecords())
+        assertThat(bookDocument.getRentalState().getRecords()).hasSize(1);
+        assertThat(bookDocument.getRentalState().getRecords())
                 .extracting("email", "status")
                 .containsExactly(tuple("email", BookStatus.RENTED));
     }
 
     @NonNull
     private Callable<Boolean> newRecordIsPresent() {
-        return () -> !bookDocumentRepository.findById(BOOK_ID).get().getBookStatusWrapper().getRecords().isEmpty();
+        return () -> !bookDocumentRepository.findById(BOOK_ID).get().getRentalState().getRecords().isEmpty();
     }
 
     @Test
@@ -80,12 +80,12 @@ class UpdateBookRecordsTest extends IntegrationTestBase {
 
         var bookDocument = bookDocumentRepository.findById(BOOK_ID).get();
 
-        assertThat(bookDocument.getBookStatusWrapper().getAvailableBooksCount()).isEqualTo(AVAILABLE_BOOK_COUNT);
+        assertThat(bookDocument.getRentalState().getAvailableBooksCount()).isEqualTo(AVAILABLE_BOOK_COUNT);
     }
 
     @NonNull
     private Callable<Boolean> availableBookCountIsChanged() {
-        return () -> bookDocumentRepository.findById(BOOK_ID).get().getBookStatusWrapper().getAvailableBooksCount() != 0;
+        return () -> bookDocumentRepository.findById(BOOK_ID).get().getRentalState().getAvailableBooksCount() != 0;
     }
 
     private void givenBookWithId() {

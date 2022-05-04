@@ -1,7 +1,7 @@
 package com.productdock.library.search.integration;
 
 import com.productdock.library.search.book.BookDocumentRepository;
-import com.productdock.library.search.elastic.document.Topic;
+import com.productdock.library.search.elastic.document.BookDocument;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,9 +69,9 @@ class BookSearchApiTest extends IntegrationTestBase {
             bookDocumentRepository.save(book);
         }
 
-        private List<Topic> createTopicEntitiesWithNames(String... topicNames) {
+        private List<BookDocument.Topic> createTopicEntitiesWithNames(String... topicNames) {
             return stream(topicNames)
-                    .map(topicName -> Topic.builder().name(topicName).build())
+                    .map(topicName -> BookDocument.Topic.builder().name(topicName).build())
                     .toList();
         }
     }
