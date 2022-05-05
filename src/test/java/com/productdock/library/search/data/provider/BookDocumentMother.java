@@ -1,9 +1,8 @@
 package com.productdock.library.search.data.provider;
 
+import com.productdock.library.search.book.BookStatus;
 import com.productdock.library.search.elastic.document.BookDocument;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class BookDocumentMother {
 
@@ -13,7 +12,8 @@ public class BookDocumentMother {
     private static final String defaultCover = null;
 
     private static final int defaultAvailableBookCount = 0;
-    private static final List<BookDocument.RentalState.Record> defaultRecords = new ArrayList<>();
+    private static final BookDocument.RentalState.Record defaultRecord =
+            new BookDocument.RentalState.Record("::email::", BookStatus.RENTED);
 
 
     public static BookDocument.BookDocumentBuilder defaultBookDocumentBuilder() {
@@ -22,10 +22,17 @@ public class BookDocumentMother {
                 .title(defaultTitle)
                 .author(defaultAuthor)
                 .cover(defaultCover)
-                .rentalState(new BookDocument.RentalState(
-                        defaultAvailableBookCount,
-                        defaultRecords)
-                );
+                .rentalState(defaultBookDocumentRentalState());
+    }
+
+    public static BookDocument.RentalState.RentalStateBuilder defaultBookDocumentRentalStateBuilder() {
+        return BookDocument.RentalState.builder()
+                .availableBooksCount(defaultAvailableBookCount)
+                .record(defaultRecord);
+    }
+
+    public static BookDocument.RentalState defaultBookDocumentRentalState() {
+        return defaultBookDocumentRentalStateBuilder().build();
     }
 
     public static BookDocument defaultBookDocument() {

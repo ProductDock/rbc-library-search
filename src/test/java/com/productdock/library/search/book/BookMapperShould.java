@@ -8,11 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static com.productdock.library.search.data.provider.BookDocumentMother.defaultBookDocumentBuilder;
+import static com.productdock.library.search.data.provider.BookDocumentMother.defaultBookDocumentRentalStateBuilder;
 import static com.productdock.library.search.data.provider.InsertBookMessageMother.defaultInsertBookMessageBuilder;
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Stream.of;
 import static org.assertj.core.api.AssertionsForClassTypes.tuple;
 
 @ExtendWith(SpringExtension.class)
@@ -24,14 +24,7 @@ class BookMapperShould {
 
     @Test
     void mapBookDocumentToBookDto() {
-        var bookDocument = defaultBookDocumentBuilder()
-                .bookId("123").title("Book title").author("Book author").cover("Book cover").build();
-        List<BookDocument.RentalState.Record> records = new ArrayList<>();
-        var record = new BookDocument.RentalState.Record();
-        record.setEmail("natasa@gmail.com");
-        record.setStatus(BookStatus.RENTED);
-        records.add(record);
-        bookDocument.getRentalState().setRecords(records);
+        var bookDocument = defaultBookDocumentBuilder().build();
 
         var bookDto = bookMapper.toBookDto(bookDocument);
 
@@ -42,42 +35,18 @@ class BookMapperShould {
             softly.assertThat(bookDto.cover).isEqualTo(bookDocument.getCover());
             softly.assertThat(bookDto.records)
                     .extracting("email", "status")
-                    .containsExactly(tuple("natasa@gmail.com", BookStatus.RENTED));
-        }
-    }
-
-    @Test
-    void mapBookDocumentToBookDto_whenBookStatusWrapperMissing() {
-        var bookDocument = defaultBookDocumentBuilder()
-                .bookId("123")
-                .title("Book title")
-                .author("Book author")
-                .cover("Book cover")
-                .rentalState(null)
-                .build();
-
-        var bookDto = bookMapper.toBookDto(bookDocument);
-
-        try (var softly = new AutoCloseableSoftAssertions()) {
-            softly.assertThat(bookDto.id).isEqualTo(bookDocument.getBookId());
-            softly.assertThat(bookDto.title).isEqualTo(bookDocument.getTitle());
-            softly.assertThat(bookDto.author).isEqualTo(bookDocument.getAuthor());
-            softly.assertThat(bookDto.cover).isEqualTo(bookDocument.getCover());
-            softly.assertThat(bookDto.records).isEmpty();
+                    .containsExactly(tuple("::email::", BookStatus.RENTED));
         }
     }
 
     @Test
     void mapBookDocumentToBookDto_whenBookStatusWrapperHasOneRecordAndOneAvailableBookCount() {
-        var bookDocument = defaultBookDocumentBuilder()
-                .bookId("123").title("Book title").author("Book author").cover("Book cover").build();
-        List<BookDocument.RentalState.Record> records = new ArrayList<>();
-        var record = new BookDocument.RentalState.Record();
-        record.setEmail("natasa@gmail.com");
-        record.setStatus(BookStatus.RENTED);
-        records.add(record);
-        bookDocument.getRentalState().setRecords(records);
-        bookDocument.getRentalState().setAvailableBooksCount(1);
+        var records = of(
+                BookDocument.RentalState.Record.builder().email("::email::").status(BookStatus.RENTED).build()
+        ).collect(toList());
+        var rentalState = defaultBookDocumentRentalStateBuilder().availableBooksCount(1).build();
+        rentalState.setRecords(records);
+        var bookDocument = defaultBookDocumentBuilder().rentalState(rentalState).build();
 
         var bookDto = bookMapper.toBookDto(bookDocument);
 
@@ -91,15 +60,15 @@ class BookMapperShould {
                     .extracting("email", "status")
                     .containsExactlyInAnyOrder(
                             tuple(null, BookStatus.AVAILABLE),
-                            tuple("natasa@gmail.com", BookStatus.RENTED));
+                            tuple("::email::", BookStatus.RENTED)
+                    );
         }
     }
 
 
     @Test
     void mapInsertBookMessageToBookDocument() {
-        var insertBookMessage = defaultInsertBookMessageBuilder()
-                .bookId("123").title("Book title").author("Book author").cover("Book cover").build();
+        var insertBookMessage = defaultInsertBookMessageBuilder().build();
 
         var bookDocument = bookMapper.toBookDocument(insertBookMessage);
 

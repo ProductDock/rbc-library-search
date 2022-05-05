@@ -31,7 +31,6 @@ class UpdateBookRecordsTest extends IntegrationTestBase {
     private BookDocumentRepository bookDocumentRepository;
 
     private final String BOOK_ID = "1";
-    private final int AVAILABLE_BOOK_COUNT = 2;
 
     @Value("${spring.kafka.topic.book-status}")
     private String bookStatusTopic;
@@ -42,8 +41,9 @@ class UpdateBookRecordsTest extends IntegrationTestBase {
     @Test
     void shouldUpdateBookRecords_WhenRentalMessageReceived() throws JsonProcessingException {
         givenBookWithId();
+        var rentalMessageRecord = RentalMessage.Record.builder().email("email").status(BookStatus.RENTED).build();
         var rentalMessage = defaultRentalMessageBuilder()
-                .record(new RentalMessage.Record("email", BookStatus.RENTED)).build();
+                .record(rentalMessageRecord).build();
 
         producer.send(bookStatusTopic, rentalMessage);
 
@@ -68,8 +68,9 @@ class UpdateBookRecordsTest extends IntegrationTestBase {
     @Test
     void shouldUpdateBookAvailability_WhenBookAvailabilityMessageReceived() throws JsonProcessingException {
         givenBookWithId();
+        int availableBookCount = 2;
         var bookAvailabilityMessage = defaultBookAvailabilityMessageBuilder()
-                .availableBookCount(AVAILABLE_BOOK_COUNT).build();
+                .availableBookCount(availableBookCount).build();
 
         producer.send(bookAvailabilityTopic, bookAvailabilityMessage);
 
@@ -80,7 +81,7 @@ class UpdateBookRecordsTest extends IntegrationTestBase {
 
         var bookDocument = bookDocumentRepository.findById(BOOK_ID).get();
 
-        assertThat(bookDocument.getRentalState().getAvailableBooksCount()).isEqualTo(AVAILABLE_BOOK_COUNT);
+        assertThat(bookDocument.getRentalState().getAvailableBooksCount()).isEqualTo(availableBookCount);
     }
 
     @NonNull
