@@ -87,7 +87,7 @@ class BookServiceShould {
         bookService.updateBookRecords(rentalMessage);
 
         verify(bookDocumentRepository).save(bookDocument);
-        assertThat(bookDocument.getRentalState().getRecords()).hasSize(0);
+        assertThat(bookDocument.getRentalState().getRecords()).isEmpty();
     }
 
     @Test

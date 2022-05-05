@@ -9,7 +9,7 @@ import java.util.List;
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring")
 public interface BookDtoRecordMapper {
 
-    BookDto.Record toRecordDto(BookDocument.RentalState.Record record);
+    BookDto.Record toRecordDto(BookDocument.RentalState.Record recordDoc);
 
     List<BookDto.Record> toRecordsDto(List<BookDocument.RentalState.Record> records);
 }
