@@ -12,9 +12,8 @@ public class BookDocumentMother {
     private static final String defaultCover = null;
 
     private static final int defaultAvailableBookCount = 0;
-    private static final BookDocument.RentalState.Record defaultRecord =
-            new BookDocument.RentalState.Record("::email::", BookStatus.RENTED);
-
+    private static final String defaultEmail = "::email::";
+    private static final BookStatus defaultBookStatus = BookStatus.RENTED;
 
     public static BookDocument.BookDocumentBuilder defaultBookDocumentBuilder() {
         return BookDocument.builder()
@@ -25,19 +24,25 @@ public class BookDocumentMother {
                 .rentalState(defaultBookDocumentRentalState());
     }
 
+    public static BookDocument.RentalState defaultBookDocumentRentalState() {
+        return defaultBookDocumentRentalStateBuilder().build();
+    }
+
     public static BookDocument.RentalState.RentalStateBuilder defaultBookDocumentRentalStateBuilder() {
         return BookDocument.RentalState.builder()
                 .availableBooksCount(defaultAvailableBookCount)
-                .record(defaultRecord);
+                .record(defaultRecord());
     }
 
-    public static BookDocument.RentalState defaultBookDocumentRentalState() {
-        return defaultBookDocumentRentalStateBuilder().build();
+    public static BookDocument.RentalState.Record defaultRecord() {
+        return BookDocument.RentalState.Record.builder()
+                .email(defaultEmail)
+                .status(defaultBookStatus)
+                .build();
     }
 
     public static BookDocument defaultBookDocument() {
         return defaultBookDocumentBuilder().build();
     }
-
 
 }
