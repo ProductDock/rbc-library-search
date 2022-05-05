@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 public record KafkaConsumer(BookService bookService,
                             BookMapper bookMapper) {
 
-    @KafkaListener(topics = "${spring.kafka.topic.insert-book-topic}",
+    @KafkaListener(topics = "${spring.kafka.topic.insert-book}",
             containerFactory = "insertBookMessageKafkaListenerContainerFactory")
     public synchronized void listen(InsertBookMessage insertBookMessage) {
         bookService.save(bookMapper.toBookDocument(insertBookMessage));

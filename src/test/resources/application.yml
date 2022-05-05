@@ -12,6 +12,6 @@ spring:
       auto-offset-reset: earliest
       group-id: rbc-library
     topic:
-      insert-book-topic: embedded-insert-book-topic
+      insert-book: embedded-insert-book-topic
       book-status: embedded-book-status
       book-availability: embedded-book-availability

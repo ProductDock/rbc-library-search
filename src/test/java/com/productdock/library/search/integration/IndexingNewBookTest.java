@@ -22,7 +22,7 @@ class IndexingNewBookTest extends IntegrationTestBase {
     @Autowired
     private BookDocumentRepository bookDocumentRepository;
 
-    @Value("${spring.kafka.topic.insert-book-topic}")
+    @Value("${spring.kafka.topic.insert-book}")
     private String topic;
 
     @Test
