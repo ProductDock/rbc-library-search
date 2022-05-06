@@ -3,12 +3,13 @@ package com.productdock.library.search.book;
 import com.productdock.library.search.elastic.document.BookDocument;
 import com.productdock.library.search.kafka.consumer.messages.InsertBookMessage;
 import lombok.AllArgsConstructor;
-import org.mapstruct.ap.internal.util.Collections;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import static java.util.stream.Stream.concat;
 
 @Component
 @AllArgsConstructor
@@ -27,7 +28,7 @@ public class BookMapper {
         var records = bookDocument.getRentalState().getRecords();
         var availableBookCount = bookDocument.getRentalState().getAvailableBooksCount();
         var availableRecords = createAvailableRecords(availableBookCount);
-        var allRecords = Collections.join(records, availableRecords);
+        var allRecords = concat(records.stream(), availableRecords.stream()).toList();
         bookDto.records = recordDtoMapper.toRecordsDto(allRecords);
     }
 
