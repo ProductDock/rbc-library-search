@@ -1,6 +1,5 @@
 package com.productdock.library.search.book;
 
-import com.productdock.library.search.elastic.document.BookDocument;
 import org.assertj.core.api.AutoCloseableSoftAssertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -9,10 +8,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static com.productdock.library.search.data.provider.BookDocumentMother.defaultBookDocumentBuilder;
-import static com.productdock.library.search.data.provider.BookDocumentMother.defaultBookDocumentRentalStateBuilder;
+import static com.productdock.library.search.data.provider.BookDocumentRentalStateMother.defaultRentalStateBuilder;
+import static com.productdock.library.search.data.provider.BookDocumentRentalStateRecordMother.defaultRecord;
 import static com.productdock.library.search.data.provider.InsertBookMessageMother.defaultInsertBookMessageBuilder;
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.Stream.of;
 import static org.assertj.core.api.AssertionsForClassTypes.tuple;
 
 @ExtendWith(SpringExtension.class)
@@ -24,7 +22,9 @@ class BookMapperShould {
 
     @Test
     void mapBookDocumentToBookDto() {
-        var bookDocument = defaultBookDocumentBuilder().build();
+        var bookDocument = defaultBookDocumentBuilder()
+                .rentalState(defaultRentalStateBuilder()
+                        .record(defaultRecord()).build()).build();
 
         var bookDto = bookMapper.toBookDto(bookDocument);
 
@@ -41,12 +41,14 @@ class BookMapperShould {
 
     @Test
     void mapBookDocumentToBookDto_whenBookStatusWrapperHasOneRecordAndOneAvailableBookCount() {
-        var records = of(
-                BookDocument.RentalState.Record.builder().email("::email::").status(BookStatus.RENTED).build()
-        ).collect(toList());
-        var rentalState = defaultBookDocumentRentalStateBuilder().availableBooksCount(1).build();
-        rentalState.setRecords(records);
-        var bookDocument = defaultBookDocumentBuilder().rentalState(rentalState).build();
+        var bookDocument =
+                defaultBookDocumentBuilder()
+                        .bookId("123")
+                        .cover("Book cover")
+                        .rentalState(defaultRentalStateBuilder()
+                                .availableBooksCount(1)
+                                .record(defaultRecord())
+                                .build()).build();
 
         var bookDto = bookMapper.toBookDto(bookDocument);
 

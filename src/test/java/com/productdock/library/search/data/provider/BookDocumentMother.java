@@ -3,6 +3,8 @@ package com.productdock.library.search.data.provider;
 import com.productdock.library.search.book.BookStatus;
 import com.productdock.library.search.elastic.document.BookDocument;
 
+import static com.productdock.library.search.data.provider.BookDocumentRentalStateMother.defaultRentalState;
+
 
 public class BookDocumentMother {
 
@@ -11,34 +13,13 @@ public class BookDocumentMother {
     private static final String defaultAuthor = "::author::";
     private static final String defaultCover = null;
 
-    private static final int defaultAvailableBookCount = 0;
-    private static final String defaultEmail = "::email::";
-    private static final BookStatus defaultBookStatus = BookStatus.RENTED;
-
     public static BookDocument.BookDocumentBuilder defaultBookDocumentBuilder() {
         return BookDocument.builder()
                 .bookId(defaultId)
                 .title(defaultTitle)
                 .author(defaultAuthor)
                 .cover(defaultCover)
-                .rentalState(defaultBookDocumentRentalState());
-    }
-
-    public static BookDocument.RentalState defaultBookDocumentRentalState() {
-        return defaultBookDocumentRentalStateBuilder().build();
-    }
-
-    public static BookDocument.RentalState.RentalStateBuilder defaultBookDocumentRentalStateBuilder() {
-        return BookDocument.RentalState.builder()
-                .availableBooksCount(defaultAvailableBookCount)
-                .record(defaultRecord());
-    }
-
-    public static BookDocument.RentalState.Record defaultRecord() {
-        return BookDocument.RentalState.Record.builder()
-                .email(defaultEmail)
-                .status(defaultBookStatus)
-                .build();
+                .rentalState(defaultRentalState());
     }
 
     public static BookDocument defaultBookDocument() {
