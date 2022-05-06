@@ -3,6 +3,7 @@ package com.productdock.library.search.book;
 import com.productdock.library.search.elastic.document.BookDocument;
 import com.productdock.library.search.kafka.consumer.messages.InsertBookMessage;
 import lombok.AllArgsConstructor;
+import org.mapstruct.ap.internal.util.Collections;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -25,11 +26,12 @@ public class BookMapper {
     private void mapRecords(BookDocument bookDocument, BookDto bookDto) {
         var records = bookDocument.getRentalState().getRecords();
         var availableBookCount = bookDocument.getRentalState().getAvailableBooksCount();
-        records.addAll(createAvailableRecords(availableBookCount));
-        bookDto.records = recordDtoMapper.toRecordsDto(records);
+        var availableRecords = createAvailableRecords(availableBookCount);
+        var allRecords = Collections.join(records, availableRecords);
+        bookDto.records = recordDtoMapper.toRecordsDto(allRecords);
     }
 
-    private Collection<BookDocument.RentalState.Record> createAvailableRecords(int availableBookCount) {
+    private List<BookDocument.RentalState.Record> createAvailableRecords(int availableBookCount) {
         var bookRecords = new ArrayList<BookDocument.RentalState.Record>();
         for (int i = 1; i <= availableBookCount; i++) {
             bookRecords.add(new BookDocument.RentalState.Record(BookStatus.AVAILABLE));
