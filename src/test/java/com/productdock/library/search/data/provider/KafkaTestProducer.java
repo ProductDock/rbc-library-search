@@ -2,7 +2,6 @@ package com.productdock.library.search.data.provider;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.productdock.library.search.kafka.cosumer.messages.InsertBookMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
@@ -15,8 +14,8 @@ public class KafkaTestProducer {
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
 
-    public void send(String topic, InsertBookMessage payload) throws JsonProcessingException {
-        String message =  OBJECT_MAPPER.writeValueAsString(payload);
+    public void send(String topic, Object payload) throws JsonProcessingException {
+        String message = OBJECT_MAPPER.writeValueAsString(payload);
         kafkaTemplate.send(topic, message);
     }
 }

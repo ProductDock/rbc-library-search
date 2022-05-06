@@ -1,12 +1,30 @@
+version: "3"
 services:
   zookeeper:
+    container_name: zookeeper
     image: wurstmeister/zookeeper
   kafka:
+    container_name: kafka
     image: wurstmeister/kafka
     ports:
       - "9092:9092"
     environment:
-      KAFKA_CREATE_TOPICS: "insert-book-topic:1:1"
+      KAFKA_CREATE_TOPICS: "insert-book:1:1"
       KAFKA_ADVERTISED_HOST_NAME: localhost
       KAFKA_ADVERTISED_PORT: 9092
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.2
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+    volumes:
+      - elasticsearch-data:/tmp/elasticsearch/data
+    ports:
+      - 9200:9200
+      - 9300:9300
+
+volumes:
+  elasticsearch-data:
+    name: elasticsearch-data

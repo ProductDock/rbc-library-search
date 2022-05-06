@@ -22,17 +22,17 @@ class IndexingNewBookTest extends IntegrationTestBase {
     @Autowired
     private BookDocumentRepository bookDocumentRepository;
 
-    @Value("${spring.kafka.topic.insert-book-topic}")
+    @Value("${spring.kafka.topic.insert-book}")
     private String topic;
 
     @Test
     void shouldSaveBookIndex_whenMessageReceived() throws Exception {
-        var insertBook = defaultInsertBookMessageBuilder().id("123").author("Book author").build();
+        var insertBook = defaultInsertBookMessageBuilder().bookId("123").author("Book author").build();
 
         producer.send(topic, insertBook);
 
         await()
-                .atMost(Duration.ofSeconds(20))
+                .atMost(Duration.ofSeconds(5))
                 .until(() -> bookDocumentRepository.findById("123").isPresent());
 
         var insertedBookDocument = bookDocumentRepository.findById("123").get();

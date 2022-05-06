@@ -16,7 +16,9 @@ spring:
       auto-offset-reset: latest
       group-id: ${consumer.group:group}
     topic:
-      insert-book-topic: ${kafka.topic:insert-book-topic}
+      insert-book: ${kafka.topic.insert-book:insert-book}
+      book-status: ${kafka.topic.book-status:book-status}
+      book-availability: ${kafka.topic.book-availability:book-availability}
   elasticsearch:
     rest:
       uris: ${elasticsearch.server.url}:9200

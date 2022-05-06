@@ -2,6 +2,8 @@ package com.productdock.library.search.data.provider;
 
 import com.productdock.library.search.elastic.document.BookDocument;
 
+import static com.productdock.library.search.data.provider.BookDocumentRentalStateMother.defaultRentalState;
+
 public class BookDocumentMother {
 
     private static final String defaultId = null;
@@ -11,15 +13,15 @@ public class BookDocumentMother {
 
     public static BookDocument.BookDocumentBuilder defaultBookDocumentBuilder() {
         return BookDocument.builder()
-                .id(defaultId)
+                .bookId(defaultId)
                 .title(defaultTitle)
                 .author(defaultAuthor)
-                .cover(defaultCover);
+                .cover(defaultCover)
+                .rentalState(defaultRentalState());
     }
 
     public static BookDocument defaultBookDocument() {
         return defaultBookDocumentBuilder().build();
     }
-
 
 }
