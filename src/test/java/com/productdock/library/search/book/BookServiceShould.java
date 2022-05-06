@@ -15,6 +15,7 @@ import org.springframework.data.elasticsearch.core.SearchHitsImpl;
 import org.springframework.test.context.ContextConfiguration;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,6 +34,8 @@ import static org.mockito.Mockito.*;
 class BookServiceShould {
 
     private static final Optional<List<String>> ANY_TOPIC = Optional.of(List.of("TOPIC"));
+    private static final List MAPPED_DOCUMENT_RECORDS = Collections.singletonList
+            (new BookDocument.RentalState.Record("any", BookStatus.RENTED));
 
     @InjectMocks
     private BookService bookService;
@@ -82,12 +85,11 @@ class BookServiceShould {
         var bookDocument = defaultBookDocument();
 
         given(bookDocumentRepository.findById(rentalMessage.getBookId())).willReturn(Optional.ofNullable(bookDocument));
-        given(rentalStateRecordMapper.toRecords(rentalMessage.getRecords())).willReturn(new ArrayList<>());
+        given(rentalStateRecordMapper.toRecords(rentalMessage.getRecords())).willReturn(MAPPED_DOCUMENT_RECORDS);
 
         bookService.updateBookRecords(rentalMessage);
 
-        verify(bookDocumentRepository).save(bookDocument);
-        assertThat(bookDocument.getRentalState().getRecords()).isEmpty();
+        assertThat(bookDocument.getRentalState().getRecords()).isEqualTo(MAPPED_DOCUMENT_RECORDS);
     }
 
     @Test
