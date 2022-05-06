@@ -32,7 +32,7 @@ public class BookMapper {
     private Collection<BookDocument.RentalState.Record> createAvailableRecords(int availableBookCount) {
         var bookRecords = new ArrayList<BookDocument.RentalState.Record>();
         for (int i = 1; i <= availableBookCount; i++) {
-            bookRecords.add(BookDocument.RentalState.Record.builder().status(BookStatus.AVAILABLE).build());
+            bookRecords.add(new BookDocument.RentalState.Record(BookStatus.AVAILABLE));
         }
         return bookRecords;
     }
