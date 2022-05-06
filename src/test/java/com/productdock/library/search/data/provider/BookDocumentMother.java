@@ -1,10 +1,8 @@
 package com.productdock.library.search.data.provider;
 
-import com.productdock.library.search.book.BookStatus;
 import com.productdock.library.search.elastic.document.BookDocument;
 
 import static com.productdock.library.search.data.provider.BookDocumentRentalStateMother.defaultRentalState;
-
 
 public class BookDocumentMother {
 
