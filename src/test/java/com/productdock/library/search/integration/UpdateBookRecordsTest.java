@@ -41,7 +41,7 @@ class UpdateBookRecordsTest extends IntegrationTestBase {
     @Test
     void shouldUpdateBookRecords_WhenRentalMessageReceived() throws JsonProcessingException {
         givenBookWithId();
-        var rentalMessageRecord = RentalMessage.Record.builder().email("email").status(BookStatus.RENTED).build();
+        var rentalMessageRecord = RentalMessage.Record.builder().patron("email").status(BookStatus.RENTED).build();
         var rentalMessage = defaultRentalMessageBuilder()
                 .rentalRecord(rentalMessageRecord).build();
 
