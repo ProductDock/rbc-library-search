@@ -13,7 +13,7 @@ public class RentalMessage {
 
     private String bookId;
     @Singular
-    private List<Record> records;
+    private List<Record> rentalRecords;
 
     @Data
     @Builder

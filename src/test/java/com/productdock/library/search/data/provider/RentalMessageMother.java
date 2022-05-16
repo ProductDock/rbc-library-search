@@ -13,7 +13,7 @@ public class RentalMessageMother {
     public static RentalMessage.RentalMessageBuilder defaultRentalMessageBuilder() {
         return RentalMessage.builder()
                 .bookId(defaultId)
-                .records(defaultRecords);
+                .rentalRecords(defaultRecords);
     }
 
     public static RentalMessage defaultRentalMessage() {

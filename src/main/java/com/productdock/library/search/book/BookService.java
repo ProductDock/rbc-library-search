@@ -30,7 +30,7 @@ public record BookService(BookDocumentRepository bookDocumentRepository,
 
     public void updateBookRecords(RentalMessage rentalMessage) {
         updateBook(rentalMessage.getBookId(),
-                state -> state.setRecords(recordDocumentMapper.toRecords(rentalMessage.getRecords())));
+                state -> state.setRecords(recordDocumentMapper.toRecords(rentalMessage.getRentalRecords())));
     }
 
     public void updateAvailabilityBookCount(BookAvailabilityMessage bookAvailabilityMessage) {
