@@ -25,12 +25,12 @@ class RentalStateRecordMapperShould {
     @Test
     void mapRentalMessageRecordToRentalStateRecord() {
         var rentalMessageRecord = RentalMessage.Record.builder()
-                .email("email1").status(BookStatus.AVAILABLE).build();
+                .patron("email1").status(BookStatus.AVAILABLE).build();
 
         var rentalStateRecord = rentalStateRecordMapper.toRecord(rentalMessageRecord);
 
         try (var softly = new AutoCloseableSoftAssertions()) {
-            softly.assertThat(rentalMessageRecord.getEmail()).isEqualTo(rentalStateRecord.getEmail());
+            softly.assertThat(rentalMessageRecord.getPatron()).isEqualTo(rentalStateRecord.getEmail());
             softly.assertThat(rentalMessageRecord.getStatus()).isEqualTo(rentalStateRecord.getStatus());
         }
     }
@@ -38,8 +38,8 @@ class RentalStateRecordMapperShould {
     @Test
     void mapRentalMessageRecordsToRentalStateRecords() {
         var rentalMessageRecords = of(
-                RentalMessage.Record.builder().email("email1").status(BookStatus.AVAILABLE).build(),
-                RentalMessage.Record.builder().email("email2").status(BookStatus.RENTED).build()
+                RentalMessage.Record.builder().patron("email1").status(BookStatus.AVAILABLE).build(),
+                RentalMessage.Record.builder().patron("email2").status(BookStatus.RENTED).build()
         ).collect(Collectors.toList());
 
         var rentalStateRecords = rentalStateRecordMapper.toRecords(rentalMessageRecords);

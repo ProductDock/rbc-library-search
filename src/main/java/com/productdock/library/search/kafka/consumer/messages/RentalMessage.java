@@ -21,7 +21,7 @@ public class RentalMessage {
     @NoArgsConstructor
     public static class Record {
 
-        private String email;
+        private String patron;
         private BookStatus status;
     }
 
