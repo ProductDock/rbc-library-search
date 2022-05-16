@@ -14,7 +14,6 @@ import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.SearchHitsImpl;
 import org.springframework.test.context.ContextConfiguration;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -85,7 +84,7 @@ class BookServiceShould {
         var bookDocument = defaultBookDocument();
 
         given(bookDocumentRepository.findById(rentalMessage.getBookId())).willReturn(Optional.ofNullable(bookDocument));
-        given(rentalStateRecordMapper.toRecords(rentalMessage.getRecords())).willReturn(MAPPED_DOCUMENT_RECORDS);
+        given(rentalStateRecordMapper.toRecords(rentalMessage.getRentalRecords())).willReturn(MAPPED_DOCUMENT_RECORDS);
 
         bookService.updateBookRecords(rentalMessage);
 

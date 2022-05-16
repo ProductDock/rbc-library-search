@@ -43,7 +43,7 @@ class UpdateBookRecordsTest extends IntegrationTestBase {
         givenBookWithId();
         var rentalMessageRecord = RentalMessage.Record.builder().email("email").status(BookStatus.RENTED).build();
         var rentalMessage = defaultRentalMessageBuilder()
-                .record(rentalMessageRecord).build();
+                .rentalRecord(rentalMessageRecord).build();
 
         producer.send(bookStatusTopic, rentalMessage);
 
