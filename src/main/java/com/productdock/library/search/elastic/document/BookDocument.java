@@ -38,8 +38,24 @@ public class BookDocument {
     @Field(type = FieldType.Nested, includeInParent = true)
     private RentalState rentalState;
 
+    @Field(type = FieldType.Nested, includeInParent = true)
+    private Rating rating;
+
     public BookDocument() {
         rentalState = new RentalState(0, new ArrayList<>());
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class Rating {
+
+        @Field(type = FieldType.Double)
+        private double score;
+
+        @Field(type = FieldType.Integer)
+        private int count;
     }
 
     @Data

@@ -4,6 +4,7 @@ import com.productdock.library.search.elastic.RentalStateRecordMapper;
 import com.productdock.library.search.elastic.SearchQueryExecutor;
 import com.productdock.library.search.elastic.document.BookDocument;
 import com.productdock.library.search.kafka.consumer.messages.BookAvailabilityMessage;
+import com.productdock.library.search.kafka.consumer.messages.BookRatingMessage;
 import com.productdock.library.search.kafka.consumer.messages.RentalMessage;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +37,14 @@ public record BookService(BookDocumentRepository bookDocumentRepository,
     public void updateAvailabilityBookCount(BookAvailabilityMessage bookAvailabilityMessage) {
         updateBook(bookAvailabilityMessage.getBookId(),
                 state -> state.setAvailableBooksCount(bookAvailabilityMessage.getAvailableBookCount()));
+    }
+
+    public void updateBookRating(BookRatingMessage bookRatingMessage) {
+        var bookDocument = getBookDocument(bookRatingMessage.getBookId());
+        var bookRating = bookDocument.getRating();
+        bookRating.setCount(bookRatingMessage.getRatingsCount());
+        bookRating.setScore(bookRatingMessage.getRating());
+        bookDocumentRepository.save(bookDocument);
     }
 
     private void updateBook(String bookId, Consumer<BookDocument.RentalState> updater) {
