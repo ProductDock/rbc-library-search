@@ -1,5 +1,6 @@
 package com.productdock.library.search.book;
 
+import com.productdock.library.search.elastic.BookRatingMapper;
 import com.productdock.library.search.elastic.RentalStateRecordMapper;
 import com.productdock.library.search.elastic.SearchQueryExecutor;
 import com.productdock.library.search.elastic.document.BookDocument;
@@ -16,6 +17,7 @@ import java.util.function.Consumer;
 public record BookService(BookDocumentRepository bookDocumentRepository,
                           SearchQueryExecutor searchQueryExecutor,
                           BookMapper bookMapper,
+                          BookRatingMapper bookRatingMapper,
                           RentalStateRecordMapper recordDocumentMapper) {
 
 
@@ -41,9 +43,7 @@ public record BookService(BookDocumentRepository bookDocumentRepository,
 
     public void updateBookRating(BookRatingMessage bookRatingMessage) {
         var bookDocument = getBookDocument(bookRatingMessage.getBookId());
-        var bookRating = bookDocument.getRating();
-        bookRating.setCount(bookRatingMessage.getRatingsCount());
-        bookRating.setScore(bookRatingMessage.getRating());
+        bookDocument.setRating(bookRatingMapper.toRating(bookRatingMessage));
         bookDocumentRepository.save(bookDocument);
     }
 

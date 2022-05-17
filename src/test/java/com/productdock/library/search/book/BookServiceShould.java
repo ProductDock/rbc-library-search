@@ -1,5 +1,6 @@
 package com.productdock.library.search.book;
 
+import com.productdock.library.search.elastic.BookRatingMapper;
 import com.productdock.library.search.elastic.RentalStateRecordMapper;
 import com.productdock.library.search.elastic.RentalStateRecordMapperImpl;
 import com.productdock.library.search.elastic.SearchQueryExecutor;
@@ -18,6 +19,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import static com.productdock.library.search.data.provider.BookRatingMessageMother.defaultBookRatingMessage;
 import static com.productdock.library.search.data.provider.RentalMessageMother.defaultRentalMessage;
 import static com.productdock.library.search.data.provider.BookAvailabilityMessageMother.defaultBookAvailabilityMessage;
 import static com.productdock.library.search.data.provider.BookDocumentMother.defaultBookDocument;
@@ -35,6 +37,8 @@ class BookServiceShould {
     private static final Optional<List<String>> ANY_TOPIC = Optional.of(List.of("TOPIC"));
     private static final List MAPPED_DOCUMENT_RECORDS = Collections.singletonList
             (new BookDocument.RentalState.Record("any", BookStatus.RENTED));
+    private static final BookDocument.Rating MAPPED_BOOK_RATING = mock(BookDocument.Rating.class);
+
 
     @InjectMocks
     private BookService bookService;
@@ -47,6 +51,9 @@ class BookServiceShould {
 
     @Mock
     private RentalStateRecordMapper rentalStateRecordMapper;
+
+    @Mock
+    private BookRatingMapper bookRatingMapper;
 
     @Mock
     private BookDocumentRepository bookDocumentRepository;
@@ -89,6 +96,19 @@ class BookServiceShould {
         bookService.updateBookRecords(rentalMessage);
 
         assertThat(bookDocument.getRentalState().getRecords()).isEqualTo(MAPPED_DOCUMENT_RECORDS);
+    }
+
+    @Test
+    void updateBookRating() {
+        var bookRatingMessage = defaultBookRatingMessage();
+        var bookDocument = defaultBookDocument();
+
+        given(bookDocumentRepository.findById(bookRatingMessage.getBookId())).willReturn(Optional.ofNullable(bookDocument));
+        given(bookRatingMapper.toRating(bookRatingMessage)).willReturn(MAPPED_BOOK_RATING);
+
+        bookService.updateBookRating(bookRatingMessage);
+
+        assertThat(bookDocument.getRating()).isEqualTo(MAPPED_BOOK_RATING);
     }
 
     @Test
