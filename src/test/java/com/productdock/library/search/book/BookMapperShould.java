@@ -33,9 +33,25 @@ class BookMapperShould {
             softly.assertThat(bookDto.title).isEqualTo(bookDocument.getTitle());
             softly.assertThat(bookDto.author).isEqualTo(bookDocument.getAuthor());
             softly.assertThat(bookDto.cover).isEqualTo(bookDocument.getCover());
+            softly.assertThat(bookDto.rating.count).isEqualTo(bookDocument.getRating().getCount());
+            softly.assertThat(bookDto.rating.score).isEqualTo(bookDocument.getRating().getScore());
             softly.assertThat(bookDto.records)
                     .extracting("email", "status")
                     .containsExactly(tuple("::email::", BookStatus.RENTED));
+        }
+    }
+
+    @Test
+    void mapBookDocumentToBookDto_whenRatingNotPresent() {
+        var bookDocument = defaultBookDocumentBuilder()
+                .rating(null)
+                .build();
+
+        var bookDto = bookMapper.toBookDto(bookDocument);
+
+        try (var softly = new AutoCloseableSoftAssertions()) {
+            softly.assertThat(bookDto.rating.count).isNull();
+            softly.assertThat(bookDto.rating.score).isNull();
         }
     }
 
