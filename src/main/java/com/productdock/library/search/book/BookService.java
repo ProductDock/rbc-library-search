@@ -33,24 +33,22 @@ public record BookService(BookDocumentRepository bookDocumentRepository,
 
     public void updateBookRecords(RentalMessage rentalMessage) {
         updateBook(rentalMessage.getBookId(),
-                state -> state.setRecords(recordDocumentMapper.toRecords(rentalMessage.getRentalRecords())));
+                state -> state.getRentalState().setRecords(recordDocumentMapper.toRecords(rentalMessage.getRentalRecords())));
     }
 
     public void updateAvailabilityBookCount(BookAvailabilityMessage bookAvailabilityMessage) {
         updateBook(bookAvailabilityMessage.getBookId(),
-                state -> state.setAvailableBooksCount(bookAvailabilityMessage.getAvailableBookCount()));
+                state -> state.getRentalState().setAvailableBooksCount(bookAvailabilityMessage.getAvailableBookCount()));
     }
 
     public void updateBookRating(BookRatingMessage bookRatingMessage) {
-        var bookDocument = getBookDocument(bookRatingMessage.getBookId());
-        bookDocument.setRating(bookRatingMapper.toRating(bookRatingMessage));
-        bookDocumentRepository.save(bookDocument);
+        updateBook(bookRatingMessage.getBookId(),
+                state -> state.setRating(bookRatingMapper.toRating(bookRatingMessage)));
     }
 
-    private void updateBook(String bookId, Consumer<BookDocument.RentalState> updater) {
+    private void updateBook(String bookId, Consumer<BookDocument> updater) {
         var bookDocument = getBookDocument(bookId);
-        var bookRentalState = bookDocument.getRentalState();
-        updater.accept(bookRentalState);
+        updater.accept(bookDocument);
         bookDocumentRepository.save(bookDocument);
     }
 
