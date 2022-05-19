@@ -21,7 +21,15 @@ public class BookMapper {
         var bookDto = new BookDto();
         mapSimpleProperties(bookDocument, bookDto);
         mapRecords(bookDocument, bookDto);
+        mapRating(bookDocument, bookDto);
         return bookDto;
+    }
+
+    private void mapRating(BookDocument bookDocument, BookDto bookDto) {
+        if (bookDocument.getRating() != null){
+            bookDto.rating.score = bookDocument.getRating().getScore();
+            bookDto.rating.count = bookDocument.getRating().getCount();
+        }
     }
 
     private void mapRecords(BookDocument bookDocument, BookDto bookDto) {

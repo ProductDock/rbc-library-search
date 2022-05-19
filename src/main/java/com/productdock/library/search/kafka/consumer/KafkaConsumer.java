@@ -3,6 +3,7 @@ package com.productdock.library.search.kafka.consumer;
 import com.productdock.library.search.book.BookMapper;
 import com.productdock.library.search.book.BookService;
 import com.productdock.library.search.kafka.consumer.messages.BookAvailabilityMessage;
+import com.productdock.library.search.kafka.consumer.messages.BookRatingMessage;
 import com.productdock.library.search.kafka.consumer.messages.InsertBookMessage;
 import com.productdock.library.search.kafka.consumer.messages.RentalMessage;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -28,5 +29,11 @@ public record KafkaConsumer(BookService bookService,
             containerFactory = "bookAvailabilityMessageKafkaListenerContainerFactory")
     public synchronized void listen(BookAvailabilityMessage bookAvailabilityMessage) {
         bookService.updateAvailabilityBookCount(bookAvailabilityMessage);
+    }
+
+    @KafkaListener(topics = "${spring.kafka.topic.book-rating}",
+            containerFactory = "bookRatingMessageKafkaListenerContainerFactory")
+    public synchronized void listen(BookRatingMessage bookRatingMessage) {
+        bookService.updateBookRating(bookRatingMessage);
     }
 }

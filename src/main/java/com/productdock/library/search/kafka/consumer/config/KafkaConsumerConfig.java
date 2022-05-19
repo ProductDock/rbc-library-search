@@ -1,6 +1,7 @@
 package com.productdock.library.search.kafka.consumer.config;
 
 import com.productdock.library.search.kafka.consumer.messages.BookAvailabilityMessage;
+import com.productdock.library.search.kafka.consumer.messages.BookRatingMessage;
 import com.productdock.library.search.kafka.consumer.messages.InsertBookMessage;
 import com.productdock.library.search.kafka.consumer.messages.RentalMessage;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
@@ -90,4 +91,21 @@ public class KafkaConsumerConfig {
         return factory;
     }
 
+    @Bean
+    public ConsumerFactory<String, BookRatingMessage> bookRatingConsumerFactory() {
+        Map<String, Object> props = getProps();
+        return new DefaultKafkaConsumerFactory<>(
+                props,
+                new StringDeserializer(),
+                new JsonDeserializer<>(BookRatingMessage.class)
+        );
+    }
+
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, BookRatingMessage> bookRatingMessageKafkaListenerContainerFactory() {
+
+        ConcurrentKafkaListenerContainerFactory<String, BookRatingMessage> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(bookRatingConsumerFactory());
+        return factory;
+    }
 }

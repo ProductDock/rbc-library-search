@@ -2,6 +2,7 @@ package com.productdock.library.search.data.provider;
 
 import com.productdock.library.search.elastic.document.BookDocument;
 
+import static com.productdock.library.search.data.provider.BookDocumentRatingMother.defaultBookRating;
 import static com.productdock.library.search.data.provider.BookDocumentRentalStateMother.defaultRentalState;
 
 public class BookDocumentMother {
@@ -17,7 +18,8 @@ public class BookDocumentMother {
                 .title(defaultTitle)
                 .author(defaultAuthor)
                 .cover(defaultCover)
-                .rentalState(defaultRentalState());
+                .rentalState(defaultRentalState())
+                .rating(defaultBookRating());
     }
 
     public static BookDocument defaultBookDocument() {

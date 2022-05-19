@@ -1,9 +1,11 @@
 package com.productdock.library.search.book;
 
+import com.productdock.library.search.elastic.BookRatingMapper;
 import com.productdock.library.search.elastic.RentalStateRecordMapper;
 import com.productdock.library.search.elastic.SearchQueryExecutor;
 import com.productdock.library.search.elastic.document.BookDocument;
 import com.productdock.library.search.kafka.consumer.messages.BookAvailabilityMessage;
+import com.productdock.library.search.kafka.consumer.messages.BookRatingMessage;
 import com.productdock.library.search.kafka.consumer.messages.RentalMessage;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,7 @@ import java.util.function.Consumer;
 public record BookService(BookDocumentRepository bookDocumentRepository,
                           SearchQueryExecutor searchQueryExecutor,
                           BookMapper bookMapper,
+                          BookRatingMapper bookRatingMapper,
                           RentalStateRecordMapper recordDocumentMapper) {
 
 
@@ -30,18 +33,22 @@ public record BookService(BookDocumentRepository bookDocumentRepository,
 
     public void updateBookRecords(RentalMessage rentalMessage) {
         updateBook(rentalMessage.getBookId(),
-                state -> state.setRecords(recordDocumentMapper.toRecords(rentalMessage.getRentalRecords())));
+                state -> state.getRentalState().setRecords(recordDocumentMapper.toRecords(rentalMessage.getRentalRecords())));
     }
 
     public void updateAvailabilityBookCount(BookAvailabilityMessage bookAvailabilityMessage) {
         updateBook(bookAvailabilityMessage.getBookId(),
-                state -> state.setAvailableBooksCount(bookAvailabilityMessage.getAvailableBookCount()));
+                state -> state.getRentalState().setAvailableBooksCount(bookAvailabilityMessage.getAvailableBookCount()));
     }
 
-    private void updateBook(String bookId, Consumer<BookDocument.RentalState> updater) {
+    public void updateBookRating(BookRatingMessage bookRatingMessage) {
+        updateBook(bookRatingMessage.getBookId(),
+                state -> state.setRating(bookRatingMapper.toRating(bookRatingMessage)));
+    }
+
+    private void updateBook(String bookId, Consumer<BookDocument> updater) {
         var bookDocument = getBookDocument(bookId);
-        var bookRentalState = bookDocument.getRentalState();
-        updater.accept(bookRentalState);
+        updater.accept(bookDocument);
         bookDocumentRepository.save(bookDocument);
     }
 

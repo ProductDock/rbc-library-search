@@ -16,6 +16,7 @@ import java.util.concurrent.Callable;
 
 import static com.productdock.library.search.data.provider.BookDocumentMother.defaultBookDocumentBuilder;
 import static com.productdock.library.search.data.provider.BookAvailabilityMessageMother.defaultBookAvailabilityMessageBuilder;
+import static com.productdock.library.search.data.provider.BookRatingMessageMother.defaultBookRatingMessage;
 import static com.productdock.library.search.data.provider.RentalMessageMother.defaultRentalMessageBuilder;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.tuple;
@@ -37,6 +38,9 @@ class UpdateBookRecordsTest extends IntegrationTestBase {
 
     @Value("${spring.kafka.topic.book-availability}")
     private String bookAvailabilityTopic;
+
+    @Value("${spring.kafka.topic.book-rating}")
+    private String bookRatingTopic;
 
     @Test
     void shouldUpdateBookRecords_WhenRentalMessageReceived() throws JsonProcessingException {
@@ -87,6 +91,29 @@ class UpdateBookRecordsTest extends IntegrationTestBase {
     @NonNull
     private Callable<Boolean> availableBookCountIsChanged() {
         return () -> bookDocumentRepository.findById(BOOK_ID).get().getRentalState().getAvailableBooksCount() != 0;
+    }
+
+    @Test
+    void shouldUpdateBookRating_WhenBookRatingMessageReceived() throws JsonProcessingException {
+        givenBookWithId();
+        var bookRatingMessage = defaultBookRatingMessage();
+
+        producer.send(bookRatingTopic, bookRatingMessage);
+
+        await()
+                .atMost(Duration.ofSeconds(5))
+                .ignoreException(NullPointerException.class)
+                .until(bookRatingIsChanged());
+
+        var bookDocument = bookDocumentRepository.findById(BOOK_ID).get();
+
+        assertThat(bookDocument.getRating().getCount()).isEqualTo(bookRatingMessage.getRatingsCount());
+        assertThat(bookDocument.getRating().getScore()).isEqualTo(bookRatingMessage.getRating());
+    }
+
+    @NonNull
+    private Callable<Boolean> bookRatingIsChanged() {
+        return () -> bookDocumentRepository.findById(BOOK_ID).get().getRating().getCount() != 0;
     }
 
     private void givenBookWithId() {

@@ -1,24 +1,3 @@
-server:
-  port: 8081
-
 cors:
   allowed:
     origins: http://localhost:3000
-
-spring:
-  kafka:
-    enabled: true
-    bootstrap-servers: ${kafka.server.url:localhost:9092}
-    value-seriliazer: org.apache.kafka.common.serialization.StringSerializer
-    key-serializer: org.apache.kafka.common.serialization.StringSerializer
-    consumer:
-      enable-auto-commit: true
-      auto-offset-reset: latest
-      group-id: ${consumer.group:group}
-    topic:
-      insert-book: ${kafka.topic.insert-book:insert-book}
-      book-status: ${kafka.topic.book-status:book-status}
-      book-availability: ${kafka.topic.book-availability:book-availability}
-  elasticsearch:
-    rest:
-      uris: ${elasticsearch.server.url:localhost}:9200

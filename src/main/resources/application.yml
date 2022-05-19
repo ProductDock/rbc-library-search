@@ -1,0 +1,18 @@
+spring:
+  kafka:
+    enabled: true
+    bootstrap-servers: ${kafka.server.url:localhost:9092}
+    value-seriliazer: org.apache.kafka.common.serialization.StringSerializer
+    key-serializer: org.apache.kafka.common.serialization.StringSerializer
+    consumer:
+      enable-auto-commit: true
+      auto-offset-reset: latest
+      group-id: ${consumer.group:search}
+    topic:
+      insert-book: insert-book
+      book-status: book-status
+      book-availability: book-availability
+      book-rating: book-rating
+  elasticsearch:
+    rest:
+      uris: ${elasticsearch.server.url:localhost}:9200
