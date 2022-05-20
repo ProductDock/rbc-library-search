@@ -6,28 +6,6 @@ on:
       - closed
 
 jobs:
-  git_tag_when_merged_pr:
-    name: Create new Git Tag when PR is merged
-    if: ${{ github.event.pull_request.merged == true && github.base_ref == 'main' }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Decide type of change from branch name
-        id: get_bump_type
-        run: |
-          echo The PR was merged to main from ${{ github.head_ref }}
-          isFeatureOrStory=$(echo "${{ startsWith(github.head_ref, 'feat') || startsWith(github.head_ref, 'story') }}")
-          if [ "$isFeatureOrStory" = true ]
-          then
-            echo Feat or Story
-            BUMP_TYPE='minor'
-          else
-            echo Fix or Other
-            BUMP_TYPE='patch'
-          fi
-          echo "::set-output name=bump_type::${BUMP_TYPE}"
-      - name: Name new version and push new git tag
-        id: tag_version
-        uses: mathieudutour/github-tag-action@v6.0
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          default_bump: ${{ steps.get_bump_type.outputs.bump_type }}
+  create-git-tag-when-merged:
+    uses: ProductDock/rbc-github-workflows/.github/workflows/git-tag.yml@main
+    secrets: inherit
