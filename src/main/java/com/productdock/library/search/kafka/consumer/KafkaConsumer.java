@@ -2,10 +2,7 @@ package com.productdock.library.search.kafka.consumer;
 
 import com.productdock.library.search.book.BookMapper;
 import com.productdock.library.search.book.BookService;
-import com.productdock.library.search.kafka.consumer.messages.BookAvailabilityMessage;
-import com.productdock.library.search.kafka.consumer.messages.BookRatingMessage;
-import com.productdock.library.search.kafka.consumer.messages.InsertBookMessage;
-import com.productdock.library.search.kafka.consumer.messages.RentalMessage;
+import com.productdock.library.search.kafka.consumer.messages.*;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
@@ -35,5 +32,11 @@ public record KafkaConsumer(BookService bookService,
             containerFactory = "bookRatingMessageKafkaListenerContainerFactory")
     public synchronized void listen(BookRatingMessage bookRatingMessage) {
         bookService.updateBookRating(bookRatingMessage);
+    }
+
+    @KafkaListener(topics = "${spring.kafka.topic.book-recommendation}",
+            containerFactory = "bookRecommendedMessageKafkaListenerContainerFactory")
+    public synchronized void listen(BookRecommendedMessage bookRecommendedMessage) {
+        bookService.updateBookRecommendations(bookRecommendedMessage);
     }
 }
