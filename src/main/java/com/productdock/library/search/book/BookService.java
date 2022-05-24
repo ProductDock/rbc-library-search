@@ -6,6 +6,7 @@ import com.productdock.library.search.elastic.SearchQueryExecutor;
 import com.productdock.library.search.elastic.document.BookDocument;
 import com.productdock.library.search.kafka.consumer.messages.BookAvailabilityMessage;
 import com.productdock.library.search.kafka.consumer.messages.BookRatingMessage;
+import com.productdock.library.search.kafka.consumer.messages.BookRecommendedMessage;
 import com.productdock.library.search.kafka.consumer.messages.RentalMessage;
 import org.springframework.stereotype.Service;
 
@@ -44,6 +45,10 @@ public record BookService(BookDocumentRepository bookDocumentRepository,
     public void updateBookRating(BookRatingMessage bookRatingMessage) {
         updateBook(bookRatingMessage.getBookId(),
                 state -> state.setRating(bookRatingMapper.toRating(bookRatingMessage)));
+    }
+
+    public void updateBookRecommendations(BookRecommendedMessage bookRecommendedMessage) {
+        updateBook(bookRecommendedMessage.getBookId(), state -> state.setRecommended(true));
     }
 
     private void updateBook(String bookId, Consumer<BookDocument> updater) {

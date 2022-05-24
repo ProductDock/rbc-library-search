@@ -41,6 +41,9 @@ public class BookDocument {
     @Field(type = FieldType.Nested, includeInParent = true)
     private Rating rating;
 
+    @Field(type = FieldType.Boolean)
+    private boolean recommended;
+
     public BookDocument() {
         rentalState = new RentalState(0, new ArrayList<>());
     }
