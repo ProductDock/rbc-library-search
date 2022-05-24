@@ -1,9 +1,6 @@
 package com.productdock.library.search.kafka.consumer.config;
 
-import com.productdock.library.search.kafka.consumer.messages.BookAvailabilityMessage;
-import com.productdock.library.search.kafka.consumer.messages.BookRatingMessage;
-import com.productdock.library.search.kafka.consumer.messages.InsertBookMessage;
-import com.productdock.library.search.kafka.consumer.messages.RentalMessage;
+import com.productdock.library.search.kafka.consumer.messages.*;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -106,6 +103,24 @@ public class KafkaConsumerConfig {
 
         ConcurrentKafkaListenerContainerFactory<String, BookRatingMessage> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(bookRatingConsumerFactory());
+        return factory;
+    }
+
+    @Bean
+    public ConsumerFactory<String, BookRecommendedMessage> bookRecommendedConsumerFactory() {
+        Map<String, Object> props = getProps();
+        return new DefaultKafkaConsumerFactory<>(
+                props,
+                new StringDeserializer(),
+                new JsonDeserializer<>(BookRecommendedMessage.class)
+        );
+    }
+
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, BookRecommendedMessage> bookRecommendedMessageKafkaListenerContainerFactory() {
+
+        ConcurrentKafkaListenerContainerFactory<String, BookRecommendedMessage> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(bookRecommendedConsumerFactory());
         return factory;
     }
 }
