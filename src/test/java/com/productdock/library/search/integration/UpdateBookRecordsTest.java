@@ -134,7 +134,7 @@ class UpdateBookRecordsTest extends IntegrationTestBase {
 
         var bookDocument = bookDocumentRepository.findById(BOOK_ID).get();
 
-        assertThat(bookDocument.isRecommended()).isEqualTo(true);
+        assertThat(bookDocument.isRecommended()).isTrue();
     }
 
     @NonNull

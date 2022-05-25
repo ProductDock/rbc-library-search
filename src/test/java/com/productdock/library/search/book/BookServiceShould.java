@@ -36,7 +36,7 @@ import static org.mockito.Mockito.*;
 class BookServiceShould {
 
     private static final Optional<List<String>> ANY_TOPIC = Optional.of(List.of("TOPIC"));
-    private static final boolean RECOMMENTED = false;
+    private static final boolean RECOMMENDED = false;
     private static final List MAPPED_DOCUMENT_RECORDS = Collections.singletonList
             (new BookDocument.RentalState.Record("any", BookStatus.RENTED));
     private static final BookDocument.Rating MAPPED_BOOK_RATING = mock(BookDocument.Rating.class);
@@ -64,9 +64,9 @@ class BookServiceShould {
     void getBooksByTopics() {
         var firstPage = 0;
 
-        given(searchQueryExecutor.execute(ANY_TOPIC, RECOMMENTED, firstPage)).willReturn(aBookSearchHits());
+        given(searchQueryExecutor.execute(ANY_TOPIC, RECOMMENDED, firstPage)).willReturn(aBookSearchHits());
 
-        var books = bookService.getBooks(ANY_TOPIC, RECOMMENTED, 0);
+        var books = bookService.getBooks(ANY_TOPIC, RECOMMENDED, 0);
 
         assertThat(books.count).isEqualTo(2);
         assertThat(books.books).hasSize(2);
@@ -137,6 +137,6 @@ class BookServiceShould {
         bookService.updateBookRecommendations(bookRecommendedMessage);
 
         verify(bookDocumentRepository).save(bookDocument);
-        assertThat(bookDocument.isRecommended()).isEqualTo(true);
+        assertThat(bookDocument.isRecommended()).isTrue();
     }
 }
