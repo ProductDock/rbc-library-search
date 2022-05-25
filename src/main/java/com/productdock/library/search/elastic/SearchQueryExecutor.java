@@ -21,8 +21,11 @@ public class SearchQueryExecutor {
     private static final int PAGE_SIZE = 18;
     private ElasticsearchOperations elasticsearchOperations;
 
-    public SearchHits<BookDocument> execute(Optional<List<String>> topicsFilter, int page) {
-        var queryBuilder = bookQueryBuilder().withTopicsCriteria(topicsFilter).build();
+    public SearchHits<BookDocument> execute(Optional<List<String>> topicsFilter, boolean recommended, int page) {
+        var queryBuilder = bookQueryBuilder()
+                .withTopicsCriteria(topicsFilter)
+                .withRecommendation(recommended)
+                .build();
         Query searchQuery = new NativeSearchQueryBuilder()
                 .withQuery(queryBuilder)
                 .withPageable(PageRequest.of(page, PAGE_SIZE))
