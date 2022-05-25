@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.productdock.library.search.book.BookDocumentRepository;
 import com.productdock.library.search.book.BookStatus;
 import com.productdock.library.search.data.provider.KafkaTestProducer;
+import com.productdock.library.search.kafka.consumer.messages.BookRecommendedMessage;
 import com.productdock.library.search.kafka.consumer.messages.RentalMessage;
 import lombok.NonNull;
 import org.junit.jupiter.api.Test;
@@ -41,6 +42,9 @@ class UpdateBookRecordsTest extends IntegrationTestBase {
 
     @Value("${spring.kafka.topic.book-rating}")
     private String bookRatingTopic;
+
+    @Value("${spring.kafka.topic.book-recommendation}")
+    private String bookRecommendationTopic;
 
     @Test
     void shouldUpdateBookRecords_WhenRentalMessageReceived() throws JsonProcessingException {
@@ -114,6 +118,28 @@ class UpdateBookRecordsTest extends IntegrationTestBase {
     @NonNull
     private Callable<Boolean> bookRatingIsChanged() {
         return () -> bookDocumentRepository.findById(BOOK_ID).get().getRating().getCount() != 0;
+    }
+
+    @Test
+    void shouldUpdateBookRecommendations_WhenBookRecommendedMessageReceived() throws JsonProcessingException {
+        givenBookWithId();
+        var bookRecommendedMessage = new BookRecommendedMessage("1");
+
+        producer.send(bookRecommendationTopic, bookRecommendedMessage);
+
+        await()
+                .atMost(Duration.ofSeconds(5))
+                .ignoreException(NullPointerException.class)
+                .until(bookRecommendationsIsChanged());
+
+        var bookDocument = bookDocumentRepository.findById(BOOK_ID).get();
+
+        assertThat(bookDocument.isRecommended()).isEqualTo(true);
+    }
+
+    @NonNull
+    private Callable<Boolean> bookRecommendationsIsChanged() {
+        return () -> bookDocumentRepository.findById(BOOK_ID).get().isRecommended();
     }
 
     private void givenBookWithId() {

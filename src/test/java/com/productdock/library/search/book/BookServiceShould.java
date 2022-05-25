@@ -5,6 +5,7 @@ import com.productdock.library.search.elastic.RentalStateRecordMapper;
 import com.productdock.library.search.elastic.RentalStateRecordMapperImpl;
 import com.productdock.library.search.elastic.SearchQueryExecutor;
 import com.productdock.library.search.elastic.document.BookDocument;
+import com.productdock.library.search.kafka.consumer.messages.BookRecommendedMessage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -124,5 +125,18 @@ class BookServiceShould {
         verify(bookDocumentRepository).save(bookDocument);
         assertThat(bookDocument.getRentalState().getAvailableBooksCount())
                 .isEqualTo(bookAvailabilityMessage.getAvailableBookCount());
+    }
+
+    @Test
+    void updateBookRecommendations() {
+        var bookRecommendedMessage = new BookRecommendedMessage("1");
+        var bookDocument = defaultBookDocument();
+
+        given(bookDocumentRepository.findById(bookRecommendedMessage.getBookId())).willReturn(Optional.ofNullable(bookDocument));
+
+        bookService.updateBookRecommendations(bookRecommendedMessage);
+
+        verify(bookDocumentRepository).save(bookDocument);
+        assertThat(bookDocument.isRecommended()).isEqualTo(true);
     }
 }
