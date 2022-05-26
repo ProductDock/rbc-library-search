@@ -13,6 +13,6 @@ import java.util.Optional;
 public class SearchFilters {
 
     private int page;
-    private boolean recommended;
+    private boolean recommendation;
     private Optional<List<String>> topics;
 }

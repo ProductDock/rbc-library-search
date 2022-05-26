@@ -5,7 +5,7 @@ import com.productdock.library.search.kafka.consumer.messages.BookRecommendation
 public class BookRecommendationMessageMother {
 
     private static final String defaultId = "1";
-    private static final Boolean defaultRecommendation = null;
+    private static final boolean defaultRecommendation = false;
 
     public static BookRecommendationMessage.BookRecommendationMessageBuilder defaultBookRecommendationMessageBuilder() {
         return BookRecommendationMessage.builder()
