@@ -63,10 +63,11 @@ class BookServiceShould {
     @Test
     void getBooksByTopics() {
         var firstPage = 0;
+        var searchFilters = new SearchFilters(firstPage, RECOMMENDED, ANY_TOPIC);
 
-        given(searchQueryExecutor.execute(ANY_TOPIC, RECOMMENDED, firstPage)).willReturn(aBookSearchHits());
+        given(searchQueryExecutor.execute(searchFilters)).willReturn(aBookSearchHits());
 
-        var books = bookService.getBooks(ANY_TOPIC, RECOMMENDED, 0);
+        var books = bookService.getBooks(searchFilters);
 
         assertThat(books.count).isEqualTo(2);
         assertThat(books.books).hasSize(2);

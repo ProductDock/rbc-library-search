@@ -22,8 +22,8 @@ public record BookService(BookDocumentRepository bookDocumentRepository,
                           RentalStateRecordMapper recordDocumentMapper) {
 
 
-    public SearchBooksResponse getBooks(Optional<List<String>> topics, boolean recommended, int page) {
-        var hits = searchQueryExecutor.execute(topics, recommended, page);
+    public SearchBooksResponse getBooks(SearchFilters searchFilters) {
+        var hits = searchQueryExecutor.execute(searchFilters);
         var bookHitsDto = hits.stream().map(hit -> bookMapper.toBookDto(hit.getContent())).toList();
         return new SearchBooksResponse(hits.getTotalHits(), bookHitsDto);
     }
