@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.productdock.library.search.book.BookDocumentRepository;
 import com.productdock.library.search.book.BookStatus;
 import com.productdock.library.search.data.provider.KafkaTestProducer;
-import com.productdock.library.search.kafka.consumer.messages.BookRecommendedMessage;
+import com.productdock.library.search.kafka.consumer.messages.BookRecommendationMessage;
 import com.productdock.library.search.kafka.consumer.messages.RentalMessage;
 import lombok.NonNull;
 import org.junit.jupiter.api.Test;
@@ -18,6 +18,7 @@ import java.util.concurrent.Callable;
 import static com.productdock.library.search.data.provider.BookDocumentMother.defaultBookDocumentBuilder;
 import static com.productdock.library.search.data.provider.BookAvailabilityMessageMother.defaultBookAvailabilityMessageBuilder;
 import static com.productdock.library.search.data.provider.BookRatingMessageMother.defaultBookRatingMessage;
+import static com.productdock.library.search.data.provider.BookRecommendationMessageMother.defaultBookRecommendationMessageBuilder;
 import static com.productdock.library.search.data.provider.RentalMessageMother.defaultRentalMessageBuilder;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.tuple;
@@ -123,9 +124,9 @@ class UpdateBookRecordsTest extends IntegrationTestBase {
     @Test
     void shouldUpdateBookRecommendations_WhenBookRecommendedMessageReceived() throws JsonProcessingException {
         givenBookWithId();
-        var bookRecommendedMessage = new BookRecommendedMessage("1");
+        var bookRecommendationMessage = defaultBookRecommendationMessageBuilder().recommendation(true).build();
 
-        producer.send(bookRecommendationTopic, bookRecommendedMessage);
+        producer.send(bookRecommendationTopic, bookRecommendationMessage);
 
         await()
                 .atMost(Duration.ofSeconds(5))

@@ -35,8 +35,8 @@ public record KafkaConsumer(BookService bookService,
     }
 
     @KafkaListener(topics = "${spring.kafka.topic.book-recommendation}",
-            containerFactory = "bookRecommendedMessageKafkaListenerContainerFactory")
-    public synchronized void listen(BookRecommendedMessage bookRecommendedMessage) {
-        bookService.recommendedBook(bookRecommendedMessage.getBookId());
+            containerFactory = "bookRecommendationMessageKafkaListenerContainerFactory")
+    public synchronized void listen(BookRecommendationMessage bookRecommendationMessage) {
+        bookService.updateBookRecommendations(bookRecommendationMessage);
     }
 }

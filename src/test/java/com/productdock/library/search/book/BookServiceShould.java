@@ -5,7 +5,6 @@ import com.productdock.library.search.elastic.RentalStateRecordMapper;
 import com.productdock.library.search.elastic.RentalStateRecordMapperImpl;
 import com.productdock.library.search.elastic.SearchQueryExecutor;
 import com.productdock.library.search.elastic.document.BookDocument;
-import com.productdock.library.search.kafka.consumer.messages.BookRecommendedMessage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -24,6 +23,7 @@ import static com.productdock.library.search.data.provider.BookRatingMessageMoth
 import static com.productdock.library.search.data.provider.RentalMessageMother.defaultRentalMessage;
 import static com.productdock.library.search.data.provider.BookAvailabilityMessageMother.defaultBookAvailabilityMessage;
 import static com.productdock.library.search.data.provider.BookDocumentMother.defaultBookDocument;
+import static com.productdock.library.search.data.provider.BookRecommendationMessageMother.defaultBookRecommendationMessageBuilder;
 
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Stream.of;
@@ -130,12 +130,12 @@ class BookServiceShould {
 
     @Test
     void updateBookRecommendations() {
-        var bookRecommendedMessage = new BookRecommendedMessage("1");
+        var bookRecommendationMessage = defaultBookRecommendationMessageBuilder().recommendation(true).build();
         var bookDocument = defaultBookDocument();
 
-        given(bookDocumentRepository.findById(bookRecommendedMessage.getBookId())).willReturn(Optional.ofNullable(bookDocument));
+        given(bookDocumentRepository.findById(bookRecommendationMessage.getBookId())).willReturn(Optional.ofNullable(bookDocument));
 
-        bookService.recommendedBook(bookRecommendedMessage.getBookId());
+        bookService.updateBookRecommendations(bookRecommendationMessage);
 
         verify(bookDocumentRepository).save(bookDocument);
         assertThat(bookDocument.isRecommended()).isTrue();

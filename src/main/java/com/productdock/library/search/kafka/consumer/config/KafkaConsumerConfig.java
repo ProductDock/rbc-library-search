@@ -107,20 +107,20 @@ public class KafkaConsumerConfig {
     }
 
     @Bean
-    public ConsumerFactory<String, BookRecommendedMessage> bookRecommendedConsumerFactory() {
+    public ConsumerFactory<String, BookRecommendationMessage> bookRecommendationConsumerFactory() {
         Map<String, Object> props = getProps();
         return new DefaultKafkaConsumerFactory<>(
                 props,
                 new StringDeserializer(),
-                new JsonDeserializer<>(BookRecommendedMessage.class)
+                new JsonDeserializer<>(BookRecommendationMessage.class)
         );
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, BookRecommendedMessage> bookRecommendedMessageKafkaListenerContainerFactory() {
+    public ConcurrentKafkaListenerContainerFactory<String, BookRecommendationMessage> bookRecommendationMessageKafkaListenerContainerFactory() {
 
-        ConcurrentKafkaListenerContainerFactory<String, BookRecommendedMessage> factory = new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory(bookRecommendedConsumerFactory());
+        ConcurrentKafkaListenerContainerFactory<String, BookRecommendationMessage> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(bookRecommendationConsumerFactory());
         return factory;
     }
 }
