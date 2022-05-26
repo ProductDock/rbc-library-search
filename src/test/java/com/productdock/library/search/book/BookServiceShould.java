@@ -134,7 +134,7 @@ class BookServiceShould {
 
         given(bookDocumentRepository.findById(bookRecommendedMessage.getBookId())).willReturn(Optional.ofNullable(bookDocument));
 
-        bookService.updateBookRecommendations(bookRecommendedMessage);
+        bookService.recommendedBook(bookRecommendedMessage.getBookId());
 
         verify(bookDocumentRepository).save(bookDocument);
         assertThat(bookDocument.isRecommended()).isTrue();
