@@ -29,7 +29,7 @@ public class BookQueryBuilder {
 
     public BookQueryBuilder withRecommendation(boolean recommendation) {
         if (recommendation) {
-            builder.should(QueryBuilders.matchQuery(BookSearchFields.RECOMMENDATION_NAME.label, true));
+            builder.must(QueryBuilders.matchQuery(BookSearchFields.RECOMMENDATION_NAME.label, true));
         }
         return this;
     }
