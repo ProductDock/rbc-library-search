@@ -33,7 +33,7 @@ class BookSearchApiTest extends IntegrationTestBase {
 
 
     @Nested
-    class SearchWithFilters {
+    class SearchWithTopics {
 
         @Test
         void getSecondPage_whenEmptyResults() throws Exception {
