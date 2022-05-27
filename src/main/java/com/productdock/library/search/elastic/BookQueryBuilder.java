@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public class BookQueryBuilder {
 
-    private final BoolQueryBuilder builder = new BoolQueryBuilder();
+    private BoolQueryBuilder builder = new BoolQueryBuilder();
 
 
     public static BookQueryBuilder bookQueryBuilder() {
@@ -22,19 +22,29 @@ public class BookQueryBuilder {
     }
 
     private void addTopicsCriteria(List<String> topics) {
+        var topicsCriteria = new BoolQueryBuilder();
+
         for (String topic : topics) {
-            builder.should(QueryBuilders.matchQuery(BookSearchFields.TOPICS.label, topic));
+            topicsCriteria.should(QueryBuilders.matchQuery(BookSearchFields.TOPICS.label, topic));
         }
+        and(topicsCriteria);
     }
 
-    public BookQueryBuilder withRecommendation(boolean recommended) {
+    public BookQueryBuilder andRecommendation(boolean recommended) {
         if (recommended) {
-            builder.must(QueryBuilders.matchQuery(BookSearchFields.RECOMMENDED.label, true));
+            var recommendCriteria = new BoolQueryBuilder();
+            recommendCriteria.must(QueryBuilders.matchQuery(BookSearchFields.RECOMMENDED.label, true));
+            and(recommendCriteria);
         }
         return this;
+    }
+
+    private void and(BoolQueryBuilder andBuilder) {
+        builder.must(andBuilder);
     }
 
     public BoolQueryBuilder build() {
         return builder;
     }
+
 }

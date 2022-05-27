@@ -22,7 +22,7 @@ public class SearchQueryExecutor {
     public SearchHits<BookDocument> execute(SearchFilters searchFilters) {
         var queryBuilder = bookQueryBuilder()
                 .withTopicsCriteria(searchFilters.getTopics())
-                .withRecommendation(searchFilters.isRecommended())
+                .andRecommendation(searchFilters.isRecommended())
                 .build();
         Query searchQuery = new NativeSearchQueryBuilder()
                 .withQuery(queryBuilder)
