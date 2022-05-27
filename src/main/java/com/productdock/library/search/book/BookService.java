@@ -47,7 +47,7 @@ public record BookService(BookDocumentRepository bookDocumentRepository,
 
     public void updateBookRecommendations(BookRecommendationMessage bookRecommendationMessage) {
         updateBook(bookRecommendationMessage.getBookId(),
-                state -> state.setRecommended(bookRecommendationMessage.getRecommendation()));
+                state -> state.setRecommended(bookRecommendationMessage.getRecommended()));
     }
 
     private void updateBook(String bookId, Consumer<BookDocument> updater) {

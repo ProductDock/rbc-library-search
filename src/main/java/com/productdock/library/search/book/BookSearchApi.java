@@ -14,8 +14,8 @@ public record BookSearchApi(BookService bookService) {
 
     @GetMapping
     public SearchBooksResponse findBook(@RequestParam(required = false) Optional<List<String>> topics,
-                                        @RequestParam(required = false) boolean recommendation,
+                                        @RequestParam(required = false) boolean recommended,
                                         @RequestParam int page) {
-        return bookService.getBooks(new SearchFilters(page, recommendation, topics));
+        return bookService.getBooks(new SearchFilters(page, recommended, topics));
     }
 }

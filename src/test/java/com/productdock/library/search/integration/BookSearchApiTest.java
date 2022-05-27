@@ -88,7 +88,7 @@ class BookSearchApiTest extends IntegrationTestBase {
 
             mockMvc.perform(get("/api/search")
                             .param("page", FIRST_PAGE)
-                            .param("recommendation", "true"))
+                            .param("recommended", "true"))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.count").value(1))
                     .andExpect(jsonPath("$.books").value(hasSize(1)))
@@ -117,7 +117,7 @@ class BookSearchApiTest extends IntegrationTestBase {
                             .param("page", FIRST_PAGE)
                             .param("topics", "DESIGN")
                             .param("topics", "MARKETING")
-                            .param("recommendation", "true"))
+                            .param("recommended", "true"))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.count").value(1))
                     .andExpect(jsonPath("$.books").value(hasSize(1)))

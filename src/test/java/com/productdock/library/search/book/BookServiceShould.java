@@ -130,7 +130,7 @@ class BookServiceShould {
 
     @Test
     void updateBookRecommendations() {
-        var bookRecommendationMessage = defaultBookRecommendationMessageBuilder().recommendation(true).build();
+        var bookRecommendationMessage = defaultBookRecommendationMessageBuilder().recommended(true).build();
         var bookDocument = defaultBookDocument();
 
         given(bookDocumentRepository.findById(bookRecommendationMessage.getBookId())).willReturn(Optional.ofNullable(bookDocument));

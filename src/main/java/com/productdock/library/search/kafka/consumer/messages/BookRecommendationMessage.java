@@ -12,5 +12,5 @@ import lombok.NoArgsConstructor;
 public class BookRecommendationMessage {
 
     private String bookId;
-    private Boolean recommendation;
+    private Boolean recommended;
 }

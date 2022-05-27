@@ -10,9 +10,6 @@ import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilde
 import org.springframework.data.elasticsearch.core.query.Query;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-
 import static com.productdock.library.search.elastic.BookQueryBuilder.bookQueryBuilder;
 
 @Service
@@ -25,7 +22,7 @@ public class SearchQueryExecutor {
     public SearchHits<BookDocument> execute(SearchFilters searchFilters) {
         var queryBuilder = bookQueryBuilder()
                 .withTopicsCriteria(searchFilters.getTopics())
-                .withRecommendation(searchFilters.isRecommendation())
+                .withRecommendation(searchFilters.isRecommended())
                 .build();
         Query searchQuery = new NativeSearchQueryBuilder()
                 .withQuery(queryBuilder)

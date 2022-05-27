@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.productdock.library.search.book.BookDocumentRepository;
 import com.productdock.library.search.book.BookStatus;
 import com.productdock.library.search.data.provider.KafkaTestProducer;
-import com.productdock.library.search.kafka.consumer.messages.BookRecommendationMessage;
 import com.productdock.library.search.kafka.consumer.messages.RentalMessage;
 import lombok.NonNull;
 import org.junit.jupiter.api.Test;
@@ -124,7 +123,7 @@ class UpdateBookRecordsTest extends IntegrationTestBase {
     @Test
     void shouldUpdateBookRecommendations_WhenBookRecommendedMessageReceived() throws JsonProcessingException {
         givenBookWithId();
-        var bookRecommendationMessage = defaultBookRecommendationMessageBuilder().recommendation(true).build();
+        var bookRecommendationMessage = defaultBookRecommendationMessageBuilder().recommended(true).build();
 
         producer.send(bookRecommendationTopic, bookRecommendationMessage);
 

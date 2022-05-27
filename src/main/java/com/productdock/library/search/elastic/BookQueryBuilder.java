@@ -27,9 +27,9 @@ public class BookQueryBuilder {
         }
     }
 
-    public BookQueryBuilder withRecommendation(boolean recommendation) {
-        if (recommendation) {
-            builder.must(QueryBuilders.matchQuery(BookSearchFields.RECOMMENDATION_NAME.label, true));
+    public BookQueryBuilder withRecommendation(boolean recommended) {
+        if (recommended) {
+            builder.must(QueryBuilders.matchQuery(BookSearchFields.RECOMMENDED_NAME.label, true));
         }
         return this;
     }
