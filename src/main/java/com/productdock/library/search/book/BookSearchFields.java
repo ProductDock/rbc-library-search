@@ -2,7 +2,7 @@ package com.productdock.library.search.book;
 
 public enum BookSearchFields {
     TOPICS_NAME("topics.name"),
-    RECOMMENDATION_NAME("recommendation");
+    RECOMMENDATION_NAME("recommended");
 
     public final String label;
 

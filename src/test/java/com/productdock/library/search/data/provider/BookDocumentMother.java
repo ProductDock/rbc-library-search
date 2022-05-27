@@ -11,7 +11,7 @@ public class BookDocumentMother {
     private static final String defaultTitle = "::title::";
     private static final String defaultAuthor = "::author::";
     private static final String defaultCover = null;
-    private static final boolean defaultRecommended = false;
+    private static final boolean defaultRecommendation = false;
 
     public static BookDocument.BookDocumentBuilder defaultBookDocumentBuilder() {
         return BookDocument.builder()
@@ -19,7 +19,7 @@ public class BookDocumentMother {
                 .title(defaultTitle)
                 .author(defaultAuthor)
                 .cover(defaultCover)
-                .recommended(defaultRecommended)
+                .recommended(defaultRecommendation)
                 .rentalState(defaultRentalState())
                 .rating(defaultBookRating());
     }
