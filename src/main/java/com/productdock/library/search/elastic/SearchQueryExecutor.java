@@ -1,5 +1,6 @@
 package com.productdock.library.search.elastic;
 
+import com.productdock.library.search.book.SearchFilters;
 import com.productdock.library.search.elastic.document.BookDocument;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -8,9 +9,6 @@ import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.data.elasticsearch.core.query.Query;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Optional;
 
 import static com.productdock.library.search.elastic.BookQueryBuilder.bookQueryBuilder;
 
@@ -21,11 +19,14 @@ public class SearchQueryExecutor {
     private static final int PAGE_SIZE = 18;
     private ElasticsearchOperations elasticsearchOperations;
 
-    public SearchHits<BookDocument> execute(Optional<List<String>> topicsFilter, int page) {
-        var queryBuilder = bookQueryBuilder().withTopicsCriteria(topicsFilter).build();
+    public SearchHits<BookDocument> execute(SearchFilters searchFilters) {
+        var queryBuilder = bookQueryBuilder()
+                .withTopicsCriteria(searchFilters.getTopics())
+                .withRecommendation(searchFilters.isRecommended())
+                .build();
         Query searchQuery = new NativeSearchQueryBuilder()
                 .withQuery(queryBuilder)
-                .withPageable(PageRequest.of(page, PAGE_SIZE))
+                .withPageable(PageRequest.of(searchFilters.getPage(), PAGE_SIZE))
                 .build();
 
         return elasticsearchOperations.search(searchQuery, BookDocument.class);

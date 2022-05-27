@@ -17,6 +17,7 @@ import java.util.concurrent.Callable;
 import static com.productdock.library.search.data.provider.BookDocumentMother.defaultBookDocumentBuilder;
 import static com.productdock.library.search.data.provider.BookAvailabilityMessageMother.defaultBookAvailabilityMessageBuilder;
 import static com.productdock.library.search.data.provider.BookRatingMessageMother.defaultBookRatingMessage;
+import static com.productdock.library.search.data.provider.BookRecommendationMessageMother.defaultBookRecommendationMessageBuilder;
 import static com.productdock.library.search.data.provider.RentalMessageMother.defaultRentalMessageBuilder;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.tuple;
@@ -41,6 +42,9 @@ class UpdateBookRecordsTest extends IntegrationTestBase {
 
     @Value("${spring.kafka.topic.book-rating}")
     private String bookRatingTopic;
+
+    @Value("${spring.kafka.topic.book-recommendation}")
+    private String bookRecommendationTopic;
 
     @Test
     void shouldUpdateBookRecords_WhenRentalMessageReceived() throws JsonProcessingException {
@@ -114,6 +118,28 @@ class UpdateBookRecordsTest extends IntegrationTestBase {
     @NonNull
     private Callable<Boolean> bookRatingIsChanged() {
         return () -> bookDocumentRepository.findById(BOOK_ID).get().getRating().getCount() != 0;
+    }
+
+    @Test
+    void shouldUpdateBookRecommendations_WhenBookRecommendedMessageReceived() throws JsonProcessingException {
+        givenBookWithId();
+        var bookRecommendationMessage = defaultBookRecommendationMessageBuilder().recommended(true).build();
+
+        producer.send(bookRecommendationTopic, bookRecommendationMessage);
+
+        await()
+                .atMost(Duration.ofSeconds(5))
+                .ignoreException(NullPointerException.class)
+                .until(bookRecommendationsIsChanged());
+
+        var bookDocument = bookDocumentRepository.findById(BOOK_ID).get();
+
+        assertThat(bookDocument.isRecommended()).isTrue();
+    }
+
+    @NonNull
+    private Callable<Boolean> bookRecommendationsIsChanged() {
+        return () -> bookDocumentRepository.findById(BOOK_ID).get().isRecommended();
     }
 
     private void givenBookWithId() {

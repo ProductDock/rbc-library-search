@@ -6,11 +6,10 @@ import com.productdock.library.search.elastic.SearchQueryExecutor;
 import com.productdock.library.search.elastic.document.BookDocument;
 import com.productdock.library.search.kafka.consumer.messages.BookAvailabilityMessage;
 import com.productdock.library.search.kafka.consumer.messages.BookRatingMessage;
+import com.productdock.library.search.kafka.consumer.messages.BookRecommendationMessage;
 import com.productdock.library.search.kafka.consumer.messages.RentalMessage;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
 import java.util.function.Consumer;
 
 @Service
@@ -21,8 +20,8 @@ public record BookService(BookDocumentRepository bookDocumentRepository,
                           RentalStateRecordMapper recordDocumentMapper) {
 
 
-    public SearchBooksResponse getBooks(Optional<List<String>> topics, int page) {
-        var hits = searchQueryExecutor.execute(topics, page);
+    public SearchBooksResponse getBooks(SearchFilters searchFilters) {
+        var hits = searchQueryExecutor.execute(searchFilters);
         var bookHitsDto = hits.stream().map(hit -> bookMapper.toBookDto(hit.getContent())).toList();
         return new SearchBooksResponse(hits.getTotalHits(), bookHitsDto);
     }
@@ -44,6 +43,11 @@ public record BookService(BookDocumentRepository bookDocumentRepository,
     public void updateBookRating(BookRatingMessage bookRatingMessage) {
         updateBook(bookRatingMessage.getBookId(),
                 state -> state.setRating(bookRatingMapper.toRating(bookRatingMessage)));
+    }
+
+    public void updateBookRecommendations(BookRecommendationMessage bookRecommendationMessage) {
+        updateBook(bookRecommendationMessage.getBookId(),
+                state -> state.setRecommended(bookRecommendationMessage.getRecommended()));
     }
 
     private void updateBook(String bookId, Consumer<BookDocument> updater) {

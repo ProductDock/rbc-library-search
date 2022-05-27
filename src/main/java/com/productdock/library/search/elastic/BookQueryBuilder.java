@@ -23,8 +23,15 @@ public class BookQueryBuilder {
 
     private void addTopicsCriteria(List<String> topics) {
         for (String topic : topics) {
-            builder.should(QueryBuilders.matchQuery(BookSearchFields.TOPICS_NAME.label, topic));
+            builder.should(QueryBuilders.matchQuery(BookSearchFields.TOPICS.label, topic));
         }
+    }
+
+    public BookQueryBuilder withRecommendation(boolean recommended) {
+        if (recommended) {
+            builder.must(QueryBuilders.matchQuery(BookSearchFields.RECOMMENDED.label, true));
+        }
+        return this;
     }
 
     public BoolQueryBuilder build() {

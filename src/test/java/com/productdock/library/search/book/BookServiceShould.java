@@ -23,6 +23,7 @@ import static com.productdock.library.search.data.provider.BookRatingMessageMoth
 import static com.productdock.library.search.data.provider.RentalMessageMother.defaultRentalMessage;
 import static com.productdock.library.search.data.provider.BookAvailabilityMessageMother.defaultBookAvailabilityMessage;
 import static com.productdock.library.search.data.provider.BookDocumentMother.defaultBookDocument;
+import static com.productdock.library.search.data.provider.BookRecommendationMessageMother.defaultBookRecommendationMessageBuilder;
 
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Stream.of;
@@ -35,6 +36,7 @@ import static org.mockito.Mockito.*;
 class BookServiceShould {
 
     private static final Optional<List<String>> ANY_TOPIC = Optional.of(List.of("TOPIC"));
+    private static final boolean RECOMMENDED = false;
     private static final List MAPPED_DOCUMENT_RECORDS = Collections.singletonList
             (new BookDocument.RentalState.Record("any", BookStatus.RENTED));
     private static final BookDocument.Rating MAPPED_BOOK_RATING = mock(BookDocument.Rating.class);
@@ -61,10 +63,11 @@ class BookServiceShould {
     @Test
     void getBooksByTopics() {
         var firstPage = 0;
+        var searchFilters = new SearchFilters(firstPage, RECOMMENDED, ANY_TOPIC);
 
-        given(searchQueryExecutor.execute(ANY_TOPIC, firstPage)).willReturn(aBookSearchHits());
+        given(searchQueryExecutor.execute(searchFilters)).willReturn(aBookSearchHits());
 
-        var books = bookService.getBooks(ANY_TOPIC, 0);
+        var books = bookService.getBooks(searchFilters);
 
         assertThat(books.count).isEqualTo(2);
         assertThat(books.books).hasSize(2);
@@ -123,5 +126,18 @@ class BookServiceShould {
         verify(bookDocumentRepository).save(bookDocument);
         assertThat(bookDocument.getRentalState().getAvailableBooksCount())
                 .isEqualTo(bookAvailabilityMessage.getAvailableBookCount());
+    }
+
+    @Test
+    void updateBookRecommendations() {
+        var bookRecommendationMessage = defaultBookRecommendationMessageBuilder().recommended(true).build();
+        var bookDocument = defaultBookDocument();
+
+        given(bookDocumentRepository.findById(bookRecommendationMessage.getBookId())).willReturn(Optional.ofNullable(bookDocument));
+
+        bookService.updateBookRecommendations(bookRecommendationMessage);
+
+        verify(bookDocumentRepository).save(bookDocument);
+        assertThat(bookDocument.isRecommended()).isTrue();
     }
 }

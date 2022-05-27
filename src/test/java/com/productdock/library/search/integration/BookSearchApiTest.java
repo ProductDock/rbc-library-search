@@ -24,6 +24,8 @@ class BookSearchApiTest extends IntegrationTestBase {
     public static final int RESULTS_PAGE_SIZE = 19;
     public static final String FIRST_PAGE = "0";
     public static final String SECOND_PAGE = "1";
+    public static final boolean RECOMMENDED_BOOK = true;
+    public static final boolean NOT_RECOMMENDED_BOOK = false;
 
     @Autowired
     private MockMvc mockMvc;
@@ -33,7 +35,7 @@ class BookSearchApiTest extends IntegrationTestBase {
 
 
     @Nested
-    class SearchWithFilters {
+    class SearchWithTopics {
 
         @Test
         void getSecondPage_whenEmptyResults() throws Exception {
@@ -74,6 +76,64 @@ class BookSearchApiTest extends IntegrationTestBase {
                     .map(topicName -> BookDocument.Topic.builder().name(topicName).build())
                     .toList();
         }
+    }
+
+    @Nested
+    class SearchWithRecommendations {
+
+        @Test
+        void getFirstPage_whenThereAreResults() throws Exception {
+            givenBook("Recommended book", RECOMMENDED_BOOK);
+            givenBook("Not recommended book", NOT_RECOMMENDED_BOOK);
+
+            mockMvc.perform(get("/api/search")
+                            .param("page", FIRST_PAGE)
+                            .param("recommended", "true"))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.count").value(1))
+                    .andExpect(jsonPath("$.books").value(hasSize(1)))
+                    .andExpect(jsonPath("$.books[0].title").value("Recommended book"));
+        }
+
+        private void givenBook(String title, boolean recommended) {
+            var book = defaultBookDocumentBuilder()
+                    .title(title)
+                    .recommended(recommended)
+                    .build();
+            bookDocumentRepository.save(book);
+        }
+    }
+
+    @Nested
+    class SearchWithFilters {
+
+        @Test
+        void getFirstPage_whenThereAreResults() throws Exception {
+            givenABookWithTopicAndRecommendation("Title Product", "PRODUCT", NOT_RECOMMENDED_BOOK);
+            givenABookWithTopicAndRecommendation("Title Marketing", "MARKETING", NOT_RECOMMENDED_BOOK);
+            givenABookWithTopicAndRecommendation("Title Design", "DESIGN", RECOMMENDED_BOOK);
+
+            mockMvc.perform(get("/api/search")
+                            .param("page", FIRST_PAGE)
+                            .param("topics", "DESIGN")
+                            .param("topics", "MARKETING")
+                            .param("recommended", "true"))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.count").value(1))
+                    .andExpect(jsonPath("$.books").value(hasSize(1)))
+                    .andExpect(jsonPath("$.books[0].title").value("Title Design"));
+        }
+
+        private void givenABookWithTopicAndRecommendation(String title, String topicName, boolean recommended) {
+            var topic = BookDocument.Topic.builder().name(topicName).build();
+            var book = defaultBookDocumentBuilder()
+                    .title(title)
+                    .topics(List.of(topic))
+                    .recommended(recommended)
+                    .build();
+            bookDocumentRepository.save(book);
+        }
+
     }
 
     @Nested

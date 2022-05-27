@@ -13,6 +13,7 @@ spring:
       book-status: book-status
       book-availability: book-availability
       book-rating: book-rating
+      book-recommendation: book-recommendation
   elasticsearch:
     rest:
       uris: ${elasticsearch.server.url:localhost}:9200
