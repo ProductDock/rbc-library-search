@@ -112,6 +112,7 @@ class BookSearchApiTest extends IntegrationTestBase {
             givenABookWithTopicAndRecommendation("Title Product", "PRODUCT", NOT_RECOMMENDED_BOOK);
             givenABookWithTopicAndRecommendation("Title Marketing", "MARKETING", NOT_RECOMMENDED_BOOK);
             givenABookWithTopicAndRecommendation("Title Design", "DESIGN", RECOMMENDED_BOOK);
+            givenABookWithTopicAndRecommendation("Title Another Product", "PRODUCT", RECOMMENDED_BOOK);
 
             mockMvc.perform(get("/api/search")
                             .param("page", FIRST_PAGE)

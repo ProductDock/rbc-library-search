@@ -29,14 +29,14 @@ class BookQueryBuilderShould {
 
     private void assertThatOperatorsAreMatching(List<String> expectedOperators, String queryString) {
         List<String> topicOperators = JsonPath.parse(queryString)
-                .read("$['bool']['should'][*]['match']['topics.name']['operator']");
+                .read("$['bool']['must'][*]['bool']['should'][*]['match']['topics.name']['operator']");
         assertThat(topicOperators).containsAll(expectedOperators);
 
     }
 
     private void assertThatTopicsAreMatching(List<String> topics, String queryString) {
         List<String> topicQueries = JsonPath.parse(queryString)
-                .read("$['bool']['should'][*]['match']['topics.name']['query']");
+                .read("$['bool']['must'][*]['bool']['should'][*]['match']['topics.name']['query']");
         assertThat(topicQueries).containsAll(topics);
     }
 
