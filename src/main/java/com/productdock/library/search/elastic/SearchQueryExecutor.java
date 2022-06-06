@@ -3,6 +3,7 @@ package com.productdock.library.search.elastic;
 import com.productdock.library.search.book.SearchFilters;
 import com.productdock.library.search.elastic.document.BookDocument;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHits;
@@ -14,12 +15,14 @@ import static com.productdock.library.search.elastic.BookQueryBuilder.bookQueryB
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class SearchQueryExecutor {
 
     private static final int PAGE_SIZE = 18;
     private ElasticsearchOperations elasticsearchOperations;
 
     public SearchHits<BookDocument> execute(SearchFilters searchFilters) {
+        log.debug("Execute search query with search filters: {}", searchFilters);
         var queryBuilder = bookQueryBuilder()
                 .withTopicsCriteria(searchFilters.getTopics())
                 .andRecommendation(searchFilters.isRecommended())
