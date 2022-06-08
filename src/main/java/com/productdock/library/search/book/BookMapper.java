@@ -29,8 +29,7 @@ public class BookMapper {
     }
 
     private void mapRating(BookDocument bookDocument, BookDto bookDto) {
-        log.debug("Map BookDocument score {} to BookDto score", bookDocument.getRating().getScore());
-        log.debug("Map BookDocument count {} to BookDto count", bookDocument.getRating().getCount());
+        log.debug("Map BookDocument rating {} to BookDto rating", bookDocument.getRating());
         if (bookDocument.getRating() != null){
             bookDto.rating.score = bookDocument.getRating().getScore();
             bookDto.rating.count = bookDocument.getRating().getCount();
@@ -38,7 +37,7 @@ public class BookMapper {
     }
 
     private void mapRecords(BookDocument bookDocument, BookDto bookDto) {
-        log.debug("Map BookDocument records [{}] to BookDto", bookDocument.getRentalState().getRecords());
+        log.debug("Map BookDocument records [{}] to BookDto records", bookDocument.getRentalState().getRecords());
         var records = bookDocument.getRentalState().getRecords();
         var availableBookCount = bookDocument.getRentalState().getAvailableBooksCount();
         var availableRecords = createAvailableRecords(availableBookCount);
