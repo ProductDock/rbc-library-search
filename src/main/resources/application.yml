@@ -17,3 +17,7 @@ spring:
   elasticsearch:
     rest:
       uris: ${elasticsearch.server.url:localhost}:9200
+
+logging:
+  level:
+    com.productdock.library.search: ${logging.level:INFO}
