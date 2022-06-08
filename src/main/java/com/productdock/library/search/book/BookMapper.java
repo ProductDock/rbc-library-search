@@ -3,6 +3,7 @@ package com.productdock.library.search.book;
 import com.productdock.library.search.elastic.document.BookDocument;
 import com.productdock.library.search.kafka.consumer.messages.InsertBookMessage;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -13,11 +14,13 @@ import static java.util.stream.Stream.concat;
 
 @Component
 @AllArgsConstructor
+@Slf4j
 public class BookMapper {
 
     private BookDtoRecordMapper recordDtoMapper;
 
     public BookDto toBookDto(BookDocument bookDocument) {
+        log.debug("Map BookDocument [{}] to BookDto", bookDocument);
         var bookDto = new BookDto();
         mapSimpleProperties(bookDocument, bookDto);
         mapRecords(bookDocument, bookDto);
@@ -26,6 +29,8 @@ public class BookMapper {
     }
 
     private void mapRating(BookDocument bookDocument, BookDto bookDto) {
+        log.debug("Map BookDocument score {} to BookDto score", bookDocument.getRating().getScore());
+        log.debug("Map BookDocument count {} to BookDto count", bookDocument.getRating().getCount());
         if (bookDocument.getRating() != null){
             bookDto.rating.score = bookDocument.getRating().getScore();
             bookDto.rating.count = bookDocument.getRating().getCount();
@@ -33,6 +38,7 @@ public class BookMapper {
     }
 
     private void mapRecords(BookDocument bookDocument, BookDto bookDto) {
+        log.debug("Map BookDocument records [{}] to BookDto", bookDocument.getRentalState().getRecords());
         var records = bookDocument.getRentalState().getRecords();
         var availableBookCount = bookDocument.getRentalState().getAvailableBooksCount();
         var availableRecords = createAvailableRecords(availableBookCount);
@@ -41,6 +47,7 @@ public class BookMapper {
     }
 
     private List<BookDocument.RentalState.Record> createAvailableRecords(int availableBookCount) {
+        log.debug("Create {} available records", availableBookCount);
         var bookRecords = new ArrayList<BookDocument.RentalState.Record>();
         for (int i = 1; i <= availableBookCount; i++) {
             bookRecords.add(new BookDocument.RentalState.Record(BookStatus.AVAILABLE));
@@ -49,6 +56,7 @@ public class BookMapper {
     }
 
     private void mapSimpleProperties(BookDocument bookDocument, BookDto bookDto) {
+        log.debug("Map simple properties from BookDocument [{}] to BookDto", bookDocument);
         bookDto.id = bookDocument.getBookId();
         bookDto.title = bookDocument.getTitle();
         bookDto.author = bookDocument.getAuthor();
@@ -56,6 +64,7 @@ public class BookMapper {
     }
 
     public BookDocument toBookDocument(InsertBookMessage insertBookMessage) {
+        log.debug("Create BookDocument from insertBookMessage: {}", insertBookMessage);
         return BookDocument.builder()
                 .bookId(insertBookMessage.getBookId())
                 .title(insertBookMessage.getTitle())
@@ -66,6 +75,7 @@ public class BookMapper {
     }
 
     private BookDocument.Topic insertBookMessageTopicToBookDocumentTopic(InsertBookMessage.Topic bookTopic) {
+        log.debug("Insert bookMessageTopic [{}] to BookDocumentTopic", bookTopic);
         return BookDocument.Topic.builder()
                 .id(bookTopic.getId())
                 .name(bookTopic.getName())
@@ -73,6 +83,7 @@ public class BookMapper {
     }
 
     private Collection<BookDocument.Topic> insertBookMessageTopicsToBookDocumentTopics(List<InsertBookMessage.Topic> list) {
+        log.debug("Insert bookMessageTopics [{}] to BookDocumentTopic", list);
         return list.stream().map(this::insertBookMessageTopicToBookDocumentTopic).toList();
     }
 }
