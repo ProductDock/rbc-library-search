@@ -15,4 +15,5 @@ public class SearchFilters {
     private int page;
     private boolean recommended;
     private Optional<List<String>> topics;
+    private String searchText;
 }

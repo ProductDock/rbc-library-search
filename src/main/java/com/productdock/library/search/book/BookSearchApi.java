@@ -17,8 +17,9 @@ public record BookSearchApi(BookService bookService) {
     @GetMapping
     public SearchBooksResponse findBook(@RequestParam(required = false) Optional<List<String>> topics,
                                         @RequestParam(required = false) boolean recommended,
+                                        @RequestParam(required = false) String searchText,
                                         @RequestParam int page) {
-        log.debug("GET request received - api/search?page={}&topics={}&recommended={}", page, topics, recommended);
-        return bookService.getBooks(new SearchFilters(page, recommended, topics));
+        log.debug("GET request received - api/search?page={}&topics={}&recommended={}&searchText={}", page, topics, recommended, searchText);
+        return bookService.getBooks(new SearchFilters(page, recommended, topics, searchText));
     }
 }

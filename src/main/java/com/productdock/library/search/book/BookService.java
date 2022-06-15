@@ -68,5 +68,4 @@ public record BookService(BookDocumentRepository bookDocumentRepository,
         log.debug("Find book with id: {}", bookId);
         return bookDocumentRepository.findById(bookId).orElseThrow();
     }
-
 }

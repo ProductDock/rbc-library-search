@@ -39,6 +39,16 @@ public class BookQueryBuilder {
         return this;
     }
 
+    public BookQueryBuilder andSearchByTitleAndAuthor(String searchText) {
+        if (searchText != null && !searchText.isEmpty()) {
+            var searchByTitleAndAuthorCriteria = new BoolQueryBuilder();
+            searchByTitleAndAuthorCriteria.should(QueryBuilders.fuzzyQuery(BookSearchFields.TITLE.label, searchText).maxExpansions(10));
+            searchByTitleAndAuthorCriteria.should(QueryBuilders.fuzzyQuery(BookSearchFields.AUTHOR.label, searchText).maxExpansions(10));
+            and(searchByTitleAndAuthorCriteria);
+        }
+        return this;
+    }
+
     private void and(BoolQueryBuilder andBuilder) {
         builder.must(andBuilder);
     }

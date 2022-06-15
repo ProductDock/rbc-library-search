@@ -26,6 +26,7 @@ public class SearchQueryExecutor {
         var queryBuilder = bookQueryBuilder()
                 .withTopicsCriteria(searchFilters.getTopics())
                 .andRecommendation(searchFilters.isRecommended())
+                .andSearchByTitleAndAuthor(searchFilters.getSearchText())
                 .build();
         Query searchQuery = new NativeSearchQueryBuilder()
                 .withQuery(queryBuilder)
