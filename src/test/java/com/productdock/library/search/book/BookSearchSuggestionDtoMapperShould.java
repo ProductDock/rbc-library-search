@@ -10,8 +10,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static com.productdock.library.search.data.provider.BookDocumentMother.defaultBookDocumentBuilder;
-import static com.productdock.library.search.data.provider.BookDocumentRentalStateMother.defaultRentalStateBuilder;
-import static com.productdock.library.search.data.provider.BookDocumentRentalStateRecordMother.defaultRecord;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {BookSearchSuggestionDtoMapperImpl.class})
