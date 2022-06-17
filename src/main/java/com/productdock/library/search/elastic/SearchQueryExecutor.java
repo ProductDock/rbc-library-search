@@ -31,13 +31,13 @@ public class SearchQueryExecutor {
                 .build();
         Query searchQuery = new NativeSearchQueryBuilder()
                 .withQuery(queryBuilder)
-                .withPageable(doPagination(searchFilters.getPage()))
+                .withPageable(forPage(searchFilters.getPage()))
                 .build();
 
         return elasticsearchOperations.search(searchQuery, BookDocument.class);
     }
 
-    private Pageable doPagination(Integer page) {
+    private Pageable forPage(Integer page) {
         return page == null ? Pageable.unpaged() : PageRequest.of(page, PAGE_SIZE);
     }
 }

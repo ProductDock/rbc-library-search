@@ -61,6 +61,9 @@ class BookServiceShould {
     @Mock
     private BookDocumentRepository bookDocumentRepository;
 
+    @Mock
+    private BookSearchSuggestionDtoMapper bookSearchSuggestionDtoMapper;
+
     @Test
     void getBooksByTopics() {
         var firstPage = 0;
@@ -144,14 +147,11 @@ class BookServiceShould {
 
     @Test
     void getBooksByTitleAndAuthor() {
-        var firstPage = 0;
-        var searchFilters = new SearchFilters(firstPage, RECOMMENDED, Optional.of(List.of()), SEARCH_TEXT);
-
+        var searchFilters = new SearchFilters().withSearchText(SEARCH_TEXT);
         given(searchQueryExecutor.execute(searchFilters)).willReturn(aBookSearchHits());
 
-        var books = bookService.getBooks(searchFilters);
+        var books = bookService.searchBooksByText(searchFilters);
 
-        assertThat(books.count).isEqualTo(2);
-        assertThat(books.books).hasSize(2);
+        assertThat(books).hasSize(2);
     }
 }
