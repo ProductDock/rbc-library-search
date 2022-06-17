@@ -3,7 +3,9 @@ package com.productdock.library.search.book;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.With;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,8 +14,10 @@ import java.util.Optional;
 @AllArgsConstructor
 public class SearchFilters {
 
-    private int page;
-    private boolean recommended;
-    private Optional<List<String>> topics;
-    private String searchText;
+    private Integer page = null;
+    private boolean recommended = false;
+    private Optional<List<String>> topics = Optional.of(new ArrayList<>());
+    @With
+    private Optional<String> searchText;
+
 }

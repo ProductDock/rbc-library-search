@@ -39,14 +39,16 @@ public class BookQueryBuilder {
         return this;
     }
 
-    public BookQueryBuilder andSearchByTitleAndAuthor(String searchText) {
-        if (searchText != null && !searchText.isEmpty()) {
-            var searchByTitleAndAuthorCriteria = new BoolQueryBuilder();
-            searchByTitleAndAuthorCriteria.should(QueryBuilders.fuzzyQuery(BookSearchFields.TITLE.label, searchText).maxExpansions(10));
-            searchByTitleAndAuthorCriteria.should(QueryBuilders.fuzzyQuery(BookSearchFields.AUTHOR.label, searchText).maxExpansions(10));
-            and(searchByTitleAndAuthorCriteria);
-        }
+    public BookQueryBuilder andSearchByTitleAndAuthor(Optional<String> searchText) {
+        searchText.ifPresent(this::addSearchByTitleAndAuthorCriteria);
         return this;
+    }
+
+    public void addSearchByTitleAndAuthorCriteria(String searchText) {
+        var searchByTitleAndAuthorCriteria = new BoolQueryBuilder();
+        searchByTitleAndAuthorCriteria.should(QueryBuilders.fuzzyQuery(BookSearchFields.TITLE.label, searchText).maxExpansions(3));
+        searchByTitleAndAuthorCriteria.should(QueryBuilders.fuzzyQuery(BookSearchFields.AUTHOR.label, searchText).maxExpansions(3));
+        and(searchByTitleAndAuthorCriteria);
     }
 
     private void and(BoolQueryBuilder andBuilder) {

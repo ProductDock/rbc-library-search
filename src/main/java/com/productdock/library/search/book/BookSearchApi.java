@@ -17,9 +17,15 @@ public record BookSearchApi(BookService bookService) {
     @GetMapping
     public SearchBooksResponse findBook(@RequestParam(required = false) Optional<List<String>> topics,
                                         @RequestParam(required = false) boolean recommended,
-                                        @RequestParam(required = false) String searchText,
+                                        @RequestParam(required = false) Optional<String> searchText,
                                         @RequestParam int page) {
         log.debug("GET request received - api/search?page={}&topics={}&recommended={}&searchText={}", page, topics, recommended, searchText);
         return bookService.getBooks(new SearchFilters(page, recommended, topics, searchText));
+    }
+
+    @GetMapping("/suggestions")
+    public List<BookSearchSuggestionDto> suggestBooks(@RequestParam Optional<String> searchText) {
+        log.debug("GET request received - api/search/suggestions?searchText={}", searchText);
+        return bookService.searchBooksByText(new SearchFilters().withSearchText(searchText));
     }
 }

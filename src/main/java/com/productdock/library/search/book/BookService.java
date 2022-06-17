@@ -11,12 +11,14 @@ import com.productdock.library.search.kafka.consumer.messages.RentalMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.function.Consumer;
 
 @Service
 @Slf4j
 public record BookService(BookDocumentRepository bookDocumentRepository,
                           SearchQueryExecutor searchQueryExecutor,
+                          BookSearchSuggestionDtoMapper bookSearchSuggestionDtoMapper,
                           BookMapper bookMapper,
                           BookRatingMapper bookRatingMapper,
                           RentalStateRecordMapper recordDocumentMapper) {
@@ -67,5 +69,11 @@ public record BookService(BookDocumentRepository bookDocumentRepository,
     private BookDocument getBookDocument(String bookId) {
         log.debug("Find book with id: {}", bookId);
         return bookDocumentRepository.findById(bookId).orElseThrow();
+    }
+
+    public List<BookSearchSuggestionDto> searchBooksByText(SearchFilters searchFilters) {
+        log.debug("Get books by search text: {}", searchFilters.getSearchText());
+        var hits = searchQueryExecutor.execute(searchFilters);
+        return hits.stream().map(hit -> bookSearchSuggestionDtoMapper.toBookSearchSuggestionDto(hit.getContent())).toList();
     }
 }

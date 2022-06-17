@@ -5,6 +5,7 @@ import com.productdock.library.search.elastic.document.BookDocument;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
@@ -30,9 +31,13 @@ public class SearchQueryExecutor {
                 .build();
         Query searchQuery = new NativeSearchQueryBuilder()
                 .withQuery(queryBuilder)
-                .withPageable(PageRequest.of(searchFilters.getPage(), PAGE_SIZE))
+                .withPageable(doPagination(searchFilters.getPage()))
                 .build();
 
         return elasticsearchOperations.search(searchQuery, BookDocument.class);
+    }
+
+    private Pageable doPagination(Integer page) {
+        return page == null ? Pageable.unpaged() : PageRequest.of(page, PAGE_SIZE);
     }
 }

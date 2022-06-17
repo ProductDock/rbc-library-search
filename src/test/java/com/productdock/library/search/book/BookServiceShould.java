@@ -37,7 +37,7 @@ class BookServiceShould {
 
     private static final Optional<List<String>> ANY_TOPIC = Optional.of(List.of("TOPIC"));
     private static final boolean RECOMMENDED = false;
-    private static final String SEARCH_TEXT = "TEXT";
+    private static final Optional<String> SEARCH_TEXT = Optional.of("");
     private static final List MAPPED_DOCUMENT_RECORDS = Collections.singletonList
             (new BookDocument.RentalState.Record("any", BookStatus.RENTED));
     private static final BookDocument.Rating MAPPED_BOOK_RATING = mock(BookDocument.Rating.class);
@@ -64,7 +64,7 @@ class BookServiceShould {
     @Test
     void getBooksByTopics() {
         var firstPage = 0;
-        var searchFilters = new SearchFilters(firstPage, RECOMMENDED, ANY_TOPIC, "");
+        var searchFilters = new SearchFilters(firstPage, RECOMMENDED, ANY_TOPIC, SEARCH_TEXT);
 
         given(searchQueryExecutor.execute(searchFilters)).willReturn(aBookSearchHits());
 
