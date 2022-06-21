@@ -196,15 +196,27 @@ class BookSearchApiTest extends IntegrationTestBase {
         }
 
         @Test
-        void getBookSuggestions_whenThereAreSearchResultsForPartialText() throws Exception {
+        void getBookSuggestionsForPartialTitleSearchText_whenThereAreSearchResults() throws Exception {
             givenABook("Title Product", "John Doe");
+            givenABook("Title Marketing", "John Doe");
 
             mockMvc.perform(get("/api/search/suggestions")
-                            .param("searchText", "produc"))
+                            .param("searchText", "prod"))
 
                     .andExpect(status().isOk())
-                    .andExpect(jsonPath("$").value(hasSize(1)))
-                    .andExpect(jsonPath("$.[0].title").value("Title Product"));
+                    .andExpect(jsonPath("$").value(hasSize(1)));
+        }
+
+        @Test
+        void getBookSuggestionsForPartialAuthorSearchText_whenThereAreSearchResults() throws Exception {
+            givenABook("Title Product", "John Doe");
+            givenABook("Title Marketing", "John Doe");
+
+            mockMvc.perform(get("/api/search/suggestions")
+                            .param("searchText", "joh"))
+
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$").value(hasSize(2)));
         }
 
         @Test

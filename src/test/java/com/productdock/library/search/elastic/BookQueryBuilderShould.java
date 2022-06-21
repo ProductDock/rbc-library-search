@@ -57,24 +57,35 @@ class BookQueryBuilderShould {
     }
 
     @Test
-    void buildQueryWhenSearchingByTopics() {
+    void buildQueryWhenSearchingByText() {
         var searchText = Optional.of("SEARCH TEXT");
+        var expectedQueryType = "phrase_prefix";
+        var expectedSlop = 15;
 
         var query = bookQueryBuilder().andSearchByTitleAndAuthor(searchText).build().toString();
 
-        assertThatTitleIsMatching(searchText.get(), query);
-        assertThatAuthorIsMatching(searchText.get(), query);
+        assertThatSearchTextIsMatching(searchText.get(), query);
+        assertThatQueryTypeIsMatchingWhenSearchingByText(expectedQueryType, query);
+        assertThatSlopIsMatchingWhenSearchingByText(expectedSlop, query);
     }
 
-    private void assertThatTitleIsMatching(String searchText, String queryString) {
+    private void assertThatSearchTextIsMatching(String searchText, String queryString) {
         List<String> titleQuery = JsonPath.parse(queryString)
-                .read("$['bool']['must'][*]['bool']['should'][*]['fuzzy']['title']['value']");
+                .read("$['bool']['must'][*]['bool']['should'][*]['multi_match']['query']");
         assertThat(titleQuery).contains(searchText);
     }
 
-    private void assertThatAuthorIsMatching(String searchText, String queryString) {
-        List<String> authorQuery = JsonPath.parse(queryString)
-                .read("$['bool']['must'][*]['bool']['should'][*]['fuzzy']['author']['value']");
-        assertThat(authorQuery).contains(searchText);
+    private void assertThatQueryTypeIsMatchingWhenSearchingByText(String expectedType, String queryString) {
+        List<String> searchByTextOperators = JsonPath.parse(queryString)
+                .read("$['bool']['must'][*]['bool']['should'][*]['multi_match']['type']");
+        assertThat(searchByTextOperators).contains(expectedType);
+
+    }
+
+    private void assertThatSlopIsMatchingWhenSearchingByText(int expectedSlop, String queryString) {
+        List<Integer> slop = JsonPath.parse(queryString)
+                .read("$['bool']['must'][*]['bool']['should'][*]['multi_match']['slop']");
+        assertThat(slop).contains(expectedSlop);
+
     }
 }
