@@ -37,9 +37,6 @@ import static org.mockito.Mockito.*;
 @ContextConfiguration(classes = {RentalStateRecordMapperImpl.class})
 class BookServiceShould {
 
-    private static final Optional<List<String>> ANY_TOPIC = Optional.of(List.of("TOPIC"));
-    private static final boolean RECOMMENDED = false;
-    private static final Optional<String> SEARCH_TEXT = Optional.of("");
     private static final List MAPPED_DOCUMENT_RECORDS = Collections.singletonList
             (new BookDocument.RentalState.Record("any", BookStatus.RENTED));
     private static final BookDocument.Rating MAPPED_BOOK_RATING = mock(BookDocument.Rating.class);
@@ -49,15 +46,6 @@ class BookServiceShould {
     private BookService bookService;
 
     @Mock
-    private SearchQueryExecutor searchQueryExecutor;
-
-    @Mock
-    private SearchQueryBuilder searchQueryBuilder;
-
-    @Mock
-    private BookMapper bookMapper;
-
-    @Mock
     private RentalStateRecordMapper rentalStateRecordMapper;
 
     @Mock
@@ -65,38 +53,6 @@ class BookServiceShould {
 
     @Mock
     private BookDocumentRepository bookDocumentRepository;
-
-    @Mock
-    private BookSearchSuggestionDtoMapper bookSearchSuggestionDtoMapper;
-
-    @Test
-    void getBooksByTopics() {
-        var firstPage = 0;
-        var searchFilters = new SearchFilters( RECOMMENDED, ANY_TOPIC, SEARCH_TEXT);
-        var buildQuery = mock(BoolQueryBuilder.class);
-        given(searchQueryBuilder.buildWith(searchFilters)).willReturn(buildQuery);
-        given(searchQueryExecutor.execute(buildQuery, firstPage)).willReturn(aBookSearchHits());
-
-        var books = bookService.getBooks(searchFilters, firstPage);
-
-        assertThat(books.count).isEqualTo(2);
-        assertThat(books.books).hasSize(2);
-    }
-
-    private SearchHits<BookDocument> aBookSearchHits() {
-        List bookIndices = of(
-                mock(SearchHit.class),
-                mock(SearchHit.class)
-        ).collect(toList());
-
-        return new SearchHitsImpl<>(bookIndices.size(),
-                null,
-                0,
-                null,
-                bookIndices,
-                null,
-                null);
-    }
 
     @Test
     void updateBookRecords() {
@@ -149,17 +105,5 @@ class BookServiceShould {
 
         verify(bookDocumentRepository).save(bookDocument);
         assertThat(bookDocument.isRecommended()).isTrue();
-    }
-
-    @Test
-    void getBooksByTitleAndAuthor() {
-        var searchFilters = SearchFilters.builder().searchText(SEARCH_TEXT).build();
-        var buildQuery = mock(BoolQueryBuilder.class);
-        given(searchQueryBuilder.buildWith(searchFilters)).willReturn(buildQuery);
-        given(searchQueryExecutor.execute(buildQuery)).willReturn(aBookSearchHits());
-
-        var books = bookService.searchBookSuggestions(searchFilters);
-
-        assertThat(books).hasSize(2);
     }
 }
