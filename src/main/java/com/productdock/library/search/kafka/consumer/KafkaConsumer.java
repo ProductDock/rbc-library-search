@@ -1,6 +1,5 @@
 package com.productdock.library.search.kafka.consumer;
 
-import com.productdock.library.search.book.BookMapper;
 import com.productdock.library.search.book.BookService;
 import com.productdock.library.search.book.InsertBookMessageMapper;
 import com.productdock.library.search.kafka.consumer.messages.*;
@@ -10,8 +9,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
-public record KafkaConsumer(BookService bookService,
-                            BookMapper bookMapper, InsertBookMessageMapper insertBookMessageMapper) {
+public record KafkaConsumer(BookService bookService, InsertBookMessageMapper insertBookMessageMapper) {
 
     @KafkaListener(topics = "${spring.kafka.topic.insert-book}",
             containerFactory = "insertBookMessageKafkaListenerContainerFactory")
