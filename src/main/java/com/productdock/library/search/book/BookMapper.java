@@ -62,27 +62,27 @@ public class BookMapper {
         bookDto.cover = bookDocument.getCover();
     }
 
-    public BookDocument toBookDocument(InsertBookMessage insertBookMessage) {
-        log.debug("Create BookDocument from insertBookMessage: {}", insertBookMessage);
-        return BookDocument.builder()
-                .bookId(insertBookMessage.getBookId())
-                .title(insertBookMessage.getTitle())
-                .author(insertBookMessage.getAuthor())
-                .cover(insertBookMessage.getCover())
-                .topics(insertBookMessageTopicsToBookDocumentTopics(insertBookMessage.getTopics()))
-                .build();
-    }
-
-    private BookDocument.Topic insertBookMessageTopicToBookDocumentTopic(InsertBookMessage.Topic bookTopic) {
-        log.debug("Insert bookMessageTopic [{}] to BookDocumentTopic", bookTopic);
-        return BookDocument.Topic.builder()
-                .id(bookTopic.getId())
-                .name(bookTopic.getName())
-                .build();
-    }
-
-    private Collection<BookDocument.Topic> insertBookMessageTopicsToBookDocumentTopics(List<InsertBookMessage.Topic> list) {
-        log.debug("Insert bookMessageTopics [{}] to BookDocumentTopic", list);
-        return list.stream().map(this::insertBookMessageTopicToBookDocumentTopic).toList();
-    }
+//    public BookDocument toBookDocument(InsertBookMessage insertBookMessage) {
+//        log.debug("Create BookDocument from insertBookMessage: {}", insertBookMessage);
+//        return BookDocument.builder()
+//                .bookId(insertBookMessage.getBookId())
+//                .title(insertBookMessage.getTitle())
+//                .author(insertBookMessage.getAuthor())
+//                .cover(insertBookMessage.getCover())
+//                .topics(insertBookMessageTopicsToBookDocumentTopics(insertBookMessage.getTopics()))
+//                .build();
+//    }
+//
+//    private BookDocument.Topic insertBookMessageTopicToBookDocumentTopic(InsertBookMessage.Topic bookTopic) {
+//        log.debug("Insert bookMessageTopic [{}] to BookDocumentTopic", bookTopic);
+//        return BookDocument.Topic.builder()
+//                .id(bookTopic.getId())
+//                .name(bookTopic.getName())
+//                .build();
+//    }
+//
+//    private Collection<BookDocument.Topic> insertBookMessageTopicsToBookDocumentTopics(List<InsertBookMessage.Topic> list) {
+//        log.debug("Insert bookMessageTopics [{}] to BookDocumentTopic", list);
+//        return list.stream().map(this::insertBookMessageTopicToBookDocumentTopic).toList();
+//    }
 }
