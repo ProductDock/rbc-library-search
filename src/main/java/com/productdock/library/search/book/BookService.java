@@ -2,6 +2,7 @@ package com.productdock.library.search.book;
 
 import com.productdock.library.search.elastic.BookRatingMapper;
 import com.productdock.library.search.elastic.RentalStateRecordMapper;
+import com.productdock.library.search.elastic.SearchQueryBuilder;
 import com.productdock.library.search.elastic.SearchQueryExecutor;
 import com.productdock.library.search.elastic.document.BookDocument;
 import com.productdock.library.search.kafka.consumer.messages.BookAvailabilityMessage;
@@ -17,6 +18,7 @@ import java.util.function.Consumer;
 @Service
 @Slf4j
 public record BookService(BookDocumentRepository bookDocumentRepository,
+                          SearchQueryBuilder searchQueryBuilder,
                           SearchQueryExecutor searchQueryExecutor,
                           BookSearchSuggestionDtoMapper bookSearchSuggestionDtoMapper,
                           BookMapper bookMapper,
@@ -24,9 +26,10 @@ public record BookService(BookDocumentRepository bookDocumentRepository,
                           RentalStateRecordMapper recordDocumentMapper) {
 
 
-    public SearchBooksResponse getBooks(SearchFilters searchFilters) {
+    public SearchBooksResponse getBooks(SearchFilters searchFilters, int page) {
         log.debug("Get books by search filters: {}", searchFilters);
-        var hits = searchQueryExecutor.execute(searchFilters);
+        var buildQuery = searchQueryBuilder.buildWith(searchFilters);
+        var hits = searchQueryExecutor.execute(buildQuery, page);
         var bookHitsDto = hits.stream().map(hit -> bookMapper.toBookDto(hit.getContent())).toList();
         return new SearchBooksResponse(hits.getTotalHits(), bookHitsDto);
     }
@@ -71,9 +74,10 @@ public record BookService(BookDocumentRepository bookDocumentRepository,
         return bookDocumentRepository.findById(bookId).orElseThrow();
     }
 
-    public List<BookSearchSuggestionDto> searchBooksByText(SearchFilters searchFilters) {
+    public List<BookSearchSuggestionDto> searchBookSuggestions(SearchFilters searchFilters) {
         log.debug("Get books by search text: {}", searchFilters.getSearchText());
-        var hits = searchQueryExecutor.execute(searchFilters);
+        var buildQuery = searchQueryBuilder.buildWith(searchFilters);
+        var hits = searchQueryExecutor.execute(buildQuery);
         return hits.stream().map(hit -> bookSearchSuggestionDtoMapper.toBookSearchSuggestionDto(hit.getContent())).toList();
     }
 }

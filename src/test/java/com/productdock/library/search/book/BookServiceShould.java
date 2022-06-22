@@ -3,8 +3,10 @@ package com.productdock.library.search.book;
 import com.productdock.library.search.elastic.BookRatingMapper;
 import com.productdock.library.search.elastic.RentalStateRecordMapper;
 import com.productdock.library.search.elastic.RentalStateRecordMapperImpl;
+import com.productdock.library.search.elastic.SearchQueryBuilder;
 import com.productdock.library.search.elastic.SearchQueryExecutor;
 import com.productdock.library.search.elastic.document.BookDocument;
+import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -50,6 +52,9 @@ class BookServiceShould {
     private SearchQueryExecutor searchQueryExecutor;
 
     @Mock
+    private SearchQueryBuilder searchQueryBuilder;
+
+    @Mock
     private BookMapper bookMapper;
 
     @Mock
@@ -67,11 +72,12 @@ class BookServiceShould {
     @Test
     void getBooksByTopics() {
         var firstPage = 0;
-        var searchFilters = new SearchFilters(firstPage, RECOMMENDED, ANY_TOPIC, SEARCH_TEXT);
+        var searchFilters = new SearchFilters( RECOMMENDED, ANY_TOPIC, SEARCH_TEXT);
+        var buildQuery = mock(BoolQueryBuilder.class);
+        given(searchQueryBuilder.buildWith(searchFilters)).willReturn(buildQuery);
+        given(searchQueryExecutor.execute(buildQuery, firstPage)).willReturn(aBookSearchHits());
 
-        given(searchQueryExecutor.execute(searchFilters)).willReturn(aBookSearchHits());
-
-        var books = bookService.getBooks(searchFilters);
+        var books = bookService.getBooks(searchFilters, firstPage);
 
         assertThat(books.count).isEqualTo(2);
         assertThat(books.books).hasSize(2);
@@ -147,10 +153,12 @@ class BookServiceShould {
 
     @Test
     void getBooksByTitleAndAuthor() {
-        var searchFilters = new SearchFilters().withSearchText(SEARCH_TEXT);
-        given(searchQueryExecutor.execute(searchFilters)).willReturn(aBookSearchHits());
+        var searchFilters = SearchFilters.builder().searchText(SEARCH_TEXT).build();
+        var buildQuery = mock(BoolQueryBuilder.class);
+        given(searchQueryBuilder.buildWith(searchFilters)).willReturn(buildQuery);
+        given(searchQueryExecutor.execute(buildQuery)).willReturn(aBookSearchHits());
 
-        var books = bookService.searchBooksByText(searchFilters);
+        var books = bookService.searchBookSuggestions(searchFilters);
 
         assertThat(books).hasSize(2);
     }
