@@ -34,7 +34,6 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-@ContextConfiguration(classes = {RentalStateRecordMapperImpl.class})
 class BookServiceShould {
 
     private static final List MAPPED_DOCUMENT_RECORDS = Collections.singletonList

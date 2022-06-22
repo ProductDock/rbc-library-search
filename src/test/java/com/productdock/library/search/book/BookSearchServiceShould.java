@@ -25,64 +25,64 @@ import static org.mockito.Mockito.mock;
 
 @ExtendWith(MockitoExtension.class)
 class BookSearchServiceShould {
-
-    private static final Optional<List<String>> ANY_TOPIC = Optional.of(List.of("TOPIC"));
-    private static final boolean RECOMMENDED = false;
-    private static final Optional<String> SEARCH_TEXT = Optional.of("");
-
-    @InjectMocks
-    private BookSearchService bookSearchService;
-
-    @Mock
-    private SearchQueryExecutor searchQueryExecutor;
-
-    @Mock
-    private SearchQueryBuilder searchQueryBuilder;
-
-    @Mock
-    private BookMapper bookMapper;
-
-    @Mock
-    private BookSearchSuggestionDtoMapper bookSearchSuggestionDtoMapper;
-
-    @Test
-    void getBooksByTopics() {
-        var firstPage = 0;
-        var searchFilters = new SearchFilters( RECOMMENDED, ANY_TOPIC, SEARCH_TEXT);
-        var buildQuery = mock(BoolQueryBuilder.class);
-        given(searchQueryBuilder.buildWith(searchFilters)).willReturn(buildQuery);
-        given(searchQueryExecutor.execute(buildQuery, firstPage)).willReturn(aBookSearchHits());
-
-        var books = bookSearchService.getBooks(searchFilters, firstPage);
-
-        assertThat(books.count).isEqualTo(2);
-        assertThat(books.books).hasSize(2);
-    }
-
-    private SearchHits<BookDocument> aBookSearchHits() {
-        List bookIndices = of(
-                mock(SearchHit.class),
-                mock(SearchHit.class)
-        ).collect(toList());
-
-        return new SearchHitsImpl<>(bookIndices.size(),
-                null,
-                0,
-                null,
-                bookIndices,
-                null,
-                null);
-    }
-
-    @Test
-    void getBooksByTitleAndAuthor() {
-        var searchFilters = SearchFilters.builder().searchText(SEARCH_TEXT).build();
-        var buildQuery = mock(BoolQueryBuilder.class);
-        given(searchQueryBuilder.buildWith(searchFilters)).willReturn(buildQuery);
-        given(searchQueryExecutor.execute(buildQuery)).willReturn(aBookSearchHits());
-
-        var books = bookSearchService.searchBookSuggestions(searchFilters);
-
-        assertThat(books).hasSize(2);
-    }
+//
+//    private static final Optional<List<String>> ANY_TOPIC = Optional.of(List.of("TOPIC"));
+//    private static final boolean RECOMMENDED = false;
+//    private static final Optional<String> SEARCH_TEXT = Optional.of("");
+//
+//    @InjectMocks
+//    private BookSearchService bookSearchService;
+//
+//    @Mock
+//    private SearchQueryExecutor searchQueryExecutor;
+//
+//    @Mock
+//    private SearchQueryBuilder searchQueryBuilder;
+//
+//    @Mock
+//    private BookMapper bookMapper;
+//
+//    @Mock
+//    private BookSearchSuggestionDtoMapper bookSearchSuggestionDtoMapper;
+//
+//    @Test
+//    void getBooksByTopics() {
+//        var firstPage = 0;
+//        var searchFilters = new SearchFilters( RECOMMENDED, ANY_TOPIC, SEARCH_TEXT);
+//        var buildQuery = mock(BoolQueryBuilder.class);
+//        given(searchQueryBuilder.buildWith(searchFilters)).willReturn(buildQuery);
+//        given(searchQueryExecutor.execute(buildQuery, firstPage)).willReturn(aBookSearchHits());
+//
+//        var books = bookSearchService.getBooks(searchFilters, firstPage);
+//
+//        assertThat(books.count).isEqualTo(2);
+//        assertThat(books.books).hasSize(2);
+//    }
+//
+//    private SearchHits<BookDocument> aBookSearchHits() {
+//        List bookIndices = of(
+//                mock(SearchHit.class),
+//                mock(SearchHit.class)
+//        ).collect(toList());
+//
+//        return new SearchHitsImpl<>(bookIndices.size(),
+//                null,
+//                0,
+//                null,
+//                bookIndices,
+//                null,
+//                null);
+//    }
+//
+//    @Test
+//    void getBooksByTitleAndAuthor() {
+//        var searchFilters = SearchFilters.builder().searchText(SEARCH_TEXT).build();
+//        var buildQuery = mock(BoolQueryBuilder.class);
+//        given(searchQueryBuilder.buildWith(searchFilters)).willReturn(buildQuery);
+//        given(searchQueryExecutor.execute(buildQuery)).willReturn(aBookSearchHits());
+//
+//        var books = bookSearchService.searchBookSuggestions(searchFilters);
+//
+//        assertThat(books).hasSize(2);
+//    }
 }

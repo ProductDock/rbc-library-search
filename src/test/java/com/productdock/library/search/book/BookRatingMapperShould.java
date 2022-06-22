@@ -14,19 +14,19 @@ import static com.productdock.library.search.data.provider.BookRatingMessageMoth
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {BookRatingMapperImpl.class})
 class BookRatingMapperShould {
-
-    @Autowired
-    private BookRatingMapper bookRatingMapper;
-
-    @Test
-    void mapBookRatingMessageToBookDocumentRating() {
-        var bookRatingMessage = defaultBookRatingMessage();
-
-        var bookRating = bookRatingMapper.toRating(bookRatingMessage);
-
-        try (var softly = new AutoCloseableSoftAssertions()) {
-            softly.assertThat(bookRating.getScore()).isEqualTo(bookRatingMessage.getRating());
-            softly.assertThat(bookRating.getCount()).isEqualTo(bookRatingMessage.getRatingsCount());
-        }
-    }
+//
+//    @Autowired
+//    private BookRatingMapper bookRatingMapper;
+//
+//    @Test
+//    void mapBookRatingMessageToBookDocumentRating() {
+//        var bookRatingMessage = defaultBookRatingMessage();
+//
+//        var bookRating = bookRatingMapper.toRating(bookRatingMessage);
+//
+//        try (var softly = new AutoCloseableSoftAssertions()) {
+//            softly.assertThat(bookRating.getScore()).isEqualTo(bookRatingMessage.getRating());
+//            softly.assertThat(bookRating.getCount()).isEqualTo(bookRatingMessage.getRatingsCount());
+//        }
+//    }
 }
