@@ -1,7 +1,7 @@
 package com.productdock.library.search.kafka.consumer;
 
-import com.productdock.library.search.book.BookMapper;
 import com.productdock.library.search.book.BookService;
+import com.productdock.library.search.book.InsertBookMessageMapper;
 import com.productdock.library.search.kafka.consumer.messages.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -9,14 +9,13 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
-public record KafkaConsumer(BookService bookService,
-                            BookMapper bookMapper) {
+public record KafkaConsumer(BookService bookService, InsertBookMessageMapper insertBookMessageMapper) {
 
     @KafkaListener(topics = "${spring.kafka.topic.insert-book}",
             containerFactory = "insertBookMessageKafkaListenerContainerFactory")
     public synchronized void listen(InsertBookMessage insertBookMessage) {
         log.debug("On topic 'insert-book' received kafka message: {}", insertBookMessage);
-        bookService.save(bookMapper.toBookDocument(insertBookMessage));
+        bookService.save(insertBookMessageMapper.toBookDocument(insertBookMessage));
     }
 
     @KafkaListener(topics = "${spring.kafka.topic.book-status}",

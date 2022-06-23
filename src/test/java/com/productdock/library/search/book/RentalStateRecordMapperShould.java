@@ -1,26 +1,19 @@
 package com.productdock.library.search.book;
 
 import com.productdock.library.search.elastic.RentalStateRecordMapper;
-import com.productdock.library.search.elastic.RentalStateRecordMapperImpl;
 import com.productdock.library.search.kafka.consumer.messages.RentalMessage;
 import org.assertj.core.api.AutoCloseableSoftAssertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.mapstruct.factory.Mappers;
 
 import java.util.stream.Collectors;
 
 import static java.util.stream.Stream.of;
 import static org.assertj.core.api.AssertionsForClassTypes.tuple;
 
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {RentalStateRecordMapperImpl.class})
 class RentalStateRecordMapperShould {
 
-    @Autowired
-    private RentalStateRecordMapper rentalStateRecordMapper;
+    private final RentalStateRecordMapper rentalStateRecordMapper = Mappers.getMapper(RentalStateRecordMapper.class);
 
     @Test
     void mapRentalMessageRecordToRentalStateRecord() {

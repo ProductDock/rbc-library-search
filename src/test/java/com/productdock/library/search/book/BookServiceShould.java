@@ -3,8 +3,10 @@ package com.productdock.library.search.book;
 import com.productdock.library.search.elastic.BookRatingMapper;
 import com.productdock.library.search.elastic.RentalStateRecordMapper;
 import com.productdock.library.search.elastic.RentalStateRecordMapperImpl;
+import com.productdock.library.search.elastic.SearchQueryBuilder;
 import com.productdock.library.search.elastic.SearchQueryExecutor;
 import com.productdock.library.search.elastic.document.BookDocument;
+import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -32,11 +34,8 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-@ContextConfiguration(classes = {RentalStateRecordMapperImpl.class})
 class BookServiceShould {
 
-    private static final Optional<List<String>> ANY_TOPIC = Optional.of(List.of("TOPIC"));
-    private static final boolean RECOMMENDED = false;
     private static final List MAPPED_DOCUMENT_RECORDS = Collections.singletonList
             (new BookDocument.RentalState.Record("any", BookStatus.RENTED));
     private static final BookDocument.Rating MAPPED_BOOK_RATING = mock(BookDocument.Rating.class);
@@ -46,12 +45,6 @@ class BookServiceShould {
     private BookService bookService;
 
     @Mock
-    private SearchQueryExecutor searchQueryExecutor;
-
-    @Mock
-    private BookMapper bookMapper;
-
-    @Mock
     private RentalStateRecordMapper rentalStateRecordMapper;
 
     @Mock
@@ -59,34 +52,6 @@ class BookServiceShould {
 
     @Mock
     private BookDocumentRepository bookDocumentRepository;
-
-    @Test
-    void getBooksByTopics() {
-        var firstPage = 0;
-        var searchFilters = new SearchFilters(firstPage, RECOMMENDED, ANY_TOPIC);
-
-        given(searchQueryExecutor.execute(searchFilters)).willReturn(aBookSearchHits());
-
-        var books = bookService.getBooks(searchFilters);
-
-        assertThat(books.count).isEqualTo(2);
-        assertThat(books.books).hasSize(2);
-    }
-
-    private SearchHits<BookDocument> aBookSearchHits() {
-        List bookIndices = of(
-                mock(SearchHit.class),
-                mock(SearchHit.class)
-        ).collect(toList());
-
-        return new SearchHitsImpl<>(bookIndices.size(),
-                null,
-                0,
-                null,
-                bookIndices,
-                null,
-                null);
-    }
 
     @Test
     void updateBookRecords() {

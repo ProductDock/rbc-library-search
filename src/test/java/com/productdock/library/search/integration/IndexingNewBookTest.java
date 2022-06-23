@@ -2,6 +2,7 @@ package com.productdock.library.search.integration;
 
 import com.productdock.library.search.book.BookDocumentRepository;
 import com.productdock.library.search.data.provider.KafkaTestProducer;
+import com.productdock.library.search.kafka.consumer.messages.InsertBookMessage;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,7 +10,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.Duration;
 
-import static com.productdock.library.search.data.provider.InsertBookMessageMother.defaultInsertBookMessageBuilder;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 
@@ -27,7 +27,9 @@ class IndexingNewBookTest extends IntegrationTestBase {
 
     @Test
     void shouldSaveBookIndex_whenMessageReceived() throws Exception {
-        var insertBook = defaultInsertBookMessageBuilder().bookId("123").author("Book author").build();
+        var bookTopic =
+                InsertBookMessage.Topic.builder().id("1").name("::topic::").build();
+        var insertBook = InsertBookMessage.builder().bookId("123").title("::title::").cover("::cover::").author("Book author").topic(bookTopic).build();
 
         producer.send(topic, insertBook);
 

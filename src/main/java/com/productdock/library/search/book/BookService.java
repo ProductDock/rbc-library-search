@@ -2,7 +2,6 @@ package com.productdock.library.search.book;
 
 import com.productdock.library.search.elastic.BookRatingMapper;
 import com.productdock.library.search.elastic.RentalStateRecordMapper;
-import com.productdock.library.search.elastic.SearchQueryExecutor;
 import com.productdock.library.search.elastic.document.BookDocument;
 import com.productdock.library.search.kafka.consumer.messages.BookAvailabilityMessage;
 import com.productdock.library.search.kafka.consumer.messages.BookRatingMessage;
@@ -16,18 +15,8 @@ import java.util.function.Consumer;
 @Service
 @Slf4j
 public record BookService(BookDocumentRepository bookDocumentRepository,
-                          SearchQueryExecutor searchQueryExecutor,
-                          BookMapper bookMapper,
                           BookRatingMapper bookRatingMapper,
                           RentalStateRecordMapper recordDocumentMapper) {
-
-
-    public SearchBooksResponse getBooks(SearchFilters searchFilters) {
-        log.debug("Get books by search filters: {}", searchFilters);
-        var hits = searchQueryExecutor.execute(searchFilters);
-        var bookHitsDto = hits.stream().map(hit -> bookMapper.toBookDto(hit.getContent())).toList();
-        return new SearchBooksResponse(hits.getTotalHits(), bookHitsDto);
-    }
 
     public void save(BookDocument bookDocument) {
         bookDocumentRepository.save(bookDocument);
@@ -68,5 +57,4 @@ public record BookService(BookDocumentRepository bookDocumentRepository,
         log.debug("Find book with id: {}", bookId);
         return bookDocumentRepository.findById(bookId).orElseThrow();
     }
-
 }

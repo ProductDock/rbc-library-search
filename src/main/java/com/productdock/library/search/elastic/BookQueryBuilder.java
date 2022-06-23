@@ -2,10 +2,13 @@ package com.productdock.library.search.elastic;
 
 import com.productdock.library.search.book.BookSearchFields;
 import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.MultiMatchQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 
 import java.util.List;
 import java.util.Optional;
+
+import static org.elasticsearch.index.query.QueryBuilders.multiMatchQuery;
 
 public class BookQueryBuilder {
 
@@ -37,6 +40,21 @@ public class BookQueryBuilder {
             and(recommendCriteria);
         }
         return this;
+    }
+
+    public BookQueryBuilder andSearchByTitleAndAuthor(Optional<String> searchText) {
+        searchText.ifPresent(this::addSearchByTitleAndAuthorCriteria);
+        return this;
+    }
+
+    public void addSearchByTitleAndAuthorCriteria(String searchText) {
+        var searchByTitleAndAuthorCriteria = new BoolQueryBuilder();
+        searchByTitleAndAuthorCriteria.should(multiMatchQuery(searchText)
+                .field(BookSearchFields.TITLE.label)
+                .field(BookSearchFields.AUTHOR.label)
+                .type(MultiMatchQueryBuilder.Type.PHRASE_PREFIX)
+                .slop(15));
+        and(searchByTitleAndAuthorCriteria);
     }
 
     private void and(BoolQueryBuilder andBuilder) {

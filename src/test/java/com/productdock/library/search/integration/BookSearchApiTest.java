@@ -2,11 +2,13 @@ package com.productdock.library.search.integration;
 
 import com.productdock.library.search.book.BookDocumentRepository;
 import com.productdock.library.search.elastic.document.BookDocument;
+import lombok.NonNull;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.List;
 
@@ -173,6 +175,143 @@ class BookSearchApiTest extends IntegrationTestBase {
 
         private void givenSecondPageOfResults() {
             var book = defaultBookDocumentBuilder().title("Second Page Title").build();
+            bookDocumentRepository.save(book);
+        }
+
+    }
+
+    @Nested
+    class SearchWithText {
+
+        @Test
+        void getBookSuggestions_whenThereAreSearchResults() throws Exception {
+            givenABook("Title Product", "Product Guru");
+            givenABook("Title Marketing", "John Doe");
+            givenABook("Title Design", "Product Guru");
+            givenABook("Title Another Product", "Product Guru");
+
+            mockMvc.perform(get("/api/search/suggestions").param("searchText", "product"))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$").value(hasSize(3)));
+        }
+
+        @Test
+        void getBookSuggestionsForPartialTitleSearchText_whenThereAreSearchResults() throws Exception {
+            givenABook("Title Product", "John Doe");
+            givenABook("Title Marketing", "John Doe");
+
+            mockMvc.perform(get("/api/search/suggestions").param("searchText", "prod"))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$").value(hasSize(1)));
+        }
+
+        @Test
+        void getBookSuggestionsForPartialAuthorSearchText_whenThereAreSearchResults() throws Exception {
+            givenABook("Title Product", "John Doe");
+            givenABook("Title Marketing", "John Doe");
+
+            mockMvc.perform(get("/api/search/suggestions").param("searchText", "joh"))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$").value(hasSize(2)));
+        }
+
+        @Test
+        void getZeroBookSuggestions_whenThereAreNoSearchResults() throws Exception {
+            givenABook("Title Product", "Product Guru");
+            givenABook("Title Marketing", "John Doe");
+            givenABook("Title Design", "Product Guru");
+            givenABook("Title Another Product", "Product Guru");
+
+            mockMvc.perform(get("/api/search/suggestions").param("searchText", "Software"))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$").value(hasSize(0)));
+        }
+
+        private void givenABook(String title, String author) {
+            var book = defaultBookDocumentBuilder()
+                    .title(title)
+                    .author(author)
+                    .build();
+            bookDocumentRepository.save(book);
+        }
+
+        @Test
+        void getRecommendedBooks_whenThereAreSearchResultsWithFilters() throws Exception {
+            givenABookWithTopicAndRecommendation("Title Product", "John Doe", "PRODUCT", NOT_RECOMMENDED_BOOK);
+            givenABookWithTopicAndRecommendation("Title Marketing", "John Doe", "MARKETING", NOT_RECOMMENDED_BOOK);
+            givenABookWithTopicAndRecommendation("Title Design", "John Doe", "DESIGN", RECOMMENDED_BOOK);
+            givenABookWithTopicAndRecommendation("Title Another Product", "John Doe", "PRODUCT", RECOMMENDED_BOOK);
+
+            mockMvc.perform(get("/api/search")
+                            .param("page", FIRST_PAGE)
+                            .param("topics", "DESIGN")
+                            .param("topics", "MARKETING")
+                            .param("recommended", "true")
+                            .param("searchText", "Design"))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.count").value(1))
+                    .andExpect(jsonPath("$.books").value(hasSize(1)))
+                    .andExpect(jsonPath("$.books[0].title").value("Title Design"));
+        }
+
+        @Test
+        void getNoRecommendedBooks_whenThereAreNoSearchResultsWithFilters() throws Exception {
+            givenABookWithTopicAndRecommendation("Title Product", "John Doe", "PRODUCT", NOT_RECOMMENDED_BOOK);
+            givenABookWithTopicAndRecommendation("Title Marketing", "John Doe", "MARKETING", NOT_RECOMMENDED_BOOK);
+            givenABookWithTopicAndRecommendation("Title Design", "John Doe", "DESIGN", RECOMMENDED_BOOK);
+            givenABookWithTopicAndRecommendation("Title Another Product", "John Doe", "PRODUCT", RECOMMENDED_BOOK);
+
+            mockMvc.perform(get("/api/search")
+                            .param("page", FIRST_PAGE)
+                            .param("topics", "DESIGN")
+                            .param("topics", "MARKETING")
+                            .param("recommended", "true")
+                            .param("searchText", "Software"))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.count").value(0))
+                    .andExpect(jsonPath("$.books").value(hasSize(0)));
+        }
+
+        @Test
+        void getFirstPage_whenThereAreSearchResults() throws Exception {
+            givenABookWithTopicAndRecommendation("Title Product", "Product Guru", "PRODUCT", NOT_RECOMMENDED_BOOK);
+            givenABookWithTopicAndRecommendation("Title Marketing", "Product Guru", "MARKETING", NOT_RECOMMENDED_BOOK);
+            givenABookWithTopicAndRecommendation("Title Design", "John Doe", "DESIGN", RECOMMENDED_BOOK);
+            givenABookWithTopicAndRecommendation("Title Design", "John Doe", "PRODUCT", RECOMMENDED_BOOK);
+
+            mockMvc.perform(get("/api/search")
+                            .param("page", FIRST_PAGE)
+                            .param("searchText", "Product"))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.count").value(2))
+                    .andExpect(jsonPath("$.books").value(hasSize(2)))
+                    .andExpect(jsonPath("$.books[0].title").value("Title Product"))
+                    .andExpect(jsonPath("$.books[0].author").value("Product Guru"));
+        }
+
+        @Test
+        void getFirstPage_whenThereAreNoSearchResults() throws Exception {
+            givenABookWithTopicAndRecommendation("Title Product", "Product Guru", "PRODUCT", NOT_RECOMMENDED_BOOK);
+            givenABookWithTopicAndRecommendation("Title Marketing", "Product Guru", "MARKETING", NOT_RECOMMENDED_BOOK);
+            givenABookWithTopicAndRecommendation("Title Design", "John Doe", "DESIGN", RECOMMENDED_BOOK);
+            givenABookWithTopicAndRecommendation("Title Design", "John Doe", "PRODUCT", RECOMMENDED_BOOK);
+
+            mockMvc.perform(get("/api/search")
+                            .param("page", FIRST_PAGE)
+                            .param("searchText", "Software"))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.count").value(0))
+                    .andExpect(jsonPath("$.books").value(hasSize(0)));
+        }
+
+        private void givenABookWithTopicAndRecommendation(String title, String author, String topicName, boolean recommended) {
+            var topic = BookDocument.Topic.builder().name(topicName).build();
+            var book = defaultBookDocumentBuilder()
+                    .title(title)
+                    .author(author)
+                    .topics(List.of(topic))
+                    .recommended(recommended)
+                    .build();
             bookDocumentRepository.save(book);
         }
 

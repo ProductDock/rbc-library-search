@@ -12,13 +12,25 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/search")
 @Slf4j
-public record BookSearchApi(BookService bookService) {
+public record BookSearchApi(BookSearchService bookSearchService) {
 
     @GetMapping
     public SearchBooksResponse findBook(@RequestParam(required = false) Optional<List<String>> topics,
                                         @RequestParam(required = false) boolean recommended,
+                                        @RequestParam(required = false) Optional<String> searchText,
                                         @RequestParam int page) {
-        log.debug("GET request received - api/search?page={}&topics={}&recommended={}", page, topics, recommended);
-        return bookService.getBooks(new SearchFilters(page, recommended, topics));
+        log.debug("GET request received - api/search?page={}&topics={}&recommended={}&searchText={}", page, topics, recommended, searchText);
+        var searchFilters = SearchFilters.builder()
+                .topics(topics)
+                .recommended(recommended)
+                .searchText(searchText)
+                .build();
+        return bookSearchService.getBooks(searchFilters, page);
+    }
+
+    @GetMapping("/suggestions")
+    public List<BookSearchSuggestionDto> suggestBooks(@RequestParam Optional<String> searchText) {
+        log.debug("GET request received - api/search/suggestions?searchText={}", searchText);
+        return bookSearchService.searchBookSuggestions(SearchFilters.builder().searchText(searchText).build());
     }
 }

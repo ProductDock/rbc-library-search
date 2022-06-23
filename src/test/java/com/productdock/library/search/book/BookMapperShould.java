@@ -10,7 +10,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import static com.productdock.library.search.data.provider.BookDocumentMother.defaultBookDocumentBuilder;
 import static com.productdock.library.search.data.provider.BookDocumentRentalStateMother.defaultRentalStateBuilder;
 import static com.productdock.library.search.data.provider.BookDocumentRentalStateRecordMother.defaultRecord;
-import static com.productdock.library.search.data.provider.InsertBookMessageMother.defaultInsertBookMessageBuilder;
 import static org.assertj.core.api.AssertionsForClassTypes.tuple;
 
 @ExtendWith(SpringExtension.class)
@@ -82,24 +81,4 @@ class BookMapperShould {
                     );
         }
     }
-
-
-    @Test
-    void mapInsertBookMessageToBookDocument() {
-        var insertBookMessage = defaultInsertBookMessageBuilder().build();
-
-        var bookDocument = bookMapper.toBookDocument(insertBookMessage);
-
-        try (var softly = new AutoCloseableSoftAssertions()) {
-            softly.assertThat(bookDocument.getBookId()).isEqualTo(insertBookMessage.getBookId());
-            softly.assertThat(bookDocument.getTitle()).isEqualTo(insertBookMessage.getTitle());
-            softly.assertThat(bookDocument.getAuthor()).isEqualTo(insertBookMessage.getAuthor());
-            softly.assertThat(bookDocument.getCover()).isEqualTo(insertBookMessage.getCover());
-            softly.assertThat(bookDocument.getTopics())
-                    .extracting("id", "name")
-                    .containsExactly(tuple("1", "::topic::"));
-
-        }
-    }
-
 }
