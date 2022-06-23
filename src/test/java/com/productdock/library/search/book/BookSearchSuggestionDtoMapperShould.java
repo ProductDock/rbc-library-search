@@ -1,22 +1,15 @@
 package com.productdock.library.search.book;
 
 
-import com.productdock.library.search.elastic.document.BookDocument;
 import org.assertj.core.api.AutoCloseableSoftAssertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.mapstruct.factory.Mappers;
 
 import static com.productdock.library.search.data.provider.BookDocumentMother.defaultBookDocumentBuilder;
 
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {BookSearchSuggestionDtoMapperImpl.class})
 class BookSearchSuggestionDtoMapperShould {
 
-    @Autowired
-    private BookSearchSuggestionDtoMapper bookSearchSuggestionDtoMapper;
+    private final BookSearchSuggestionDtoMapper bookSearchSuggestionDtoMapper = Mappers.getMapper(BookSearchSuggestionDtoMapper.class);
 
     @Test
     void mapRentalStateRecordToBookDtoRecord() {
