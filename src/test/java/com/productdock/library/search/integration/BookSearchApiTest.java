@@ -2,11 +2,13 @@ package com.productdock.library.search.integration;
 
 import com.productdock.library.search.book.BookDocumentRepository;
 import com.productdock.library.search.elastic.document.BookDocument;
+import lombok.NonNull;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.List;
 
@@ -188,9 +190,7 @@ class BookSearchApiTest extends IntegrationTestBase {
             givenABook("Title Design", "Product Guru");
             givenABook("Title Another Product", "Product Guru");
 
-            mockMvc.perform(get("/api/search/suggestions")
-                            .param("searchText", "product"))
-
+            mockMvc.perform(get("/api/search/suggestions").param("searchText", "product"))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$").value(hasSize(3)));
         }
@@ -200,9 +200,7 @@ class BookSearchApiTest extends IntegrationTestBase {
             givenABook("Title Product", "John Doe");
             givenABook("Title Marketing", "John Doe");
 
-            mockMvc.perform(get("/api/search/suggestions")
-                            .param("searchText", "prod"))
-
+            mockMvc.perform(get("/api/search/suggestions").param("searchText", "prod"))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$").value(hasSize(1)));
         }
@@ -212,9 +210,7 @@ class BookSearchApiTest extends IntegrationTestBase {
             givenABook("Title Product", "John Doe");
             givenABook("Title Marketing", "John Doe");
 
-            mockMvc.perform(get("/api/search/suggestions")
-                            .param("searchText", "joh"))
-
+            mockMvc.perform(get("/api/search/suggestions").param("searchText", "joh"))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$").value(hasSize(2)));
         }
@@ -226,9 +222,7 @@ class BookSearchApiTest extends IntegrationTestBase {
             givenABook("Title Design", "Product Guru");
             givenABook("Title Another Product", "Product Guru");
 
-            mockMvc.perform(get("/api/search/suggestions")
-                            .param("searchText", "Software"))
-
+            mockMvc.perform(get("/api/search/suggestions").param("searchText", "Software"))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$").value(hasSize(0)));
         }

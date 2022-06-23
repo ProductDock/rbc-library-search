@@ -20,7 +20,12 @@ public record BookSearchApi(BookSearchService bookSearchService) {
                                         @RequestParam(required = false) Optional<String> searchText,
                                         @RequestParam int page) {
         log.debug("GET request received - api/search?page={}&topics={}&recommended={}&searchText={}", page, topics, recommended, searchText);
-        return bookSearchService.getBooks(SearchFilters.builder().topics(topics).recommended(recommended).searchText(searchText).build(), page);
+        var searchFilters = SearchFilters.builder()
+                .topics(topics)
+                .recommended(recommended)
+                .searchText(searchText)
+                .build();
+        return bookSearchService.getBooks(searchFilters, page);
     }
 
     @GetMapping("/suggestions")

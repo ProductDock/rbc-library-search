@@ -29,6 +29,7 @@ class BookSearchServiceShould {
     private static final Optional<List<String>> ANY_TOPIC = Optional.of(List.of("TOPIC"));
     private static final boolean RECOMMENDED = false;
     private static final Optional<String> SEARCH_TEXT = Optional.of("");
+    private static final int FIRST_PAGE = 0;
 
     @InjectMocks
     private BookSearchService bookSearchService;
@@ -47,13 +48,12 @@ class BookSearchServiceShould {
 
     @Test
     void getBooksByTopics() {
-        var firstPage = 0;
         var searchFilters = new SearchFilters( RECOMMENDED, ANY_TOPIC, SEARCH_TEXT);
         var buildQuery = mock(BoolQueryBuilder.class);
         given(searchQueryBuilder.buildWith(searchFilters)).willReturn(buildQuery);
-        given(searchQueryExecutor.execute(buildQuery, firstPage)).willReturn(aBookSearchHits());
+        given(searchQueryExecutor.execute(buildQuery, FIRST_PAGE)).willReturn(aBookSearchHits());
 
-        var books = bookSearchService.getBooks(searchFilters, firstPage);
+        var books = bookSearchService.getBooks(searchFilters, FIRST_PAGE);
 
         assertThat(books.count).isEqualTo(2);
         assertThat(books.books).hasSize(2);
@@ -75,7 +75,7 @@ class BookSearchServiceShould {
     }
 
     @Test
-    void getBooksByTitleAndAuthor() {
+    void getBookSuggestions() {
         var searchFilters = SearchFilters.builder().searchText(SEARCH_TEXT).build();
         var buildQuery = mock(BoolQueryBuilder.class);
         given(searchQueryBuilder.buildWith(searchFilters)).willReturn(buildQuery);
