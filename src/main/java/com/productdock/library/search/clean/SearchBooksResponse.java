@@ -1,5 +1,6 @@
-package com.productdock.library.search.book;
+package com.productdock.library.search.clean;
 
+import com.productdock.library.search.clean.BookDto;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 

@@ -1,6 +1,6 @@
 package com.productdock.library.search.elastic.document;
 
-import com.productdock.library.search.book.BookStatus;
+import com.productdock.library.search.clean.BookStatus;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;

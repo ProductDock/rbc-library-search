@@ -1,4 +1,4 @@
-package com.productdock.library.search.book;
+package com.productdock.library.search.clean;
 
 import lombok.ToString;
 

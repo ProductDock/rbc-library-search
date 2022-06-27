@@ -1,5 +1,8 @@
 package com.productdock.library.search.book;
 
+import com.productdock.library.search.clean.BookSearchSuggestionDtoMapper;
+import com.productdock.library.search.clean.SearchFilters;
+import com.productdock.library.search.clean.SuggestBooksService;
 import com.productdock.library.search.elastic.SearchQueryBuilder;
 import com.productdock.library.search.elastic.SearchQueryExecutor;
 import com.productdock.library.search.elastic.document.BookDocument;
@@ -22,9 +25,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
-
 @ExtendWith(MockitoExtension.class)
-class BookSearchServiceShould {
+class SuggestBooksServiceShould {
 
     private static final Optional<List<String>> ANY_TOPIC = Optional.of(List.of("TOPIC"));
     private static final boolean RECOMMENDED = false;
@@ -32,7 +34,7 @@ class BookSearchServiceShould {
     private static final int FIRST_PAGE = 0;
 
     @InjectMocks
-    private BookSearchService bookSearchService;
+    private SuggestBooksService suggestBooksService;
 
     @Mock
     private SearchQueryExecutor searchQueryExecutor;
@@ -41,22 +43,18 @@ class BookSearchServiceShould {
     private SearchQueryBuilder searchQueryBuilder;
 
     @Mock
-    private BookMapper bookMapper;
-
-    @Mock
     private BookSearchSuggestionDtoMapper bookSearchSuggestionDtoMapper;
 
     @Test
-    void getBooksByTopics() {
-        var searchFilters = new SearchFilters( RECOMMENDED, ANY_TOPIC, SEARCH_TEXT);
+    void getBookSuggestions() {
+        var searchFilters = SearchFilters.builder().searchText(SEARCH_TEXT).build();
         var buildQuery = mock(BoolQueryBuilder.class);
         given(searchQueryBuilder.buildWith(searchFilters)).willReturn(buildQuery);
-        given(searchQueryExecutor.execute(buildQuery, FIRST_PAGE)).willReturn(aBookSearchHits());
+        given(searchQueryExecutor.execute(buildQuery)).willReturn(aBookSearchHits());
 
-        var books = bookSearchService.getBooks(searchFilters, FIRST_PAGE);
+        var books = suggestBooksService.searchBookSuggestions(searchFilters);
 
-        assertThat(books.count).isEqualTo(2);
-        assertThat(books.books).hasSize(2);
+        assertThat(books).hasSize(2);
     }
 
     private SearchHits<BookDocument> aBookSearchHits() {
@@ -72,17 +70,5 @@ class BookSearchServiceShould {
                 bookIndices,
                 null,
                 null);
-    }
-
-    @Test
-    void getBookSuggestions() {
-        var searchFilters = SearchFilters.builder().searchText(SEARCH_TEXT).build();
-        var buildQuery = mock(BoolQueryBuilder.class);
-        given(searchQueryBuilder.buildWith(searchFilters)).willReturn(buildQuery);
-        given(searchQueryExecutor.execute(buildQuery)).willReturn(aBookSearchHits());
-
-        var books = bookSearchService.searchBookSuggestions(searchFilters);
-
-        assertThat(books).hasSize(2);
     }
 }

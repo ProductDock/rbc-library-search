@@ -1,4 +1,4 @@
-package com.productdock.library.search.book;
+package com.productdock.library.search.clean;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,7 +12,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/search")
 @Slf4j
-public record BookSearchApi(BookSearchService bookSearchService) {
+public record FindBooksApi(FindBooksQuery findBooksQuery, SearchBooksMapper searchBooksMapper) {
 
     @GetMapping
     public SearchBooksResponse findBook(@RequestParam(required = false) Optional<List<String>> topics,
@@ -25,12 +25,8 @@ public record BookSearchApi(BookSearchService bookSearchService) {
                 .recommended(recommended)
                 .searchText(searchText)
                 .build();
-        return bookSearchService.getBooks(searchFilters, page);
+        var searchBooksResult = findBooksQuery.getBooks(searchFilters, page);
+        return searchBooksMapper.toSearchBooksResponse(searchBooksResult);
     }
 
-    @GetMapping("/suggestions")
-    public List<BookSearchSuggestionDto> suggestBooks(@RequestParam Optional<String> searchText) {
-        log.debug("GET request received - api/search/suggestions?searchText={}", searchText);
-        return bookSearchService.searchBookSuggestions(SearchFilters.builder().searchText(searchText).build());
-    }
 }

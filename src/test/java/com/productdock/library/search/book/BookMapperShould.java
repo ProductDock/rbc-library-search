@@ -1,5 +1,8 @@
 package com.productdock.library.search.book;
 
+import com.productdock.library.search.clean.BookMapper;
+import com.productdock.library.search.clean.BookRecordMapperImpl;
+import com.productdock.library.search.clean.BookStatus;
 import org.assertj.core.api.AutoCloseableSoftAssertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,7 +16,7 @@ import static com.productdock.library.search.data.provider.BookDocumentRentalSta
 import static org.assertj.core.api.AssertionsForClassTypes.tuple;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {BookMapper.class, BookDtoRecordMapperImpl.class})
+@ContextConfiguration(classes = {BookMapper.class, BookRecordMapperImpl.class})
 class BookMapperShould {
 
     @Autowired
@@ -25,16 +28,16 @@ class BookMapperShould {
                 .rentalState(defaultRentalStateBuilder()
                         .record(defaultRecord()).build()).build();
 
-        var bookDto = bookMapper.toBookDto(bookDocument);
+        var book = bookMapper.toBook(bookDocument);
 
         try (var softly = new AutoCloseableSoftAssertions()) {
-            softly.assertThat(bookDto.id).isEqualTo(bookDocument.getBookId());
-            softly.assertThat(bookDto.title).isEqualTo(bookDocument.getTitle());
-            softly.assertThat(bookDto.author).isEqualTo(bookDocument.getAuthor());
-            softly.assertThat(bookDto.cover).isEqualTo(bookDocument.getCover());
-            softly.assertThat(bookDto.rating.count).isEqualTo(bookDocument.getRating().getCount());
-            softly.assertThat(bookDto.rating.score).isEqualTo(bookDocument.getRating().getScore());
-            softly.assertThat(bookDto.records)
+            softly.assertThat(book.getId()).isEqualTo(bookDocument.getBookId());
+            softly.assertThat(book.getTitle()).isEqualTo(bookDocument.getTitle());
+            softly.assertThat(book.getAuthor()).isEqualTo(bookDocument.getAuthor());
+            softly.assertThat(book.getCover()).isEqualTo(bookDocument.getCover());
+            softly.assertThat(book.getRating().getCount()).isEqualTo(bookDocument.getRating().getCount());
+            softly.assertThat(book.getRating().getScore()).isEqualTo(bookDocument.getRating().getScore());
+            softly.assertThat(book.getRecords())
                     .extracting("email", "status")
                     .containsExactly(tuple("::email::", BookStatus.RENTED));
         }
@@ -46,11 +49,11 @@ class BookMapperShould {
                 .rating(null)
                 .build();
 
-        var bookDto = bookMapper.toBookDto(bookDocument);
+        var book = bookMapper.toBook(bookDocument);
 
         try (var softly = new AutoCloseableSoftAssertions()) {
-            softly.assertThat(bookDto.rating.count).isNull();
-            softly.assertThat(bookDto.rating.score).isNull();
+            softly.assertThat(book.getRating().getCount()).isNull();
+            softly.assertThat(book.getRating().getScore()).isNull();
         }
     }
 
@@ -65,15 +68,15 @@ class BookMapperShould {
                                 .record(defaultRecord())
                                 .build()).build();
 
-        var bookDto = bookMapper.toBookDto(bookDocument);
+        var book = bookMapper.toBook(bookDocument);
 
         try (var softly = new AutoCloseableSoftAssertions()) {
-            softly.assertThat(bookDto.id).isEqualTo(bookDocument.getBookId());
-            softly.assertThat(bookDto.title).isEqualTo(bookDocument.getTitle());
-            softly.assertThat(bookDto.author).isEqualTo(bookDocument.getAuthor());
-            softly.assertThat(bookDto.cover).isEqualTo(bookDocument.getCover());
-            softly.assertThat(bookDto.records).hasSize(2);
-            softly.assertThat(bookDto.records)
+            softly.assertThat(book.getId()).isEqualTo(bookDocument.getBookId());
+            softly.assertThat(book.getTitle()).isEqualTo(bookDocument.getTitle());
+            softly.assertThat(book.getAuthor()).isEqualTo(bookDocument.getAuthor());
+            softly.assertThat(book.getCover()).isEqualTo(bookDocument.getCover());
+            softly.assertThat(book.getRecords()).hasSize(2);
+            softly.assertThat(book.getRecords())
                     .extracting("email", "status")
                     .containsExactlyInAnyOrder(
                             tuple(null, BookStatus.AVAILABLE),

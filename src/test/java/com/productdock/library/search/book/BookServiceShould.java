@@ -1,21 +1,14 @@
 package com.productdock.library.search.book;
 
+import com.productdock.library.search.clean.BookStatus;
 import com.productdock.library.search.elastic.BookRatingMapper;
 import com.productdock.library.search.elastic.RentalStateRecordMapper;
-import com.productdock.library.search.elastic.RentalStateRecordMapperImpl;
-import com.productdock.library.search.elastic.SearchQueryBuilder;
-import com.productdock.library.search.elastic.SearchQueryExecutor;
 import com.productdock.library.search.elastic.document.BookDocument;
-import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.elasticsearch.core.SearchHit;
-import org.springframework.data.elasticsearch.core.SearchHits;
-import org.springframework.data.elasticsearch.core.SearchHitsImpl;
-import org.springframework.test.context.ContextConfiguration;
 
 import java.util.Collections;
 import java.util.List;
@@ -27,7 +20,6 @@ import static com.productdock.library.search.data.provider.BookAvailabilityMessa
 import static com.productdock.library.search.data.provider.BookDocumentMother.defaultBookDocument;
 import static com.productdock.library.search.data.provider.BookRecommendationMessageMother.defaultBookRecommendationMessageBuilder;
 
-import static java.util.stream.Collectors.toList;
 import static java.util.stream.Stream.of;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;

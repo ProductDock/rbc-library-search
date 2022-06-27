@@ -1,6 +1,6 @@
 package com.productdock.library.search.elastic;
 
-import com.productdock.library.search.book.BookSearchFields;
+import com.productdock.library.search.clean.BookSearchFields;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.MultiMatchQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;

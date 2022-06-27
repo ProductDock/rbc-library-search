@@ -2,7 +2,7 @@ package com.productdock.library.search.integration;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.productdock.library.search.book.BookDocumentRepository;
-import com.productdock.library.search.book.BookStatus;
+import com.productdock.library.search.clean.BookStatus;
 import com.productdock.library.search.data.provider.KafkaTestProducer;
 import com.productdock.library.search.kafka.consumer.messages.RentalMessage;
 import lombok.NonNull;

@@ -1,13 +1,14 @@
-package com.productdock.library.search.book;
+package com.productdock.library.search.clean;
 
+import com.productdock.library.search.clean.Book;
+import com.productdock.library.search.clean.BookRecordMapper;
+import com.productdock.library.search.clean.BookStatus;
 import com.productdock.library.search.elastic.document.BookDocument;
-import com.productdock.library.search.kafka.consumer.messages.InsertBookMessage;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import static java.util.stream.Stream.concat;
@@ -17,32 +18,32 @@ import static java.util.stream.Stream.concat;
 @Slf4j
 public class BookMapper {
 
-    private BookDtoRecordMapper recordDtoMapper;
+    private BookRecordMapper recordMapper;
 
-    public BookDto toBookDto(BookDocument bookDocument) {
+    public Book toBook(BookDocument bookDocument) {
         log.debug("Map BookDocument [{}] to BookDto", bookDocument);
-        var bookDto = new BookDto();
-        mapSimpleProperties(bookDocument, bookDto);
-        mapRecords(bookDocument, bookDto);
-        mapRating(bookDocument, bookDto);
-        return bookDto;
+        var book = new Book();
+        mapSimpleProperties(bookDocument, book);
+        mapRecords(bookDocument, book);
+        mapRating(bookDocument, book);
+        return book;
     }
 
-    private void mapRating(BookDocument bookDocument, BookDto bookDto) {
+    private void mapRating(BookDocument bookDocument, Book book) {
         log.debug("Map BookDocument rating {} to BookDto rating", bookDocument.getRating());
         if (bookDocument.getRating() != null){
-            bookDto.rating.score = bookDocument.getRating().getScore();
-            bookDto.rating.count = bookDocument.getRating().getCount();
+            book.getRating().setScore(bookDocument.getRating().getScore());
+            book.getRating().setCount(bookDocument.getRating().getCount());
         }
     }
 
-    private void mapRecords(BookDocument bookDocument, BookDto bookDto) {
+    private void mapRecords(BookDocument bookDocument, Book book) {
         log.debug("Map BookDocument records [{}] to BookDto records", bookDocument.getRentalState().getRecords());
         var records = bookDocument.getRentalState().getRecords();
         var availableBookCount = bookDocument.getRentalState().getAvailableBooksCount();
         var availableRecords = createAvailableRecords(availableBookCount);
         var allRecords = concat(records.stream(), availableRecords.stream()).toList();
-        bookDto.records = recordDtoMapper.toRecordsDto(allRecords);
+        book.setRecords(recordMapper.toRecords(allRecords));
     }
 
     private List<BookDocument.RentalState.Record> createAvailableRecords(int availableBookCount) {
@@ -54,11 +55,11 @@ public class BookMapper {
         return bookRecords;
     }
 
-    private void mapSimpleProperties(BookDocument bookDocument, BookDto bookDto) {
+    private void mapSimpleProperties(BookDocument bookDocument, Book book) {
         log.debug("Map simple properties from BookDocument [{}] to BookDto", bookDocument);
-        bookDto.id = bookDocument.getBookId();
-        bookDto.title = bookDocument.getTitle();
-        bookDto.author = bookDocument.getAuthor();
-        bookDto.cover = bookDocument.getCover();
+        book.setId(bookDocument.getBookId());
+        book.setTitle(bookDocument.getTitle());
+        book.setAuthor(bookDocument.getAuthor());
+        book.setCover(bookDocument.getCover());
     }
 }

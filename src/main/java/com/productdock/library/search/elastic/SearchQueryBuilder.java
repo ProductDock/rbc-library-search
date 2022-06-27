@@ -1,6 +1,6 @@
 package com.productdock.library.search.elastic;
 
-import com.productdock.library.search.book.SearchFilters;
+import com.productdock.library.search.clean.SearchFilters;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.index.query.BoolQueryBuilder;

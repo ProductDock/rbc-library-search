@@ -1,6 +1,6 @@
 package com.productdock.library.search.kafka.consumer.messages;
 
-import com.productdock.library.search.book.BookStatus;
+import com.productdock.library.search.clean.BookStatus;
 import lombok.*;
 
 import java.util.List;

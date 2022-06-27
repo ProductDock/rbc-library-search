@@ -1,6 +1,6 @@
 package com.productdock.library.search.data.provider;
 
-import com.productdock.library.search.book.BookStatus;
+import com.productdock.library.search.clean.BookStatus;
 import com.productdock.library.search.elastic.document.BookDocument;
 
 

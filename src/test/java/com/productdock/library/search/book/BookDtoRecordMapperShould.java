@@ -1,6 +1,8 @@
 package com.productdock.library.search.book;
 
 
+import com.productdock.library.search.clean.BookRecordMapper;
+import com.productdock.library.search.clean.BookStatus;
 import com.productdock.library.search.elastic.document.BookDocument;
 import org.assertj.core.api.AutoCloseableSoftAssertions;
 import org.junit.jupiter.api.Test;
@@ -11,20 +13,20 @@ import java.util.stream.Collectors;
 import static java.util.stream.Stream.of;
 import static org.assertj.core.api.AssertionsForClassTypes.tuple;
 
-class BookDtoRecordMapperShould {
+class BookRecordMapperShould {
 
-    private BookDtoRecordMapper bookDtoRecordMapper = Mappers.getMapper(BookDtoRecordMapper.class);
+    private BookRecordMapper bookDtoRecordMapper = Mappers.getMapper(BookRecordMapper.class);
 
     @Test
     void mapRentalStateRecordToBookDtoRecord() {
         var rentalStateRecord = BookDocument.RentalState.Record.builder()
                 .email("email1").status(BookStatus.AVAILABLE).build();
 
-        var bookDtoRecord = bookDtoRecordMapper.toRecordDto(rentalStateRecord);
+        var bookRecord = bookDtoRecordMapper.toRecord(rentalStateRecord);
 
         try (var softly = new AutoCloseableSoftAssertions()) {
-            softly.assertThat(bookDtoRecord.email).isEqualTo(rentalStateRecord.getEmail());
-            softly.assertThat(bookDtoRecord.status).isEqualTo(rentalStateRecord.getStatus());
+            softly.assertThat(bookRecord.getEmail()).isEqualTo(rentalStateRecord.getEmail());
+            softly.assertThat(bookRecord.getStatus()).isEqualTo(rentalStateRecord.getStatus());
         }
     }
 
@@ -35,10 +37,10 @@ class BookDtoRecordMapperShould {
                 BookDocument.RentalState.Record.builder().email("email2").status(BookStatus.RENTED).build()
         ).collect(Collectors.toList());
 
-        var bookDtoRecords = bookDtoRecordMapper.toRecordsDto(rentalStateRecords);
+        var bookRecords = bookDtoRecordMapper.toRecords(rentalStateRecords);
 
         try (var softly = new AutoCloseableSoftAssertions()) {
-            softly.assertThat(bookDtoRecords)
+            softly.assertThat(bookRecords)
                     .extracting("email", "status")
                     .containsExactlyInAnyOrder(
                             tuple("email1", BookStatus.AVAILABLE),

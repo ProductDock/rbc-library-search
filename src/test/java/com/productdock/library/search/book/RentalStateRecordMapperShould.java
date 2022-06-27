@@ -1,5 +1,6 @@
 package com.productdock.library.search.book;
 
+import com.productdock.library.search.clean.BookStatus;
 import com.productdock.library.search.elastic.RentalStateRecordMapper;
 import com.productdock.library.search.kafka.consumer.messages.RentalMessage;
 import org.assertj.core.api.AutoCloseableSoftAssertions;

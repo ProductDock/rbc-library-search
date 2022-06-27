@@ -1,6 +1,7 @@
 package com.productdock.library.search.book;
 
 
+import com.productdock.library.search.clean.BookSearchSuggestionDtoMapper;
 import org.assertj.core.api.AutoCloseableSoftAssertions;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
