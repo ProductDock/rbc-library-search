@@ -1,7 +1,7 @@
 package com.productdock.library.search.elastic;
 
-import com.productdock.library.search.elastic.document.BookDocument;
-import com.productdock.library.search.kafka.consumer.messages.RentalMessage;
+import com.productdock.library.search.domain.Book;
+import com.productdock.library.search.adapter.in.kafka.messages.RentalMessage;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
@@ -12,8 +12,8 @@ import java.util.List;
 public interface RentalStateRecordMapper {
 
     @Mapping(source = "patron", target = "email")
-    BookDocument.RentalState.Record toRecord(RentalMessage.Record bookRecord);
+    Book.RentalState.Record toRecord(RentalMessage.Record bookRecord);
 
-    List<BookDocument.RentalState.Record> toRecords(List<RentalMessage.Record> bookRecords);
+    List<Book.RentalState.Record> toRecords(List<RentalMessage.Record> bookRecords);
 
 }

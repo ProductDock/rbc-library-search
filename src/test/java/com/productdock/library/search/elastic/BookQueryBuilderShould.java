@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.Optional;
 
-import static com.productdock.library.search.elastic.BookQueryBuilder.bookQueryBuilder;
+import static com.productdock.library.search.adapter.out.elastic.query.BookQueryBuilder.bookQueryBuilder;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Stream.of;
 import static org.assertj.core.api.Assertions.assertThat;

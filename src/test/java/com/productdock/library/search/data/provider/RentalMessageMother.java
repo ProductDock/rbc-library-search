@@ -1,6 +1,6 @@
 package com.productdock.library.search.data.provider;
 
-import com.productdock.library.search.kafka.consumer.messages.RentalMessage;
+import com.productdock.library.search.adapter.in.kafka.messages.RentalMessage;
 
 import java.util.ArrayList;
 import java.util.Collection;

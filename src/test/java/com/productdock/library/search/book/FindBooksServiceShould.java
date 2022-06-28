@@ -1,11 +1,10 @@
 package com.productdock.library.search.book;
 
-import com.productdock.library.search.clean.BookMapper;
-import com.productdock.library.search.clean.FindBooksService;
-import com.productdock.library.search.clean.SearchFilters;
-import com.productdock.library.search.elastic.SearchQueryBuilder;
-import com.productdock.library.search.elastic.SearchQueryExecutor;
-import com.productdock.library.search.elastic.document.BookDocument;
+import com.productdock.library.search.application.service.SearchBooksService;
+import com.productdock.library.search.domain.SearchFilters;
+import com.productdock.library.search.adapter.out.elastic.query.SearchQueryBuilder;
+import com.productdock.library.search.adapter.out.elastic.query.SearchQueryExecutor;
+import com.productdock.library.search.adapter.out.elastic.BookDocument;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,7 +34,7 @@ class FindBooksServiceShould {
     private static final int FIRST_PAGE = 0;
 
     @InjectMocks
-    private FindBooksService findBooksService;
+    private SearchBooksService findBooksService;
 
     @Mock
     private SearchQueryExecutor searchQueryExecutor;
@@ -43,16 +42,14 @@ class FindBooksServiceShould {
     @Mock
     private SearchQueryBuilder searchQueryBuilder;
 
-    @Mock
-    private BookMapper bookMapper;
     @Test
     void getBooksByTopics() {
-        var searchFilters = new SearchFilters( RECOMMENDED, ANY_TOPIC, SEARCH_TEXT);
+        var searchFilters = SearchFilters.builder().recommended(RECOMMENDED).topics(ANY_TOPIC).searchText(SEARCH_TEXT).build();
         var buildQuery = mock(BoolQueryBuilder.class);
         given(searchQueryBuilder.buildWith(searchFilters)).willReturn(buildQuery);
         given(searchQueryExecutor.execute(buildQuery, FIRST_PAGE)).willReturn(aBookSearchHits());
 
-        var searchBooksResult = findBooksService.getBooks(searchFilters, FIRST_PAGE);
+        var searchBooksResult = findBooksService.searchBooks(searchFilters, FIRST_PAGE);
 
         assertThat(searchBooksResult.getBooks()).hasSize(2);
     }

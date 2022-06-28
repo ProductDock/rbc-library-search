@@ -1,7 +1,7 @@
 package com.productdock.library.search.data.provider;
 
 
-import com.productdock.library.search.kafka.consumer.messages.BookAvailabilityMessage;
+import com.productdock.library.search.adapter.in.kafka.messages.BookAvailabilityMessage;
 
 public class BookAvailabilityMessageMother {
 

@@ -1,11 +1,11 @@
 package com.productdock.library.search.book;
 
-import com.productdock.library.search.clean.BookSearchSuggestionDtoMapper;
-import com.productdock.library.search.clean.SearchFilters;
-import com.productdock.library.search.clean.SuggestBooksService;
-import com.productdock.library.search.elastic.SearchQueryBuilder;
-import com.productdock.library.search.elastic.SearchQueryExecutor;
-import com.productdock.library.search.elastic.document.BookDocument;
+import com.productdock.library.search.adapter.in.web.mapper.BookSearchSuggestionDtoMapper;
+import com.productdock.library.search.domain.SearchFilters;
+import com.productdock.library.search.application.service.SuggestBooksService;
+import com.productdock.library.search.adapter.out.elastic.query.SearchQueryBuilder;
+import com.productdock.library.search.adapter.out.elastic.query.SearchQueryExecutor;
+import com.productdock.library.search.adapter.out.elastic.BookDocument;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

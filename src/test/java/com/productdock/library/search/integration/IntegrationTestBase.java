@@ -1,7 +1,7 @@
 package com.productdock.library.search.integration;
 
 import com.productdock.library.search.config.ElasticsearchTestContainer;
-import com.productdock.library.search.elastic.document.BookDocument;
+import com.productdock.library.search.adapter.out.elastic.BookDocument;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
