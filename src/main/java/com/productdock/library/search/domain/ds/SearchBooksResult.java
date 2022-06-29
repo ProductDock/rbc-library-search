@@ -2,10 +2,12 @@ package com.productdock.library.search.domain.ds;
 
 import com.productdock.library.search.domain.Book;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Builder;
+import lombok.ToString;
 
-@Data
+@ToString
 @AllArgsConstructor
+@Builder
 public class SearchBooksResult {
 
     public long count;

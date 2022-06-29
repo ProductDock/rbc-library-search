@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
-public record KafkaConsumer(BookService bookService, InsertBookMessageMapper insertBookMessageMapper) {
+public record KafkaConsumer(BookService bookService, InsertBookMessageMapper insertBookMessageMapper, RentalMessageMapper rentalMessageMapper) {
 
     @KafkaListener(topics = "${spring.kafka.topic.insert-book}",
             containerFactory = "insertBookMessageKafkaListenerContainerFactory")
@@ -24,7 +24,8 @@ public record KafkaConsumer(BookService bookService, InsertBookMessageMapper ins
             containerFactory = "rentalMessageKafkaListenerContainerFactory")
     public synchronized void listen(RentalMessage rentalMessage) {
         log.debug("On topic 'book-status' received kafka message: {}", rentalMessage);
-        var updater = new BookChanges(BookField.RECORDS, rentalMessage.getRentalRecords());
+        var records = rentalMessageMapper.toRecords(rentalMessage.getRentalRecords());
+        var updater = new BookChanges(BookField.RECORDS, records);
         bookService.updateBook(rentalMessage.getBookId(), updater);
     }
 

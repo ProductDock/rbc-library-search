@@ -16,12 +16,12 @@ public record BookService(BookDocumentPersistenceOutPort bookDocumentPersistence
 
     public void updateBook(String bookId, BookChanges updater) {
         log.debug("Update book with id: {}", bookId);
-        var book = getBookDocument(bookId);
+        var book = getBook(bookId);
         book.update(updater);
         bookDocumentPersistenceOutPort.save(book);
     }
 
-    private Book getBookDocument(String bookId) {
+    private Book getBook(String bookId) {
         log.debug("Find book with id: {}", bookId);
         return bookDocumentPersistenceOutPort.findById(bookId).orElseThrow();
     }

@@ -30,7 +30,7 @@ public record SearchBooksApi(GetBooksQuery getBooksQuery, SearchBooksMapper sear
                 .searchText(searchText)
                 .build();
         var searchBooksResult = getBooksQuery.searchBooks(searchFilters, page);
-        return searchBooksMapper.toSearchBooksResponse(searchBooksResult);
+        return searchBooksMapper.toResponse(searchBooksResult);
     }
 
 }

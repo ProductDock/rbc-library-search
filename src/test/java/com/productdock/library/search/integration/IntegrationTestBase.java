@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @Testcontainers
 @AutoConfigureMockMvc
 @EmbeddedKafka(partitions = 1, brokerProperties = {"listeners=PLAINTEXT://localhost:9091", "port=9091"})
-class IntegrationTestBase {
+public class IntegrationTestBase {
 
     @Autowired
     private ElasticsearchOperations elasticsearchOperations;

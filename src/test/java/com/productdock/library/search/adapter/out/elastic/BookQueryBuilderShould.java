@@ -1,4 +1,4 @@
-package com.productdock.library.search.elastic;
+package com.productdock.library.search.adapter.out.elastic;
 
 import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.Test;
