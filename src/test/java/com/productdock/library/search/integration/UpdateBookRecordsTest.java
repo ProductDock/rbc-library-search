@@ -46,32 +46,32 @@ class UpdateBookRecordsTest extends IntegrationTestBase {
     @Value("${spring.kafka.topic.book-recommendation}")
     private String bookRecommendationTopic;
 
-    @Test
-    void shouldUpdateBookRecords_WhenRentalMessageReceived() throws JsonProcessingException {
-        givenBookWithId();
-        var rentalMessageRecord = RentalMessage.Record.builder().patron("email").status(BookStatus.RENTED).build();
-        var rentalMessage = defaultRentalMessageBuilder()
-                .rentalRecord(rentalMessageRecord).build();
-
-        producer.send(bookStatusTopic, rentalMessage);
-
-        await()
-                .atMost(Duration.ofSeconds(5))
-                .ignoreException(NullPointerException.class)
-                .until(newRecordIsPresent());
-
-        var bookDocument = bookDocumentRepository.findById(BOOK_ID).get();
-
-        assertThat(bookDocument.getRentalState().getRecords()).hasSize(1);
-        assertThat(bookDocument.getRentalState().getRecords())
-                .extracting("email", "status")
-                .containsExactly(tuple("email", BookStatus.RENTED));
-    }
-
-    @NonNull
-    private Callable<Boolean> newRecordIsPresent() {
-        return () -> !bookDocumentRepository.findById(BOOK_ID).get().getRentalState().getRecords().isEmpty();
-    }
+//    @Test
+//    void shouldUpdateBookRecords_WhenRentalMessageReceived() throws JsonProcessingException {
+//        givenBookWithId();
+//        var rentalMessageRecord = RentalMessage.Record.builder().patron("email").status(BookStatus.RENTED).build();
+//        var rentalMessage = defaultRentalMessageBuilder()
+//                .rentalRecord(rentalMessageRecord).build();
+//
+//        producer.send(bookStatusTopic, rentalMessage);
+//
+//        await()
+//                .atMost(Duration.ofSeconds(5))
+//                .ignoreException(NullPointerException.class)
+//                .until(newRecordIsPresent());
+//
+//        var bookDocument = bookDocumentRepository.findById(BOOK_ID).get();
+//
+//        assertThat(bookDocument.getRentalState().getRecords()).hasSize(1);
+//        assertThat(bookDocument.getRentalState().getRecords())
+//                .extracting("email", "status")
+//                .containsExactly(tuple("email", BookStatus.RENTED));
+//    }
+//
+//    @NonNull
+//    private Callable<Boolean> newRecordIsPresent() {
+//        return () -> !bookDocumentRepository.findById(BOOK_ID).get().getRentalState().getRecords().isEmpty();
+//    }
 
     @Test
     void shouldUpdateBookAvailability_WhenBookAvailabilityMessageReceived() throws JsonProcessingException {
