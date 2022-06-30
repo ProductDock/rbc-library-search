@@ -18,6 +18,7 @@ public class BookMother {
     private static final String defaultCover = null;
     private static final boolean defaultRecommendation = false;
     private static final List<Book.Topic> defaultTopics = new ArrayList<>();
+    private static final int AVAILABLE_BOOK_COUNT = 1;
 
     public static Book.BookBuilder defaultBookBuilder() {
         return Book.builder()

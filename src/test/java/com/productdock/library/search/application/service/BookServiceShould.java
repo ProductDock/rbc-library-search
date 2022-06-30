@@ -1,19 +1,14 @@
 package com.productdock.library.search.application.service;
 
-import com.productdock.library.search.adapter.out.elastic.BookDocument;
 import com.productdock.library.search.application.port.out.persistence.BookDocumentPersistenceOutPort;
-import com.productdock.library.search.application.service.BookService;
 import com.productdock.library.search.domain.Book;
 import com.productdock.library.search.domain.BookChanges;
-import com.productdock.library.search.domain.BookStatus;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.BDDMockito.given;
@@ -24,7 +19,6 @@ import static org.mockito.Mockito.verify;
 class BookServiceShould {
 
     private static final String BOOK_ID = "1";
-
 
     @InjectMocks
     private BookService bookService;

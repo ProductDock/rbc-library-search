@@ -22,12 +22,12 @@ public class Book {
     private Set<Topic> topics;
     private boolean recommended;
 
-    public void update(BookChanges updater) {
-        switch (updater.getField()){
-            case RECORDS -> rentalState.setRecords((List<RentalState.Record>) updater.getValue());
-            case AVAILABLE_BOOK_COUNT -> rentalState.setAvailableBooksCount((Integer) updater.getValue());
-            case RATING -> setRating((Rating) updater.getValue());
-            case RECOMMENDED -> setRecommended((Boolean) updater.getValue());
+    public void update(BookChanges changes) {
+        switch (changes.getField()){
+            case RECORDS -> rentalState.setRecords((List<RentalState.Record>) changes.getValue());
+            case AVAILABLE_BOOK_COUNT -> rentalState.setAvailableBooksCount((Integer) changes.getValue());
+            case RATING -> setRating((Rating) changes.getValue());
+            case RECOMMENDED -> setRecommended((Boolean) changes.getValue());
         }
     }
 
