@@ -1,8 +1,8 @@
 package com.productdock.library.search.adapter.in.web;
 
+import com.productdock.library.search.adapter.in.web.dto.SearchBooksResponse;
 import com.productdock.library.search.adapter.in.web.mapper.SearchBooksMapper;
 import com.productdock.library.search.application.port.in.GetBooksQuery;
-import com.productdock.library.search.adapter.in.web.dto.SearchBooksResponse;
 import com.productdock.library.search.domain.SearchFilters;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;

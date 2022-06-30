@@ -1,7 +1,7 @@
 package com.productdock.library.search.application.port.out.persistence;
 
-import com.productdock.library.search.domain.SearchFilters;
 import com.productdock.library.search.domain.Book;
+import com.productdock.library.search.domain.SearchFilters;
 import com.productdock.library.search.domain.ds.SearchBooksResult;
 
 import java.util.List;

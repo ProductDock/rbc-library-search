@@ -1,6 +1,9 @@
 package com.productdock.library.search.adapter.in.kafka.messages;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder

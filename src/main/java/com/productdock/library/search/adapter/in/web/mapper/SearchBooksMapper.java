@@ -2,9 +2,8 @@ package com.productdock.library.search.adapter.in.web.mapper;
 
 import com.productdock.library.search.adapter.in.web.dto.BookDto;
 import com.productdock.library.search.adapter.in.web.dto.SearchBooksResponse;
-import com.productdock.library.search.adapter.out.elastic.BookDocument;
-import com.productdock.library.search.domain.BookStatus;
 import com.productdock.library.search.domain.Book;
+import com.productdock.library.search.domain.BookStatus;
 import com.productdock.library.search.domain.ds.SearchBooksResult;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
