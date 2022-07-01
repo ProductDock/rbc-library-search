@@ -5,14 +5,25 @@
             <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger - %msg%n</pattern>
         </encoder>
     </appender>
-    <logger name="com.github.dockerjava" level="INFO">
+    <logger name="com.github.dockerjava" level="WARN">
         <appender-ref ref="STDOUT" />
     </logger>
 
-    <logger name="org.testcontainers" level="INFO">
+    <logger name="org.testcontainers" level="WARN">
         <appender-ref ref="STDOUT" />
     </logger>
-    <root level="INFO">
+
+    <root level="WARN">
         <appender-ref ref="STDOUT" />
     </root>
+
+    <appender name="STDOUT_COLORED" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%magenta(%d{HH:mm:ss.SSS} [%thread] %-5level %logger - %msg%n)</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="com.productdock.library.search" level="STDOUT_COLORED" additivity="false">
+        <appender-ref ref="STDOUT_COLORED" />
+    </logger>
 </configuration>
