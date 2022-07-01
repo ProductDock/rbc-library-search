@@ -6,6 +6,7 @@ import com.productdock.library.search.application.port.out.persistence.BookDocum
 import com.productdock.library.search.data.provider.KafkaTestProducer;
 import com.productdock.library.search.domain.BookStatus;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,6 +25,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.tuple;
 import static org.awaitility.Awaitility.await;
 
 @SpringBootTest
+@Slf4j
 class UpdateBookRecordsTest extends IntegrationTestBase {
 
     @Autowired
@@ -48,6 +50,7 @@ class UpdateBookRecordsTest extends IntegrationTestBase {
 
     @Test
     void shouldUpdateBookRecords_WhenRentalMessageReceived() throws JsonProcessingException {
+        log.info("Started TEST shouldUpdateBookRecords_WhenRentalMessageReceived");
         givenBookWithId();
         var rentalMessageRecord = RentalMessage.Record.builder().patron("email").status(BookStatus.RENTED).build();
         var rentalMessage = defaultRentalMessageBuilder()
@@ -62,6 +65,7 @@ class UpdateBookRecordsTest extends IntegrationTestBase {
 
         var bookDocument = bookDocumentRepository.findById(BOOK_ID).get();
 
+        log.info("ENDED TEST shouldUpdateBookRecords_WhenRentalMessageReceived");
         assertThat(bookDocument.getRentalState().getRecords()).hasSize(1);
         assertThat(bookDocument.getRentalState().getRecords())
                 .extracting("email", "status")
@@ -75,6 +79,7 @@ class UpdateBookRecordsTest extends IntegrationTestBase {
 
     @Test
     void shouldUpdateBookAvailability_WhenBookAvailabilityMessageReceived() throws JsonProcessingException {
+        log.info("Started TEST shouldUpdateBookAvailability_WhenBookAvailabilityMessageReceived");
         givenBookWithId();
         int availableBookCount = 2;
         var bookAvailabilityMessage = defaultBookAvailabilityMessageBuilder()
@@ -89,6 +94,7 @@ class UpdateBookRecordsTest extends IntegrationTestBase {
 
         var bookDocument = bookDocumentRepository.findById(BOOK_ID).get();
 
+        log.info("ENDED TEST shouldUpdateBookAvailability_WhenBookAvailabilityMessageReceived");
         assertThat(bookDocument.getRentalState().getAvailableBooksCount()).isEqualTo(availableBookCount);
     }
 
@@ -99,6 +105,7 @@ class UpdateBookRecordsTest extends IntegrationTestBase {
 
     @Test
     void shouldUpdateBookRating_WhenBookRatingMessageReceived() throws JsonProcessingException {
+        log.info("Started TEST shouldUpdateBookRating_WhenBookRatingMessageReceived");
         givenBookWithId();
         var bookRatingMessage = defaultBookRatingMessage();
 
@@ -111,6 +118,7 @@ class UpdateBookRecordsTest extends IntegrationTestBase {
 
         var bookDocument = bookDocumentRepository.findById(BOOK_ID).get();
 
+        log.info("ENDED TEST shouldUpdateBookRating_WhenBookRatingMessageReceived");
         assertThat(bookDocument.getRating().getCount()).isEqualTo(bookRatingMessage.getRatingsCount());
         assertThat(bookDocument.getRating().getScore()).isEqualTo(bookRatingMessage.getRating());
     }
@@ -122,6 +130,7 @@ class UpdateBookRecordsTest extends IntegrationTestBase {
 
     @Test
     void shouldUpdateBookRecommendations_WhenBookRecommendedMessageReceived() throws JsonProcessingException {
+        log.info("Started TEST shouldUpdateBookRecommendations_WhenBookRecommendedMessageReceived");
         givenBookWithId();
         var bookRecommendationMessage = defaultBookRecommendationMessageBuilder().recommended(true).build();
 
@@ -134,6 +143,7 @@ class UpdateBookRecordsTest extends IntegrationTestBase {
 
         var bookDocument = bookDocumentRepository.findById(BOOK_ID).get();
 
+        log.info("ENDED TEST shouldUpdateBookRecommendations_WhenBookRecommendedMessageReceived");
         assertThat(bookDocument.isRecommended()).isTrue();
     }
 
