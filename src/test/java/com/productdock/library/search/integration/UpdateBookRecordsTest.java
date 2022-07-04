@@ -1,18 +1,23 @@
 package com.productdock.library.search.integration;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.productdock.library.search.adapter.in.kafka.KafkaConsumer;
 import com.productdock.library.search.adapter.in.kafka.messages.RentalMessage;
 import com.productdock.library.search.application.port.out.persistence.BookDocumentPersistenceOutPort;
 import com.productdock.library.search.data.provider.KafkaTestProducer;
 import com.productdock.library.search.domain.BookStatus;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.kafka.clients.KafkaClient;
+import org.apache.kafka.clients.NetworkClient;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.Duration;
+import java.util.Collection;
+import java.util.Set;
 import java.util.concurrent.Callable;
 
 import static com.productdock.library.search.data.provider.BookAvailabilityMessageMother.defaultBookAvailabilityMessageBuilder;
@@ -49,7 +54,7 @@ class UpdateBookRecordsTest extends IntegrationTestBase {
     private String bookRecommendationTopic;
 
     @Test
-    void shouldUpdateBookRecords_WhenRentalMessageReceived() throws JsonProcessingException {
+    void shouldUpdateBookRecords_WhenRentalMessageReceived() throws InterruptedException {
         log.info("Started TEST shouldUpdateBookRecords_WhenRentalMessageReceived");
         givenBookWithId();
         var rentalMessageRecord = RentalMessage.Record.builder().patron("email").status(BookStatus.RENTED).build();
@@ -58,6 +63,12 @@ class UpdateBookRecordsTest extends IntegrationTestBase {
 
         producer.send(bookStatusTopic, rentalMessage);
         log.debug("AFTER Producer send");
+
+        Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
+        threadSet.forEach((thread -> log.debug(thread.getName())));
+        Thread.sleep(2000);
+        Set<Thread> threadSetAfter = Thread.getAllStackTraces().keySet();
+        threadSetAfter.forEach((thread -> log.debug(thread.getName())));
 
         await()
                 .atMost(Duration.ofSeconds(5))
@@ -79,7 +90,7 @@ class UpdateBookRecordsTest extends IntegrationTestBase {
     }
 
     @Test
-    void shouldUpdateBookAvailability_WhenBookAvailabilityMessageReceived() throws JsonProcessingException {
+    void shouldUpdateBookAvailability_WhenBookAvailabilityMessageReceived() {
         log.info("Started TEST shouldUpdateBookAvailability_WhenBookAvailabilityMessageReceived");
         givenBookWithId();
         int availableBookCount = 2;
@@ -106,7 +117,7 @@ class UpdateBookRecordsTest extends IntegrationTestBase {
     }
 
     @Test
-    void shouldUpdateBookRating_WhenBookRatingMessageReceived() throws JsonProcessingException {
+    void shouldUpdateBookRating_WhenBookRatingMessageReceived() {
         log.info("Started TEST shouldUpdateBookRating_WhenBookRatingMessageReceived");
         givenBookWithId();
         var bookRatingMessage = defaultBookRatingMessage();
@@ -132,7 +143,7 @@ class UpdateBookRecordsTest extends IntegrationTestBase {
     }
 
     @Test
-    void shouldUpdateBookRecommendations_WhenBookRecommendedMessageReceived() throws JsonProcessingException {
+    void shouldUpdateBookRecommendations_WhenBookRecommendedMessageReceived() {
         log.info("Started TEST shouldUpdateBookRecommendations_WhenBookRecommendedMessageReceived");
         givenBookWithId();
         var bookRecommendationMessage = defaultBookRecommendationMessageBuilder().recommended(true).build();
