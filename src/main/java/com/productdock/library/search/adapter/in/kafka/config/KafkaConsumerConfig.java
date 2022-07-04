@@ -22,15 +22,17 @@ public class KafkaConsumerConfig {
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapAddress;
 
+    @Value("${spring.kafka.consumer.group-id}")
+    private String consumerGroup;
+
     private Map<String, Object> getProps() {
         Map<String, Object> props = new HashMap<>();
         props.put(
                 ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,
                 bootstrapAddress);
-        String groupId = "rbc-library";
         props.put(
                 ConsumerConfig.GROUP_ID_CONFIG,
-                groupId);
+                consumerGroup);
         return props;
     }
 
