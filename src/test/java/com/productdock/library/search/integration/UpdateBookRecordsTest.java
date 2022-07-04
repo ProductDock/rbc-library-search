@@ -59,7 +59,7 @@ class UpdateBookRecordsTest extends IntegrationTestBase {
         producer.send(bookStatusTopic, rentalMessage);
 
         await()
-                .atMost(Duration.ofSeconds(30))
+                .atMost(Duration.ofSeconds(5))
                 .ignoreException(NullPointerException.class)
                 .until(newRecordIsPresent());
 
@@ -88,7 +88,7 @@ class UpdateBookRecordsTest extends IntegrationTestBase {
         producer.send(bookAvailabilityTopic, bookAvailabilityMessage);
 
         await()
-                .atMost(Duration.ofSeconds(30))
+                .atMost(Duration.ofSeconds(5))
                 .ignoreException(NullPointerException.class)
                 .until(availableBookCountIsChanged());
 
@@ -112,7 +112,7 @@ class UpdateBookRecordsTest extends IntegrationTestBase {
         producer.send(bookRatingTopic, bookRatingMessage);
 
         await()
-                .atMost(Duration.ofSeconds(30))
+                .atMost(Duration.ofSeconds(5))
                 .ignoreException(NullPointerException.class)
                 .until(bookRatingIsChanged());
 
@@ -137,7 +137,7 @@ class UpdateBookRecordsTest extends IntegrationTestBase {
         producer.send(bookRecommendationTopic, bookRecommendationMessage);
 
         await()
-                .atMost(Duration.ofSeconds(30))
+                .atMost(Duration.ofSeconds(5))
                 .ignoreException(NullPointerException.class)
                 .until(bookRecommendationsIsChanged());
 
