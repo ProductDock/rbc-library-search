@@ -25,6 +25,9 @@ public class KafkaConsumerConfig {
     @Value("${spring.kafka.consumer.group-id}")
     private String consumerGroup;
 
+    @Value("${spring.kafka.consumer.reconnect.backoff.max.ms}")
+    private Integer backoffMaxMs;
+
     private Map<String, Object> getProps() {
         Map<String, Object> props = new HashMap<>();
         props.put(
@@ -33,6 +36,8 @@ public class KafkaConsumerConfig {
         props.put(
                 ConsumerConfig.GROUP_ID_CONFIG,
                 consumerGroup);
+        props.put(ConsumerConfig.RECONNECT_BACKOFF_MAX_MS_CONFIG,
+                backoffMaxMs);
         return props;
     }
 
