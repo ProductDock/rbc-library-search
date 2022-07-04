@@ -57,6 +57,7 @@ class UpdateBookRecordsTest extends IntegrationTestBase {
                 .rentalRecord(rentalMessageRecord).build();
 
         producer.send(bookStatusTopic, rentalMessage);
+        log.debug("AFTER Producer send");
 
         await()
                 .atMost(Duration.ofSeconds(5))
@@ -86,6 +87,7 @@ class UpdateBookRecordsTest extends IntegrationTestBase {
                 .availableBookCount(availableBookCount).build();
 
         producer.send(bookAvailabilityTopic, bookAvailabilityMessage);
+        log.debug("AFTER Producer send");
 
         await()
                 .atMost(Duration.ofSeconds(5))
@@ -110,6 +112,7 @@ class UpdateBookRecordsTest extends IntegrationTestBase {
         var bookRatingMessage = defaultBookRatingMessage();
 
         producer.send(bookRatingTopic, bookRatingMessage);
+        log.debug("AFTER Producer send");
 
         await()
                 .atMost(Duration.ofSeconds(5))
@@ -135,6 +138,7 @@ class UpdateBookRecordsTest extends IntegrationTestBase {
         var bookRecommendationMessage = defaultBookRecommendationMessageBuilder().recommended(true).build();
 
         producer.send(bookRecommendationTopic, bookRecommendationMessage);
+        log.debug("AFTER Producer send");
 
         await()
                 .atMost(Duration.ofSeconds(5))
