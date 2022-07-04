@@ -11,6 +11,10 @@ spring:
     consumer:
       auto-offset-reset: earliest
       group-id: rbc-library
+      reconnect:
+        backoff:
+          max:
+            ms: 6000
     topic:
       insert-book: embedded-insert-book-topic
       book-status: embedded-book-status
