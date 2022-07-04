@@ -38,6 +38,7 @@ public class KafkaConsumerConfig {
                 consumerGroup);
         props.put(ConsumerConfig.RECONNECT_BACKOFF_MAX_MS_CONFIG,
                 backoffMaxMs);
+        props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         return props;
     }
 
