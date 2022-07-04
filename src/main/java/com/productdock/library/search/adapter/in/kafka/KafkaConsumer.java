@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 public record KafkaConsumer(BookService bookService, InsertBookMessageMapper insertBookMessageMapper, RentalMessageMapper rentalMessageMapper) {
 
     @KafkaListener(topics = "${spring.kafka.topic.insert-book}",
+            clientIdPrefix = "${spring.kafka.topic.insert-book}",
             containerFactory = "insertBookMessageKafkaListenerContainerFactory")
     public synchronized void listen(InsertBookMessage insertBookMessage) {
         log.debug("On topic 'insert-book' received kafka message: {}", insertBookMessage);
@@ -21,6 +22,7 @@ public record KafkaConsumer(BookService bookService, InsertBookMessageMapper ins
     }
 
     @KafkaListener(topics = "${spring.kafka.topic.book-status}",
+            clientIdPrefix = "${spring.kafka.topic.book-status}",
             containerFactory = "rentalMessageKafkaListenerContainerFactory")
     public synchronized void listen(RentalMessage rentalMessage) {
         log.debug("On topic 'book-status' received kafka message: {}", rentalMessage);
@@ -30,6 +32,7 @@ public record KafkaConsumer(BookService bookService, InsertBookMessageMapper ins
     }
 
     @KafkaListener(topics = "${spring.kafka.topic.book-availability}",
+            clientIdPrefix = "${spring.kafka.topic.book-availability}",
             containerFactory = "bookAvailabilityMessageKafkaListenerContainerFactory")
     public synchronized void listen(BookAvailabilityMessage bookAvailabilityMessage) {
         log.debug("On topic 'book-availability' received kafka message: {}", bookAvailabilityMessage);
@@ -38,6 +41,7 @@ public record KafkaConsumer(BookService bookService, InsertBookMessageMapper ins
     }
 
     @KafkaListener(topics = "${spring.kafka.topic.book-rating}",
+            clientIdPrefix = "${spring.kafka.topic.book-rating}",
             containerFactory = "bookRatingMessageKafkaListenerContainerFactory")
     public synchronized void listen(BookRatingMessage bookRatingMessage) {
         log.debug("On topic 'book-rating' received kafka message: {}", bookRatingMessage);
@@ -47,6 +51,7 @@ public record KafkaConsumer(BookService bookService, InsertBookMessageMapper ins
     }
 
     @KafkaListener(topics = "${spring.kafka.topic.book-recommendation}",
+            clientIdPrefix = "${spring.kafka.topic.book-recommendation}",
             containerFactory = "bookRecommendationMessageKafkaListenerContainerFactory")
     public synchronized void listen(BookRecommendationMessage bookRecommendationMessage) {
         log.debug("On topic 'book-recommendation' received kafka message: {}", bookRecommendationMessage);
