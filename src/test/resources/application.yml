@@ -8,16 +8,13 @@ spring:
       uris: localhost:9222
   kafka:
     bootstrap-servers: localhost:9091
-    consumer:
-      auto-offset-reset: earliest
-      group-id: rbc-library-search
-      reconnect:
-        backoff:
-          max:
-            ms: 6000
     topic:
       insert-book: embedded-insert-book-topic
       book-status: embedded-book-status
       book-rating: embedded-book-rating
       book-availability: embedded-book-availability
       book-recommendation: embedded-book-recommendation
+
+kafka-consumer-factory:
+  auto-offset-reset: earliest
+  group-id: rbc-library-search

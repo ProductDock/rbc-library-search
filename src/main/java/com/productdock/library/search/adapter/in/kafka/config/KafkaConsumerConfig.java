@@ -22,11 +22,11 @@ public class KafkaConsumerConfig {
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapAddress;
 
-    @Value("${spring.kafka.consumer.group-id}")
+    @Value("${kafka-consumer-factory.group-id}")
     private String consumerGroup;
 
-    @Value("${spring.kafka.consumer.reconnect.backoff.max.ms}")
-    private Integer backoffMaxMs;
+    @Value("${kafka-consumer-factory.auto-offset-reset}")
+    private String autoOffsetReset;
 
     private Map<String, Object> getProps() {
         Map<String, Object> props = new HashMap<>();
@@ -36,9 +36,7 @@ public class KafkaConsumerConfig {
         props.put(
                 ConsumerConfig.GROUP_ID_CONFIG,
                 consumerGroup);
-        props.put(ConsumerConfig.RECONNECT_BACKOFF_MAX_MS_CONFIG,
-                backoffMaxMs);
-        props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+        props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, autoOffsetReset);
         return props;
     }
 
