@@ -1,6 +1,7 @@
 package com.productdock.library.search.adapter.in.kafka;
 
 import com.productdock.library.search.adapter.in.kafka.messages.*;
+import com.productdock.library.search.application.port.in.AddNewBookUseCase;
 import com.productdock.library.search.application.service.BookService;
 import com.productdock.library.search.domain.Book;
 import com.productdock.library.search.domain.BookChanges;
@@ -11,14 +12,15 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
-public record KafkaConsumer(BookService bookService, InsertBookMessageMapper insertBookMessageMapper, RentalMessageMapper rentalMessageMapper) {
+public record KafkaConsumer(AddNewBookUseCase addNewBookUseCase, BookService bookService, InsertBookMessageMapper insertBookMessageMapper, RentalMessageMapper rentalMessageMapper) {
 
     @KafkaListener(topics = "${spring.kafka.topic.insert-book}",
             clientIdPrefix = "${spring.kafka.topic.insert-book}",
             containerFactory = "insertBookMessageKafkaListenerContainerFactory")
     public synchronized void listen(InsertBookMessage insertBookMessage) {
         log.debug("On topic 'insert-book' received kafka message: {}", insertBookMessage);
-        bookService.save(insertBookMessageMapper.toBook(insertBookMessage));
+        var book = insertBookMessageMapper.toBook(insertBookMessage);
+        addNewBookUseCase.addNewBook(book);
     }
 
     @KafkaListener(topics = "${spring.kafka.topic.book-status}",

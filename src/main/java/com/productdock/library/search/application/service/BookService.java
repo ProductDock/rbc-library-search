@@ -1,5 +1,6 @@
 package com.productdock.library.search.application.service;
 
+import com.productdock.library.search.application.port.in.AddNewBookUseCase;
 import com.productdock.library.search.application.port.out.persistence.BookDocumentPersistenceOutPort;
 import com.productdock.library.search.domain.Book;
 import com.productdock.library.search.domain.BookChanges;
@@ -8,11 +9,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
-public record BookService(BookDocumentPersistenceOutPort bookDocumentPersistenceOutPort) {
-
-    public void save(Book book) {
-        bookDocumentPersistenceOutPort.save(book);
-    }
+public record BookService(BookDocumentPersistenceOutPort bookDocumentPersistenceOutPort) implements AddNewBookUseCase {
 
     public void updateBook(String bookId, BookChanges updater) {
         log.debug("Update book with id: {}", bookId);
@@ -24,5 +21,10 @@ public record BookService(BookDocumentPersistenceOutPort bookDocumentPersistence
     private Book getBook(String bookId) {
         log.debug("Find book with id: {}", bookId);
         return bookDocumentPersistenceOutPort.findById(bookId).orElseThrow();
+    }
+
+    @Override
+    public void addNewBook(Book book) {
+        bookDocumentPersistenceOutPort.save(book);
     }
 }
