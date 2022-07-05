@@ -10,7 +10,7 @@ import lombok.ToString;
 @Builder
 public class SearchBooksResult {
 
-    public long count;
+    public final long count;
 
-    public Iterable<Book> books;
+    public final Iterable<Book> books;
 }

@@ -11,9 +11,9 @@ import java.util.Optional;
 @Builder
 public class SearchFilters {
 
-    private boolean recommended;
+    private final boolean recommended;
     @Builder.Default
-    private Optional<List<String>> topics = Optional.of(new ArrayList<>());
-    private Optional<String> searchText;
+    private final Optional<List<String>> topics = Optional.of(new ArrayList<>());
+    private final Optional<String> searchText;
 
 }
