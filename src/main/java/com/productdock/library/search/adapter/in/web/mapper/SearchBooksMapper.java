@@ -4,7 +4,7 @@ import com.productdock.library.search.adapter.in.web.dto.BookDto;
 import com.productdock.library.search.adapter.in.web.dto.SearchBooksResponse;
 import com.productdock.library.search.domain.Book;
 import com.productdock.library.search.domain.BookStatus;
-import com.productdock.library.search.domain.ds.SearchBooksResult;
+import com.productdock.library.search.domain.SearchBooksResult;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

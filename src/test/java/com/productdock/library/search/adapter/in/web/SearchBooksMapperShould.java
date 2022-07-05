@@ -4,7 +4,7 @@ import com.productdock.library.search.adapter.in.web.mapper.BookRecordMapperImpl
 import com.productdock.library.search.adapter.in.web.mapper.SearchBooksMapper;
 import com.productdock.library.search.domain.Book;
 import com.productdock.library.search.domain.BookStatus;
-import com.productdock.library.search.domain.ds.SearchBooksResult;
+import com.productdock.library.search.domain.SearchBooksResult;
 import org.assertj.core.api.AutoCloseableSoftAssertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

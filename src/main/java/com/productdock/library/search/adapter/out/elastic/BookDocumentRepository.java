@@ -5,7 +5,7 @@ import com.productdock.library.search.adapter.out.elastic.query.SearchQueryExecu
 import com.productdock.library.search.application.port.out.persistence.BookDocumentPersistenceOutPort;
 import com.productdock.library.search.domain.Book;
 import com.productdock.library.search.domain.SearchFilters;
-import com.productdock.library.search.domain.ds.SearchBooksResult;
+import com.productdock.library.search.domain.SearchBooksResult;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;

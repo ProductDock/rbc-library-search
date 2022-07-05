@@ -1,9 +1,8 @@
 package com.productdock.library.search.application.service;
 
 import com.productdock.library.search.application.port.out.persistence.BookDocumentPersistenceOutPort;
-import com.productdock.library.search.application.service.SearchBooksService;
 import com.productdock.library.search.domain.SearchFilters;
-import com.productdock.library.search.domain.ds.SearchBooksResult;
+import com.productdock.library.search.domain.SearchBooksResult;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

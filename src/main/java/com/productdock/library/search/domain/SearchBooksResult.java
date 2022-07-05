@@ -1,6 +1,5 @@
-package com.productdock.library.search.domain.ds;
+package com.productdock.library.search.domain;
 
-import com.productdock.library.search.domain.Book;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.ToString;
