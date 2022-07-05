@@ -4,7 +4,7 @@ import com.productdock.library.search.adapter.in.web.mapper.BookRecordMapperImpl
 import com.productdock.library.search.adapter.in.web.mapper.SearchBooksMapper;
 import com.productdock.library.search.domain.Book;
 import com.productdock.library.search.domain.BookStatus;
-import com.productdock.library.search.domain.SearchBooksResult;
+import com.productdock.library.search.domain.SearchBooksResultsPage;
 import org.assertj.core.api.AutoCloseableSoftAssertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,7 +30,7 @@ class SearchBooksMapperShould {
 
     @Test
     void mapSearchBooksResultToSearchBooksResponse() {
-        var searchBookResult = SearchBooksResult.builder().count(BOOK_COUNT).books(BOOKS).build();
+        var searchBookResult = SearchBooksResultsPage.builder().count(BOOK_COUNT).books(BOOKS).build();
 
         var searchBookResponse = searchBooksMapper.toResponse(searchBookResult);
 
@@ -46,7 +46,7 @@ class SearchBooksMapperShould {
                 .rentalState(mock(Book.RentalState.class))
                 .rating(null)
                 .build();
-        var searchBookResult = SearchBooksResult.builder().count(BOOK_COUNT).books(List.of(book)).build();
+        var searchBookResult = SearchBooksResultsPage.builder().count(BOOK_COUNT).books(List.of(book)).build();
 
         var searchBookResponse = searchBooksMapper.toResponse(searchBookResult);
 
@@ -66,7 +66,7 @@ class SearchBooksMapperShould {
                                 .availableBooksCount(1)
                                 .records(List.of(Book.RentalState.Record.builder().email("email").status(BookStatus.RENTED).build()))
                                 .build()).build();
-        var searchBookResult = SearchBooksResult.builder().count(BOOK_COUNT).books(List.of(book)).build();
+        var searchBookResult = SearchBooksResultsPage.builder().count(BOOK_COUNT).books(List.of(book)).build();
 
         var searchBookResponse = searchBooksMapper.toResponse(searchBookResult);
 

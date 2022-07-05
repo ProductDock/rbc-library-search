@@ -2,7 +2,7 @@ package com.productdock.library.search.application.service;
 
 import com.productdock.library.search.application.port.out.persistence.BookDocumentPersistenceOutPort;
 import com.productdock.library.search.domain.SearchFilters;
-import com.productdock.library.search.domain.SearchBooksResult;
+import com.productdock.library.search.domain.SearchBooksResultsPage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -34,7 +34,7 @@ class SearchBooksServiceShould {
     @Test
     void getBooksByTopics() {
         var searchFilters = SearchFilters.builder().recommended(RECOMMENDED).topics(ANY_TOPIC).searchText(SEARCH_TEXT).build();
-        var searchResult = SearchBooksResult.builder().count(BOOK_COUNT).books(List.of()).build();
+        var searchResult = SearchBooksResultsPage.builder().count(BOOK_COUNT).books(List.of()).build();
         given(bookRepository.searchBooksBy(searchFilters, FIRST_PAGE)).willReturn(searchResult);
 
         var searchBooksResult = searchBooksService.searchBooks(searchFilters, FIRST_PAGE);

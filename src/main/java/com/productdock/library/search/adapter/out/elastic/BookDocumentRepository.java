@@ -5,7 +5,7 @@ import com.productdock.library.search.adapter.out.elastic.query.SearchQueryExecu
 import com.productdock.library.search.application.port.out.persistence.BookDocumentPersistenceOutPort;
 import com.productdock.library.search.domain.Book;
 import com.productdock.library.search.domain.SearchFilters;
-import com.productdock.library.search.domain.SearchBooksResult;
+import com.productdock.library.search.domain.SearchBooksResultsPage;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -46,10 +46,10 @@ public class BookDocumentRepository implements BookDocumentPersistenceOutPort {
     }
 
     @Override
-    public SearchBooksResult searchBooksBy(SearchFilters searchFilters, int page) {
+    public SearchBooksResultsPage searchBooksBy(SearchFilters searchFilters, int page) {
         var query = queryBuilder.buildWith(searchFilters);
         var hits = queryExecutor.execute(query, page);
         var books = hits.stream().map(hit -> mapper.toDomain(hit.getContent())).toList();
-        return new SearchBooksResult(hits.getTotalHits(), books);
+        return new SearchBooksResultsPage(hits.getTotalHits(), books);
     }
 }

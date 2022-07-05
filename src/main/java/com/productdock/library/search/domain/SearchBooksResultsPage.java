@@ -7,7 +7,7 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor
 @Builder
-public class SearchBooksResult {
+public class SearchBooksResultsPage {
 
     public final long count;
 

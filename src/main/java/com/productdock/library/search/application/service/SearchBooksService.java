@@ -3,7 +3,7 @@ package com.productdock.library.search.application.service;
 import com.productdock.library.search.application.port.in.GetBooksQuery;
 import com.productdock.library.search.application.port.out.persistence.BookDocumentPersistenceOutPort;
 import com.productdock.library.search.domain.SearchFilters;
-import com.productdock.library.search.domain.SearchBooksResult;
+import com.productdock.library.search.domain.SearchBooksResultsPage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 public record SearchBooksService(BookDocumentPersistenceOutPort bookRepository) implements GetBooksQuery {
 
     @Override
-    public SearchBooksResult searchBooks(SearchFilters searchFilters, int page) {
+    public SearchBooksResultsPage searchBooks(SearchFilters searchFilters, int page) {
         log.debug("Get books by search filters: {}", searchFilters);
         return bookRepository.searchBooksBy(searchFilters, page);
     }
