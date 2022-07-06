@@ -16,12 +16,12 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-class BookServiceShould {
+class CrudBookServiceShould {
 
     private static final String BOOK_ID = "1";
 
     @InjectMocks
-    private BookService bookService;
+    private CrudBookService crudBookService;
 
     @Mock
     private BookPersistenceOutPort bookDocumentRepository;
@@ -32,7 +32,7 @@ class BookServiceShould {
         var updater = mock(BookChanges.class);
         given(bookDocumentRepository.findById(BOOK_ID)).willReturn(Optional.ofNullable(book));
 
-        bookService.updateBook(BOOK_ID, updater);
+        crudBookService.updateBook(BOOK_ID, updater);
 
         verify(book).update(updater);
         verify(bookDocumentRepository).save(book);

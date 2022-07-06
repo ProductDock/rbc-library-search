@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
-public record BookService(BookPersistenceOutPort bookPersistenceOutPort) implements AddNewBookUseCase, UpdateBookUseCase {
+public record CrudBookService(BookPersistenceOutPort bookPersistenceOutPort) implements AddNewBookUseCase, UpdateBookUseCase {
 
     @Override
     public void updateBook(String bookId, BookChanges changes) {
