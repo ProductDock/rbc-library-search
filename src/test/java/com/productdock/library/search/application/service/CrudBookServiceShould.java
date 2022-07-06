@@ -24,18 +24,27 @@ class CrudBookServiceShould {
     private CrudBookService crudBookService;
 
     @Mock
-    private BookPersistenceOutPort bookDocumentRepository;
+    private BookPersistenceOutPort bookRepository;
 
     @Test
     void updateBook() {
         var book = mock(Book.class);
-        var updater = mock(BookChanges.class);
-        given(bookDocumentRepository.findById(BOOK_ID)).willReturn(Optional.ofNullable(book));
+        var changes = mock(BookChanges.class);
+        given(bookRepository.findById(BOOK_ID)).willReturn(Optional.ofNullable(book));
 
-        crudBookService.updateBook(BOOK_ID, updater);
+        crudBookService.updateBook(BOOK_ID, changes);
 
-        verify(book).update(updater);
-        verify(bookDocumentRepository).save(book);
+        verify(book).update(changes);
+        verify(bookRepository).save(book);
+    }
+
+    @Test
+    void addNewBook() {
+        var book = mock(Book.class);
+
+        crudBookService.addNewBook(book);
+
+        verify(bookRepository).save(book);
     }
 
 }
