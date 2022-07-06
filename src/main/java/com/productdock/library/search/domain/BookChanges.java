@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class BookChanges {
 
-    private BookField field;
-    private Object value;
+    private final BookField field;
+    private final Object value;
 
 }
