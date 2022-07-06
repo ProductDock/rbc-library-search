@@ -22,6 +22,7 @@ public record BookService(BookPersistenceOutPort bookPersistenceOutPort) impleme
 
     @Override
     public void addNewBook(Book book) {
+        log.debug("Add new book: {}", book);
         bookPersistenceOutPort.save(book);
     }
 }
