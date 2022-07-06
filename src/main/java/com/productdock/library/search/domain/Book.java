@@ -24,7 +24,7 @@ public class Book {
 
     public void update(BookChanges changes) {
         switch (changes.getField()){
-            case RECORDS -> rentalState.setRecords((List<RentalState.Record>) changes.getValue());
+            case RENTAL_RECORDS -> rentalState.setRecords((List<RentalState.Record>) changes.getValue());
             case AVAILABLE_BOOK_COUNT -> rentalState.setAvailableBooksCount((Integer) changes.getValue());
             case RATING -> setRating((Rating) changes.getValue());
             case RECOMMENDED -> setRecommended((Boolean) changes.getValue());

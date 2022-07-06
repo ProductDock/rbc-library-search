@@ -17,7 +17,7 @@ class BookShould {
     @Test
     void updateRentalStateRecords(){
         var newRecords = List.of(Book.RentalState.Record.class, Book.RentalState.Record.class);
-        var bookChanges = new BookChanges(BookField.RECORDS, newRecords);
+        var bookChanges = new BookChanges(BookField.RENTAL_RECORDS, newRecords);
 
         BOOK.update(bookChanges);
 

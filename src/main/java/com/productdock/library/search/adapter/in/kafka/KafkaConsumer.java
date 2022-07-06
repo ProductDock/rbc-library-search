@@ -34,7 +34,7 @@ public record KafkaConsumer(AddNewBookUseCase addNewBookUseCase, UpdateBookUseCa
     public synchronized void listen(RentalMessage message, @Header(RECEIVED_TOPIC) String topic) {
         log.debug("On topic {} received kafka message: {}", topic, message);
         var records = rentalMessageMapper.toRecords(message.getRentalRecords());
-        var changes = new BookChanges(BookField.RECORDS, records);
+        var changes = new BookChanges(BookField.RENTAL_RECORDS, records);
         updateBookUseCase.updateBook(message.getBookId(), changes);
     }
 
