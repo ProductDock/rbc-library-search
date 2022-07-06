@@ -1,6 +1,6 @@
 package com.productdock.library.search.integration;
 
-import com.productdock.library.search.application.port.out.persistence.BookDocumentPersistenceOutPort;
+import com.productdock.library.search.application.port.out.persistence.BookPersistenceOutPort;
 import com.productdock.library.search.data.provider.KafkaTestProducer;
 import com.productdock.library.search.adapter.in.kafka.messages.InsertBookMessage;
 import org.junit.jupiter.api.Test;
@@ -20,7 +20,7 @@ class IndexingNewBookTest extends IntegrationTestBase {
     private KafkaTestProducer producer;
 
     @Autowired
-    private BookDocumentPersistenceOutPort bookDocumentRepository;
+    private BookPersistenceOutPort bookDocumentRepository;
 
     @Value("${spring.kafka.topic.insert-book}")
     private String topic;

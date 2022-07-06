@@ -22,7 +22,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-class BookDocumentRepositoryShould {
+class BookRepositoryShould {
 
     private static final String BOOK_ID = "1";
     private static final int PAGE = 0;
@@ -35,7 +35,7 @@ class BookDocumentRepositoryShould {
     private static final SearchHit<BookDocument> HIT = mock(SearchHit.class);
 
     @InjectMocks
-    private BookDocumentRepository bookDocumentRepository;
+    private BookRepository bookRepository;
 
     @Mock
     private BookDocumentElasticRepository bookDocumentElasticRepository;
@@ -54,7 +54,7 @@ class BookDocumentRepositoryShould {
         given(bookDocumentElasticRepository.findById(BOOK_ID)).willReturn(OPTIONAL_BOOK_DOCUMENT);
         given(bookDocumentMapper.toDomain(OPTIONAL_BOOK_DOCUMENT.get())).willReturn(BOOK);
 
-        var book = bookDocumentRepository.findById(BOOK_ID);
+        var book = bookRepository.findById(BOOK_ID);
 
         assertThat(book).isPresent();
     }
@@ -63,7 +63,7 @@ class BookDocumentRepositoryShould {
     void notFindBookByIdWhenBookDoesNotExist() {
         given(bookDocumentElasticRepository.findById(BOOK_ID)).willReturn(Optional.empty());
 
-        var book = bookDocumentRepository.findById(BOOK_ID);
+        var book = bookRepository.findById(BOOK_ID);
 
         assertThat(book).isEmpty();
     }
@@ -72,7 +72,7 @@ class BookDocumentRepositoryShould {
     void saveBookDocument() {
         given(bookDocumentMapper.toEntity(BOOK)).willReturn(BOOK_DOCUMENT);
 
-        bookDocumentRepository.save(BOOK);
+        bookRepository.save(BOOK);
 
         verify(bookDocumentElasticRepository).save(BOOK_DOCUMENT);
     }
@@ -84,7 +84,7 @@ class BookDocumentRepositoryShould {
         given(HITS.stream()).willReturn(Stream.of(HIT, HIT));
         given(bookDocumentMapper.toDomain(HIT.getContent())).willReturn(BOOK);
 
-        var books = bookDocumentRepository.searchBooksBy(SEARCH_FILTERS);
+        var books = bookRepository.searchBooksBy(SEARCH_FILTERS);
 
         assertThat(books).hasSize(2);
     }
@@ -97,7 +97,7 @@ class BookDocumentRepositoryShould {
         given(HITS.getTotalHits()).willReturn(2L);
         given(bookDocumentMapper.toDomain(HIT.getContent())).willReturn(BOOK);
 
-        var searchBooksResult = bookDocumentRepository.searchBooksBy(SEARCH_FILTERS, PAGE);
+        var searchBooksResult = bookRepository.searchBooksBy(SEARCH_FILTERS, PAGE);
 
         assertThat(searchBooksResult.count).isEqualTo(2);
         assertThat(searchBooksResult.books).hasSize(2);

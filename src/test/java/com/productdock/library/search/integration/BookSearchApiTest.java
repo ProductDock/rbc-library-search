@@ -1,6 +1,6 @@
 package com.productdock.library.search.integration;
 
-import com.productdock.library.search.application.port.out.persistence.BookDocumentPersistenceOutPort;
+import com.productdock.library.search.application.port.out.persistence.BookPersistenceOutPort;
 import com.productdock.library.search.domain.Book;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -30,7 +30,7 @@ class BookSearchApiTest extends IntegrationTestBase {
     private MockMvc mockMvc;
 
     @Autowired
-    private BookDocumentPersistenceOutPort bookDocumentRepository;
+    private BookPersistenceOutPort bookDocumentRepository;
 
     @Nested
     class SearchWithTopics {

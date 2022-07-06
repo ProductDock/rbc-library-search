@@ -2,7 +2,7 @@ package com.productdock.library.search.adapter.out.elastic;
 
 import com.productdock.library.search.adapter.out.elastic.query.SearchQueryBuilder;
 import com.productdock.library.search.adapter.out.elastic.query.SearchQueryExecutor;
-import com.productdock.library.search.application.port.out.persistence.BookDocumentPersistenceOutPort;
+import com.productdock.library.search.application.port.out.persistence.BookPersistenceOutPort;
 import com.productdock.library.search.domain.Book;
 import com.productdock.library.search.domain.SearchFilters;
 import com.productdock.library.search.domain.SearchBooksResultsPage;
@@ -16,7 +16,7 @@ import java.util.Optional;
 @Repository
 @Slf4j
 @AllArgsConstructor
-public class BookDocumentRepository implements BookDocumentPersistenceOutPort {
+public class BookRepository implements BookPersistenceOutPort {
 
     private BookDocumentElasticRepository entityRepository;
     private BookDocumentMapper mapper;

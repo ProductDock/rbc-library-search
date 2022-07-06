@@ -1,6 +1,6 @@
 package com.productdock.library.search.application.service;
 
-import com.productdock.library.search.application.port.out.persistence.BookDocumentPersistenceOutPort;
+import com.productdock.library.search.application.port.out.persistence.BookPersistenceOutPort;
 import com.productdock.library.search.domain.Book;
 import com.productdock.library.search.domain.BookChanges;
 import org.junit.jupiter.api.Test;
@@ -24,7 +24,7 @@ class BookServiceShould {
     private BookService bookService;
 
     @Mock
-    private BookDocumentPersistenceOutPort bookDocumentRepository;
+    private BookPersistenceOutPort bookDocumentRepository;
 
     @Test
     void updateBook() {

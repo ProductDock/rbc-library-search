@@ -1,6 +1,6 @@
 package com.productdock.library.search.application.service;
 
-import com.productdock.library.search.application.port.out.persistence.BookDocumentPersistenceOutPort;
+import com.productdock.library.search.application.port.out.persistence.BookPersistenceOutPort;
 import com.productdock.library.search.domain.Book;
 import com.productdock.library.search.domain.SearchFilters;
 import org.junit.jupiter.api.Test;
@@ -25,7 +25,7 @@ class SuggestBooksServiceShould {
     private SuggestBooksService suggestBooksService;
 
     @Mock
-    private BookDocumentPersistenceOutPort bookRepository;
+    private BookPersistenceOutPort bookRepository;
 
     @Test
     void getBooksByTopics() {

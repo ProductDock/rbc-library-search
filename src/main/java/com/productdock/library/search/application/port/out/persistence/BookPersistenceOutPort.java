@@ -7,7 +7,7 @@ import com.productdock.library.search.domain.SearchBooksResultsPage;
 import java.util.List;
 import java.util.Optional;
 
-public interface BookDocumentPersistenceOutPort {
+public interface BookPersistenceOutPort {
     Optional<Book> findById(String bookId);
 
     void save(Book book);

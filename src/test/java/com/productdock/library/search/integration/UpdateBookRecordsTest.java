@@ -1,23 +1,17 @@
 package com.productdock.library.search.integration;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.productdock.library.search.adapter.in.kafka.KafkaConsumer;
 import com.productdock.library.search.adapter.in.kafka.messages.RentalMessage;
-import com.productdock.library.search.application.port.out.persistence.BookDocumentPersistenceOutPort;
+import com.productdock.library.search.application.port.out.persistence.BookPersistenceOutPort;
 import com.productdock.library.search.data.provider.KafkaTestProducer;
 import com.productdock.library.search.domain.BookStatus;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.kafka.clients.KafkaClient;
-import org.apache.kafka.clients.NetworkClient;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.Duration;
-import java.util.Collection;
-import java.util.Set;
 import java.util.concurrent.Callable;
 
 import static com.productdock.library.search.data.provider.BookAvailabilityMessageMother.defaultBookAvailabilityMessageBuilder;
@@ -37,7 +31,7 @@ class UpdateBookRecordsTest extends IntegrationTestBase {
     private KafkaTestProducer producer;
 
     @Autowired
-    private BookDocumentPersistenceOutPort bookDocumentRepository;
+    private BookPersistenceOutPort bookDocumentRepository;
 
     private final String BOOK_ID = "1";
 
