@@ -1,9 +1,7 @@
 package com.productdock.library.search.integration;
 
-import com.productdock.library.search.adapter.in.kafka.messages.RentalMessage;
 import com.productdock.library.search.application.port.out.persistence.BookPersistenceOutPort;
 import com.productdock.library.search.data.provider.KafkaTestProducer;
-import com.productdock.library.search.domain.BookStatus;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -14,13 +12,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.time.Duration;
 import java.util.concurrent.Callable;
 
-import static com.productdock.library.search.data.provider.BookAvailabilityMessageMother.defaultBookAvailabilityMessageBuilder;
 import static com.productdock.library.search.data.provider.BookMother.defaultBookBuilder;
-import static com.productdock.library.search.data.provider.BookRatingMessageMother.defaultBookRatingMessage;
-import static com.productdock.library.search.data.provider.BookRecommendationMessageMother.defaultBookRecommendationMessageBuilder;
-import static com.productdock.library.search.data.provider.RentalMessageMother.defaultRentalMessageBuilder;
+import static com.productdock.library.search.data.provider.messages.BookRatingMessageMother.bookRatingBuilder;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.tuple;
 import static org.awaitility.Awaitility.await;
 
 @SpringBootTest
@@ -41,9 +35,9 @@ class UpdateBookRatingTest extends IntegrationTestBase {
     @Test
     void shouldUpdateBookRating_WhenBookRatingMessageReceived() {
         givenBookWithId(BOOK_ID);
-        var bookRatingMessage = defaultBookRatingMessage();
+        var bookRated = bookRatingBuilder().bookId(BOOK_ID).rating(3.5).ratingsCount(2).build();
 
-        producer.send(bookRatingTopic, bookRatingMessage);
+        producer.send(bookRatingTopic, bookRated);
 
         await()
                 .atMost(Duration.ofSeconds(5))
@@ -52,8 +46,8 @@ class UpdateBookRatingTest extends IntegrationTestBase {
 
         var bookDocument = bookRepository.findById(BOOK_ID).get();
 
-        assertThat(bookDocument.getRating().getCount()).isEqualTo(bookRatingMessage.getRatingsCount());
-        assertThat(bookDocument.getRating().getScore()).isEqualTo(bookRatingMessage.getRating());
+        assertThat(bookDocument.getRating().getCount()).isEqualTo(2);
+        assertThat(bookDocument.getRating().getScore()).isEqualTo(3.5);
     }
 
     @NonNull

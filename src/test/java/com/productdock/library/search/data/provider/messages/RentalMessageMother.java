@@ -1,4 +1,4 @@
-package com.productdock.library.search.data.provider;
+package com.productdock.library.search.data.provider.messages;
 
 import com.productdock.library.search.adapter.in.kafka.messages.RentalMessage;
 
@@ -10,13 +10,10 @@ public class RentalMessageMother {
     private static final String defaultId = "1";
     private static final Collection<RentalMessage.Record> defaultRecords = new ArrayList<>();
 
-    public static RentalMessage.RentalMessageBuilder defaultRentalMessageBuilder() {
+    public static RentalMessage.RentalMessageBuilder rentalMessageBuilder() {
         return RentalMessage.builder()
                 .bookId(defaultId)
                 .rentalRecords(defaultRecords);
     }
 
-    public static RentalMessage defaultRentalMessage() {
-        return defaultRentalMessageBuilder().build();
-    }
 }

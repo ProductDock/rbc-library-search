@@ -1,4 +1,4 @@
-package com.productdock.library.search.data.provider;
+package com.productdock.library.search.data.provider.messages;
 
 import com.productdock.library.search.adapter.in.kafka.messages.InsertBookMessage;
 

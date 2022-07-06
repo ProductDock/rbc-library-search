@@ -5,7 +5,7 @@ import org.assertj.core.api.AutoCloseableSoftAssertions;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 
-import static com.productdock.library.search.data.provider.InsertBookMessageMother.defaultInsertBookMessageBuilder;
+import static com.productdock.library.search.data.provider.messages.InsertBookMessageMother.defaultInsertBookMessageBuilder;
 import static org.assertj.core.api.AssertionsForClassTypes.tuple;
 
 class InsertBookMessageMapperShould {
