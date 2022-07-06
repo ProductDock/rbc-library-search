@@ -16,7 +16,7 @@ import java.util.Optional;
 @Repository
 @Slf4j
 @AllArgsConstructor
-public class BookRepository implements BookPersistenceOutPort {
+public class BookElasticRepository implements BookPersistenceOutPort {
 
     private BookDocumentElasticRepository elasticRepository;
     private BookDocumentMapper mapper;
