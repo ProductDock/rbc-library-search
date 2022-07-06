@@ -23,8 +23,4 @@ public class InsertBookMessageMother {
                 .cover(defaultCover)
                 .topic(defaultTopic);
     }
-
-    public static InsertBookMessage defaultInsertBookMessage() {
-        return defaultInsertBookMessageBuilder().build();
-    }
 }
