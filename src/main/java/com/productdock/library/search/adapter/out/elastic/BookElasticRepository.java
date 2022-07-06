@@ -25,11 +25,7 @@ public class BookElasticRepository implements BookPersistenceOutPort {
 
     @Override
     public Optional<Book> findById(String bookId) {
-        var entity = elasticRepository.findById(bookId);
-        if(entity.isEmpty()){
-            return Optional.empty();
-        }
-        return Optional.of(mapper.toDomain(entity.get()));
+        return elasticRepository.findById(bookId).map((doc) -> mapper.toDomain(doc));
     }
 
     @Override
