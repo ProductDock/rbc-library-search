@@ -1,7 +1,7 @@
 package com.productdock.library.search.data.provider;
 
-import com.productdock.library.search.domain.BookStatus;
 import com.productdock.library.search.adapter.out.elastic.BookDocument;
+import com.productdock.library.search.domain.BookStatus;
 
 
 public class BookDocumentRentalStateRecordMother {

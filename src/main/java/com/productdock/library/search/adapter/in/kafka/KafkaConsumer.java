@@ -1,8 +1,8 @@
 package com.productdock.library.search.adapter.in.kafka;
 
-import com.productdock.library.search.adapter.in.kafka.messages.*;
 import com.productdock.library.search.adapter.in.kafka.mappers.InsertBookMessageMapper;
 import com.productdock.library.search.adapter.in.kafka.mappers.RentalMessageMapper;
+import com.productdock.library.search.adapter.in.kafka.messages.*;
 import com.productdock.library.search.application.port.in.AddNewBookUseCase;
 import com.productdock.library.search.application.port.in.UpdateBookUseCase;
 import com.productdock.library.search.domain.Book;

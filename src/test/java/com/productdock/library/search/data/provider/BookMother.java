@@ -1,13 +1,10 @@
 package com.productdock.library.search.data.provider;
 
-import com.productdock.library.search.adapter.out.elastic.BookDocument;
 import com.productdock.library.search.domain.Book;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.productdock.library.search.data.provider.BookDocumentRatingMother.defaultBookRating;
-import static com.productdock.library.search.data.provider.BookDocumentRentalStateMother.defaultRentalState;
 import static com.productdock.library.search.data.provider.BookRatingMother.defaultBookDomainRating;
 import static com.productdock.library.search.data.provider.BookRentalMother.defaultBookRentalState;
 

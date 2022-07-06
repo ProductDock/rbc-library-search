@@ -4,8 +4,8 @@ import com.productdock.library.search.adapter.out.elastic.query.SearchQueryBuild
 import com.productdock.library.search.adapter.out.elastic.query.SearchQueryExecutor;
 import com.productdock.library.search.application.port.out.persistence.BookPersistenceOutPort;
 import com.productdock.library.search.domain.Book;
-import com.productdock.library.search.domain.SearchFilters;
 import com.productdock.library.search.domain.SearchBooksResultsPage;
+import com.productdock.library.search.domain.SearchFilters;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
