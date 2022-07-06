@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public record BookService(BookPersistenceOutPort bookPersistenceOutPort) implements AddNewBookUseCase, UpdateBookUseCase {
 
+    @Override
     public void updateBook(String bookId, BookChanges changes) {
         log.debug("Update book with id: {}", bookId);
         var book = bookPersistenceOutPort.findById(bookId).orElseThrow();
