@@ -1,15 +1,15 @@
 package com.productdock.library.search.adapter.in.kafka;
 
 import com.productdock.library.search.adapter.in.kafka.messages.*;
+import com.productdock.library.search.adapter.in.kafka.mappers.InsertBookMessageMapper;
+import com.productdock.library.search.adapter.in.kafka.mappers.RentalMessageMapper;
 import com.productdock.library.search.application.port.in.AddNewBookUseCase;
 import com.productdock.library.search.application.port.in.UpdateBookUseCase;
-import com.productdock.library.search.application.service.BookService;
 import com.productdock.library.search.domain.Book;
 import com.productdock.library.search.domain.BookChanges;
 import com.productdock.library.search.domain.BookField;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Service;
 

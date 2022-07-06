@@ -1,5 +1,6 @@
 package com.productdock.library.search.adapter.in.kafka;
 
+import com.productdock.library.search.adapter.in.kafka.mappers.InsertBookMessageMapper;
 import org.assertj.core.api.AutoCloseableSoftAssertions;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;

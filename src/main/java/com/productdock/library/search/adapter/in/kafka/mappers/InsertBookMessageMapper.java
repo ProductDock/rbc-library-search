@@ -1,4 +1,4 @@
-package com.productdock.library.search.adapter.in.kafka;
+package com.productdock.library.search.adapter.in.kafka.mappers;
 
 import com.productdock.library.search.adapter.in.kafka.messages.InsertBookMessage;
 import com.productdock.library.search.domain.Book;

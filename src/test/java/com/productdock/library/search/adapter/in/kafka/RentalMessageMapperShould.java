@@ -1,6 +1,7 @@
 package com.productdock.library.search.adapter.in.kafka;
 
 import com.productdock.library.search.adapter.in.kafka.messages.RentalMessage;
+import com.productdock.library.search.adapter.in.kafka.mappers.RentalMessageMapper;
 import com.productdock.library.search.domain.BookStatus;
 import org.assertj.core.api.AutoCloseableSoftAssertions;
 import org.junit.jupiter.api.Test;
