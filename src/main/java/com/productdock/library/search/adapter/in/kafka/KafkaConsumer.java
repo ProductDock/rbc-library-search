@@ -21,47 +21,47 @@ public record KafkaConsumer(AddNewBookUseCase addNewBookUseCase, BookService boo
     @KafkaListener(topics = "${spring.kafka.topic.insert-book}",
             clientIdPrefix = "${spring.kafka.topic.insert-book}",
             containerFactory = "insertBookMessageKafkaListenerContainerFactory")
-    public synchronized void listen(InsertBookMessage insertBookMessage, @Header(RECEIVED_TOPIC) String topic) {
-        log.debug("On topic {} received kafka message: {}", topic, insertBookMessage);
-        var book = insertBookMessageMapper.toBook(insertBookMessage);
+    public synchronized void listen(InsertBookMessage message, @Header(RECEIVED_TOPIC) String topic) {
+        log.debug("On topic {} received kafka message: {}", topic, message);
+        var book = insertBookMessageMapper.toBook(message);
         addNewBookUseCase.addNewBook(book);
     }
 
     @KafkaListener(topics = "${spring.kafka.topic.book-status}",
             clientIdPrefix = "${spring.kafka.topic.book-status}",
             containerFactory = "rentalMessageKafkaListenerContainerFactory")
-    public synchronized void listen(RentalMessage rentalMessage, @Header(RECEIVED_TOPIC) String topic) {
-        log.debug("On topic {} received kafka message: {}", topic, rentalMessage);
-        var records = rentalMessageMapper.toRecords(rentalMessage.getRentalRecords());
+    public synchronized void listen(RentalMessage message, @Header(RECEIVED_TOPIC) String topic) {
+        log.debug("On topic {} received kafka message: {}", topic, message);
+        var records = rentalMessageMapper.toRecords(message.getRentalRecords());
         var changes = new BookChanges(BookField.RECORDS, records);
-        bookService.updateBook(rentalMessage.getBookId(), changes);
+        bookService.updateBook(message.getBookId(), changes);
     }
 
     @KafkaListener(topics = "${spring.kafka.topic.book-availability}",
             clientIdPrefix = "${spring.kafka.topic.book-availability}",
             containerFactory = "bookAvailabilityMessageKafkaListenerContainerFactory")
-    public synchronized void listen(BookAvailabilityMessage bookAvailabilityMessage, @Header(RECEIVED_TOPIC) String topic) {
-        log.debug("On topic {} received kafka message: {}", topic, bookAvailabilityMessage);
-        var changes = new BookChanges(BookField.AVAILABLE_BOOK_COUNT, bookAvailabilityMessage.getAvailableBookCount());
-        bookService.updateBook(bookAvailabilityMessage.getBookId(), changes);
+    public synchronized void listen(BookAvailabilityMessage message, @Header(RECEIVED_TOPIC) String topic) {
+        log.debug("On topic {} received kafka message: {}", topic, message);
+        var changes = new BookChanges(BookField.AVAILABLE_BOOK_COUNT, message.getAvailableBookCount());
+        bookService.updateBook(message.getBookId(), changes);
     }
 
     @KafkaListener(topics = "${spring.kafka.topic.book-rating}",
             clientIdPrefix = "${spring.kafka.topic.book-rating}",
             containerFactory = "bookRatingMessageKafkaListenerContainerFactory")
-    public synchronized void listen(BookRatingMessage bookRatingMessage, @Header(RECEIVED_TOPIC) String topic) {
-        log.debug("On topic {} received kafka message: {}", topic, bookRatingMessage);
-        var bookRating = new Book.Rating(bookRatingMessage.getRating(), bookRatingMessage.getRatingsCount());
+    public synchronized void listen(BookRatingMessage message, @Header(RECEIVED_TOPIC) String topic) {
+        log.debug("On topic {} received kafka message: {}", topic, message);
+        var bookRating = new Book.Rating(message.getRating(), message.getRatingsCount());
         var changes = new BookChanges(BookField.RATING, bookRating);
-        bookService.updateBook(bookRatingMessage.getBookId(), changes);
+        bookService.updateBook(message.getBookId(), changes);
     }
 
     @KafkaListener(topics = "${spring.kafka.topic.book-recommendation}",
             clientIdPrefix = "${spring.kafka.topic.book-recommendation}",
             containerFactory = "bookRecommendationMessageKafkaListenerContainerFactory")
-    public synchronized void listen(BookRecommendationMessage bookRecommendationMessage, @Header(RECEIVED_TOPIC) String topic) {
-        log.debug("On topic {} received kafka message: {}", topic, bookRecommendationMessage);
-        var changes = new BookChanges(BookField.RECOMMENDED, bookRecommendationMessage.getRecommended());
-        bookService.updateBook(bookRecommendationMessage.getBookId(), changes);
+    public synchronized void listen(BookRecommendationMessage message, @Header(RECEIVED_TOPIC) String topic) {
+        log.debug("On topic {} received kafka message: {}", topic, message);
+        var changes = new BookChanges(BookField.RECOMMENDED, message.getRecommended());
+        bookService.updateBook(message.getBookId(), changes);
     }
 }
