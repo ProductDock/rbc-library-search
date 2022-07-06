@@ -18,14 +18,14 @@ import java.util.Optional;
 @AllArgsConstructor
 public class BookRepository implements BookPersistenceOutPort {
 
-    private BookDocumentElasticRepository entityRepository;
+    private BookDocumentElasticRepository elasticRepository;
     private BookDocumentMapper mapper;
     private SearchQueryBuilder queryBuilder;
     private SearchQueryExecutor queryExecutor;
 
     @Override
     public Optional<Book> findById(String bookId) {
-        var entity = entityRepository.findById(bookId);
+        var entity = elasticRepository.findById(bookId);
         if(entity.isEmpty()){
             return Optional.empty();
         }
@@ -35,7 +35,7 @@ public class BookRepository implements BookPersistenceOutPort {
     @Override
     public void save(Book book) {
         var bookDocument = mapper.toEntity(book);
-        entityRepository.save(bookDocument);
+        elasticRepository.save(bookDocument);
     }
 
     @Override
