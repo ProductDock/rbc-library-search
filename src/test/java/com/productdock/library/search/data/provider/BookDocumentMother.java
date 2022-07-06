@@ -1,6 +1,6 @@
 package com.productdock.library.search.data.provider;
 
-import com.productdock.library.search.elastic.document.BookDocument;
+import com.productdock.library.search.adapter.out.elastic.BookDocument;
 
 import static com.productdock.library.search.data.provider.BookDocumentRatingMother.defaultBookRating;
 import static com.productdock.library.search.data.provider.BookDocumentRentalStateMother.defaultRentalState;

@@ -1,7 +1,7 @@
 package com.productdock.library.search.integration;
 
+import com.productdock.library.search.adapter.out.elastic.BookDocument;
 import com.productdock.library.search.config.ElasticsearchTestContainer;
-import com.productdock.library.search.elastic.document.BookDocument;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @Testcontainers
 @AutoConfigureMockMvc
 @EmbeddedKafka(partitions = 1, brokerProperties = {"listeners=PLAINTEXT://localhost:9091", "port=9091"})
-class IntegrationTestBase {
+public class IntegrationTestBase {
 
     @Autowired
     private ElasticsearchOperations elasticsearchOperations;

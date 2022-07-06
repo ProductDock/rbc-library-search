@@ -1,19 +1,16 @@
 package com.productdock.library.search.integration;
 
-import com.productdock.library.search.book.BookDocumentRepository;
-import com.productdock.library.search.elastic.document.BookDocument;
-import lombok.NonNull;
+import com.productdock.library.search.application.port.out.persistence.BookPersistenceOutPort;
+import com.productdock.library.search.domain.Book;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.List;
 
-import static com.productdock.library.search.data.provider.BookDocumentMother.defaultBookDocument;
-import static com.productdock.library.search.data.provider.BookDocumentMother.defaultBookDocumentBuilder;
+import static com.productdock.library.search.data.provider.BookMother.defaultBook;
 import static java.util.Arrays.stream;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasSize;
@@ -33,8 +30,7 @@ class BookSearchApiTest extends IntegrationTestBase {
     private MockMvc mockMvc;
 
     @Autowired
-    private BookDocumentRepository bookDocumentRepository;
-
+    private BookPersistenceOutPort bookDocumentRepository;
 
     @Nested
     class SearchWithTopics {
@@ -69,13 +65,13 @@ class BookSearchApiTest extends IntegrationTestBase {
 
         private void givenABookBelongingToTopic(String title, String... topicNames) {
             var topics = createTopicEntitiesWithNames(topicNames);
-            var book = defaultBookDocumentBuilder().title(title).topics(topics).build();
+            var book = Book.builder().title(title).topics(topics).build();
             bookDocumentRepository.save(book);
         }
 
-        private List<BookDocument.Topic> createTopicEntitiesWithNames(String... topicNames) {
+        private List<Book.Topic> createTopicEntitiesWithNames(String... topicNames) {
             return stream(topicNames)
-                    .map(topicName -> BookDocument.Topic.builder().name(topicName).build())
+                    .map(topicName -> Book.Topic.builder().name(topicName).build())
                     .toList();
         }
     }
@@ -98,7 +94,7 @@ class BookSearchApiTest extends IntegrationTestBase {
         }
 
         private void givenBook(String title, boolean recommended) {
-            var book = defaultBookDocumentBuilder()
+            var book = Book.builder()
                     .title(title)
                     .recommended(recommended)
                     .build();
@@ -128,8 +124,8 @@ class BookSearchApiTest extends IntegrationTestBase {
         }
 
         private void givenABookWithTopicAndRecommendation(String title, String topicName, boolean recommended) {
-            var topic = BookDocument.Topic.builder().name(topicName).build();
-            var book = defaultBookDocumentBuilder()
+            var topic = Book.Topic.builder().name(topicName).build();
+            var book = Book.builder()
                     .title(title)
                     .topics(List.of(topic))
                     .recommended(recommended)
@@ -169,12 +165,14 @@ class BookSearchApiTest extends IntegrationTestBase {
         }
 
         private void givenAnyBook() {
-            var book = defaultBookDocument();
+            var book = defaultBook();
             bookDocumentRepository.save(book);
         }
 
         private void givenSecondPageOfResults() {
-            var book = defaultBookDocumentBuilder().title("Second Page Title").build();
+            var book = Book.builder()
+                    .title("Second Page Title")
+                    .build();;
             bookDocumentRepository.save(book);
         }
 
@@ -228,7 +226,7 @@ class BookSearchApiTest extends IntegrationTestBase {
         }
 
         private void givenABook(String title, String author) {
-            var book = defaultBookDocumentBuilder()
+            var book = Book.builder()
                     .title(title)
                     .author(author)
                     .build();
@@ -305,8 +303,8 @@ class BookSearchApiTest extends IntegrationTestBase {
         }
 
         private void givenABookWithTopicAndRecommendation(String title, String author, String topicName, boolean recommended) {
-            var topic = BookDocument.Topic.builder().name(topicName).build();
-            var book = defaultBookDocumentBuilder()
+            var topic = Book.Topic.builder().name(topicName).build();
+            var book = Book.builder()
                     .title(title)
                     .author(author)
                     .topics(List.of(topic))
