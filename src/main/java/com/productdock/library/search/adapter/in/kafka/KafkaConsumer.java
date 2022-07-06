@@ -19,11 +19,13 @@ import static org.springframework.kafka.support.KafkaHeaders.RECEIVED_TOPIC;
 @Slf4j
 public record KafkaConsumer(AddNewBookUseCase addNewBookUseCase, UpdateBookUseCase updateBookUseCase, InsertBookMessageMapper insertBookMessageMapper, RentalMessageMapper rentalMessageMapper) {
 
+    private static final String LOG_TEMPLATE = "On topic {} received kafka message: {}";
+
     @KafkaListener(topics = "${spring.kafka.topic.insert-book}",
             clientIdPrefix = "${spring.kafka.topic.insert-book}",
             containerFactory = "insertBookMessageKafkaListenerContainerFactory")
     public synchronized void listen(InsertBookMessage message, @Header(RECEIVED_TOPIC) String topic) {
-        log.debug("On topic {} received kafka message: {}", topic, message);
+        log.debug(LOG_TEMPLATE, topic, message);
         var book = insertBookMessageMapper.toBook(message);
         addNewBookUseCase.addNewBook(book);
     }
