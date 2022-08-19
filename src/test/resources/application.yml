@@ -18,3 +18,6 @@ spring:
 kafka-consumer-factory:
   auto-offset-reset: earliest
   group-id: rbc-library-search
+
+jwt:
+  public.key: classpath:test.pub

@@ -58,6 +58,9 @@ out/*
 !out/elastic
 !out/persistence
 
+# Keys
+src/main/resources/*.pub
+
 # mpeltonen/sbt-idea plugin
 .idea_modules/
 
