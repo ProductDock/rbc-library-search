@@ -23,7 +23,7 @@ public class SecurityConfig {
         http.authorizeRequests(authorize -> authorize.anyRequest().authenticated())
                 .cors().and()
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
-                .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         return http.build();
     }
 
