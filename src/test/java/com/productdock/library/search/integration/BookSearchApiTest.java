@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
@@ -36,6 +37,7 @@ class BookSearchApiTest extends IntegrationTestBase {
     class SearchWithTopics {
 
         @Test
+        @WithMockUser
         void getSecondPage_whenEmptyResults() throws Exception {
             mockMvc.perform(get("/api/search")
                             .param("page", SECOND_PAGE)
@@ -46,6 +48,7 @@ class BookSearchApiTest extends IntegrationTestBase {
         }
 
         @Test
+        @WithMockUser
         void getFirstPage_whenThereAreResults() throws Exception {
             givenABookBelongingToTopic("Title Product", "PRODUCT");
             givenABookBelongingToTopic("Title Marketing", "MARKETING");
@@ -80,6 +83,7 @@ class BookSearchApiTest extends IntegrationTestBase {
     class SearchWithRecommendations {
 
         @Test
+        @WithMockUser
         void getFirstPage_whenThereAreResults() throws Exception {
             givenBook("Recommended book", RECOMMENDED_BOOK);
             givenBook("Not recommended book", NOT_RECOMMENDED_BOOK);
@@ -106,6 +110,7 @@ class BookSearchApiTest extends IntegrationTestBase {
     class SearchWithFilters {
 
         @Test
+        @WithMockUser
         void getFirstPage_whenThereAreResults() throws Exception {
             givenABookWithTopicAndRecommendation("Title Product", "PRODUCT", NOT_RECOMMENDED_BOOK);
             givenABookWithTopicAndRecommendation("Title Marketing", "MARKETING", NOT_RECOMMENDED_BOOK);
@@ -139,6 +144,7 @@ class BookSearchApiTest extends IntegrationTestBase {
     class GetBooksWithPagination {
 
         @Test
+        @WithMockUser
         void getFirstPage_whenEmptyResults() throws Exception {
             mockMvc.perform(get("/api/search").param("page", FIRST_PAGE))
                     .andExpect(status().isOk())
@@ -146,6 +152,7 @@ class BookSearchApiTest extends IntegrationTestBase {
         }
 
         @Test
+        @WithMockUser
         void getSecondPage_whenThereAreResults() throws Exception {
             givenFirstPageOfResults();
             givenSecondPageOfResults();
@@ -182,6 +189,7 @@ class BookSearchApiTest extends IntegrationTestBase {
     class SearchWithText {
 
         @Test
+        @WithMockUser
         void getBookSuggestions_whenThereAreSearchResults() throws Exception {
             givenABook("Title Product", "Product Guru");
             givenABook("Title Marketing", "John Doe");
@@ -194,6 +202,7 @@ class BookSearchApiTest extends IntegrationTestBase {
         }
 
         @Test
+        @WithMockUser
         void getBookSuggestionsForPartialTitleSearchText_whenThereAreSearchResults() throws Exception {
             givenABook("Title Product", "John Doe");
             givenABook("Title Marketing", "John Doe");
@@ -204,6 +213,7 @@ class BookSearchApiTest extends IntegrationTestBase {
         }
 
         @Test
+        @WithMockUser
         void getBookSuggestionsForPartialAuthorSearchText_whenThereAreSearchResults() throws Exception {
             givenABook("Title Product", "John Doe");
             givenABook("Title Marketing", "John Doe");
@@ -214,6 +224,7 @@ class BookSearchApiTest extends IntegrationTestBase {
         }
 
         @Test
+        @WithMockUser
         void getZeroBookSuggestions_whenThereAreNoSearchResults() throws Exception {
             givenABook("Title Product", "Product Guru");
             givenABook("Title Marketing", "John Doe");
@@ -234,6 +245,7 @@ class BookSearchApiTest extends IntegrationTestBase {
         }
 
         @Test
+        @WithMockUser
         void getRecommendedBooks_whenThereAreSearchResultsWithFilters() throws Exception {
             givenABookWithTopicAndRecommendation("Title Product", "John Doe", "PRODUCT", NOT_RECOMMENDED_BOOK);
             givenABookWithTopicAndRecommendation("Title Marketing", "John Doe", "MARKETING", NOT_RECOMMENDED_BOOK);
@@ -253,6 +265,7 @@ class BookSearchApiTest extends IntegrationTestBase {
         }
 
         @Test
+        @WithMockUser
         void getNoRecommendedBooks_whenThereAreNoSearchResultsWithFilters() throws Exception {
             givenABookWithTopicAndRecommendation("Title Product", "John Doe", "PRODUCT", NOT_RECOMMENDED_BOOK);
             givenABookWithTopicAndRecommendation("Title Marketing", "John Doe", "MARKETING", NOT_RECOMMENDED_BOOK);
@@ -271,6 +284,7 @@ class BookSearchApiTest extends IntegrationTestBase {
         }
 
         @Test
+        @WithMockUser
         void getFirstPage_whenThereAreSearchResults() throws Exception {
             givenABookWithTopicAndRecommendation("Title Product", "Product Guru", "PRODUCT", NOT_RECOMMENDED_BOOK);
             givenABookWithTopicAndRecommendation("Title Marketing", "Product Guru", "MARKETING", NOT_RECOMMENDED_BOOK);
@@ -288,6 +302,7 @@ class BookSearchApiTest extends IntegrationTestBase {
         }
 
         @Test
+        @WithMockUser
         void getFirstPage_whenThereAreNoSearchResults() throws Exception {
             givenABookWithTopicAndRecommendation("Title Product", "Product Guru", "PRODUCT", NOT_RECOMMENDED_BOOK);
             givenABookWithTopicAndRecommendation("Title Marketing", "Product Guru", "MARKETING", NOT_RECOMMENDED_BOOK);
