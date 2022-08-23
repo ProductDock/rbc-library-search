@@ -17,3 +17,7 @@ spring:
 kafka-consumer-factory:
   auto-offset-reset: latest
   group-id: rbc-library-search
+
+logging:
+  level:
+    com.productdock.library.search: ${logging.level:DEBUG}
