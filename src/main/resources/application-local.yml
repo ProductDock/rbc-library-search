@@ -3,4 +3,4 @@ cors:
     origins: http://localhost:3000
 
 jwt:
-  public.key: classpath:app.pub
+  public.key: classpath:app-local.pub
