@@ -15,7 +15,7 @@ spring:
       uris: ${ELASTICSEARCH_SERVER_URL}
 
 jwt:
-  public.key: file:${SEARCH_JWT_PUBLIC_KEY}
+  public.key: file:${USER_PROFILES_JWT_PUBLIC_KEY}
 
 kafka-consumer-factory:
   auto-offset-reset: latest
