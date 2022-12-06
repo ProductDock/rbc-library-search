@@ -1,7 +1,7 @@
 spring:
   kafka:
     enabled: true
-    bootstrap-servers: ${kafka.server.url:localhost:9093}
+    bootstrap-servers: ${KAFKA_SERVER_URL}
     value-seriliazer: org.apache.kafka.common.serialization.StringSerializer
     key-serializer: org.apache.kafka.common.serialization.StringSerializer
     topic:
@@ -12,7 +12,10 @@ spring:
       book-recommendation: book-recommendation
   elasticsearch:
     rest:
-      uris: ${elasticsearch.server.url:localhost}:9200
+      uris: ${ELASTICSEARCH_SERVER_URL}
+
+jwt:
+  public.key: file:${SEARCH_JWT_PUBLIC_KEY}
 
 kafka-consumer-factory:
   auto-offset-reset: latest
@@ -20,4 +23,4 @@ kafka-consumer-factory:
 
 logging:
   level:
-    com.productdock.library.search: ${logging.level:DEBUG}
+    com.productdock.library.search: INFO
