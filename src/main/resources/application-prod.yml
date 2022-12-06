@@ -1,6 +1,0 @@
-cors:
-  allowed:
-    origins: http://library.productdock.rs
-
-jwt:
-  public.key: file:${search.jwt.public.key}
