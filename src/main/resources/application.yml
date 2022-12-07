@@ -19,7 +19,7 @@ jwt:
 
 kafka-consumer-factory:
   auto-offset-reset: latest
-  group-id: rbc-library-search
+  group-id: search-group
 
 logging:
   level:
