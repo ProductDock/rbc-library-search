@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
 
-    <variable name="LOG_TO_FILE" value="${LOG_TO_FILE:-false}" />
+    <springProperty scope="context" name="FileLoggingEnabled" source="file-logging-enabled"/>
     <property name="LOGS" value="./logs" />
 
     <appender name="Console"
@@ -39,7 +39,7 @@
         <appender-ref ref="Console"/>
     </logger>
 
-    <if condition='"${LOG_TO_FILE}".equals("true")'>
+    <if condition='"${FileLoggingEnabled}".equals("true")'>
         <then>
             <root level="info">
                 <appender-ref ref="RollingFile"/>
