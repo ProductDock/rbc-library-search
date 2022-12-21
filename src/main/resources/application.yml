@@ -24,3 +24,5 @@ kafka-consumer-factory:
 logging:
   level:
     com.productdock.library.search: INFO
+
+file-logging-enabled: ${LOG_TO_FILE}

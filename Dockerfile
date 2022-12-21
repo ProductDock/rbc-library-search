@@ -9,4 +9,6 @@ COPY entrypoint.sh /entrypoint.sh
 COPY --from=builder /app/target/rbc-library-search-0.0.1-SNAPSHOT.jar rbc-library-search-0.0.1-SNAPSHOT.jar
 EXPOSE 8080
 RUN chmod +x /entrypoint.sh
+RUN adduser -u 1002 -D non-root-user && chown -R non-root-user:non-root-user /app
+USER non-root-user
 ENTRYPOINT ["/entrypoint.sh"]
