@@ -26,3 +26,14 @@ logging:
     com.productdock.library.search: INFO
 
 file-logging-enabled: ${LOG_TO_FILE}
+
+management:
+  server:
+    port: 8087
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: '*'

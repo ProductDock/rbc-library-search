@@ -20,7 +20,8 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.authorizeRequests(authorize -> authorize.anyRequest().authenticated())
+        http.authorizeRequests(authorize -> authorize.antMatchers("/actuator/**").permitAll()
+                        .anyRequest().authenticated())
                 .cors().and()
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
