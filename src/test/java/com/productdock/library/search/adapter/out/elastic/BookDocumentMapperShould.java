@@ -22,6 +22,7 @@ class BookDocumentMapperShould {
             softly.assertThat(book.getAuthor()).isEqualTo(bookDocument.getAuthor());
             softly.assertThat(book.getTitle()).isEqualTo(bookDocument.getTitle());
             softly.assertThat(book.getCover()).isEqualTo(bookDocument.getCover());
+            softly.assertThat(book.getRentalState().getAvailableBooksCount()).isEqualTo(bookDocument.getRentalState().getAvailableBooksCount());
         }
     }
 
@@ -36,6 +37,7 @@ class BookDocumentMapperShould {
             softly.assertThat(bookDocument.getAuthor()).isEqualTo(book.getAuthor());
             softly.assertThat(bookDocument.getTitle()).isEqualTo(book.getTitle());
             softly.assertThat(bookDocument.getCover()).isEqualTo(book.getCover());
+            softly.assertThat(bookDocument.getRentalState().getAvailableBooksCount()).isEqualTo(book.getRentalState().getAvailableBooksCount());
         }
     }
 }

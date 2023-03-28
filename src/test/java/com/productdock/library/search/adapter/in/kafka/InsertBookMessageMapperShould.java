@@ -5,6 +5,8 @@ import org.assertj.core.api.AutoCloseableSoftAssertions;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 
+import java.util.List;
+
 import static com.productdock.library.search.data.provider.messages.InsertBookMessageMother.defaultInsertBookMessageBuilder;
 import static org.assertj.core.api.AssertionsForClassTypes.tuple;
 
@@ -26,7 +28,7 @@ class InsertBookMessageMapperShould {
             softly.assertThat(book.getTopics())
                     .extracting("id", "name")
                     .containsExactly(tuple("1", "::topic::"));
-
+            softly.assertThat(book.getRentalState().getAvailableBooksCount()).isEqualTo(insertBookMessage.getBookCopies());
         }
     }
 }

@@ -29,7 +29,7 @@ class IndexingNewBookTest extends IntegrationTestBase {
     void shouldSaveBookIndex_whenMessageReceived() throws Exception {
         var bookTopic =
                 InsertBookMessage.Topic.builder().id("1").name("::topic::").build();
-        var insertBook = InsertBookMessage.builder().bookId("123").title("::title::").cover("::cover::").author("Book author").topic(bookTopic).build();
+        var insertBook = InsertBookMessage.builder().bookId("123").title("::title::").cover("::cover::").author("Book author").topic(bookTopic).bookCopies(1).build();
 
         producer.send(topic, insertBook);
 

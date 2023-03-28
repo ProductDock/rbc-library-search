@@ -8,7 +8,7 @@ public class InsertBookMessageMother {
     private static final String defaultTitle = "::title::";
     private static final String defaultAuthor = "::author::";
     private static final String defaultCover = "::cover::";
-
+    private static final int defaultBookCopies = 1;
     private static final String defaultTopicId = "1";
     private static final String defaultTopicName = "::topic::";
 
@@ -21,6 +21,7 @@ public class InsertBookMessageMother {
                 .title(defaultTitle)
                 .author(defaultAuthor)
                 .cover(defaultCover)
-                .topic(defaultTopic);
+                .topic(defaultTopic)
+                .bookCopies(defaultBookCopies);
     }
 }
