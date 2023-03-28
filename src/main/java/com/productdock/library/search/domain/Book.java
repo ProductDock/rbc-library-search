@@ -2,6 +2,7 @@ package com.productdock.library.search.domain;
 
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -35,7 +36,8 @@ public class Book {
     @Builder
     public static class RentalState {
         private Integer availableBooksCount;
-        private List<Record> records;
+        @Builder.Default
+        private List<Record> records = new ArrayList<>();
 
         @Data
         @RequiredArgsConstructor

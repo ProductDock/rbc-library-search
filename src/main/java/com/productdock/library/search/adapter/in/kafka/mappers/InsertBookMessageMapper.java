@@ -10,6 +10,7 @@ import org.mapstruct.ReportingPolicy;
 public interface InsertBookMessageMapper {
 
     @Mapping(source = "bookId", target = "id")
+    @Mapping(source = "bookCopies", target = "rentalState.availableBooksCount")
     Book toBook(InsertBookMessage insertBookMessage);
 
 }
