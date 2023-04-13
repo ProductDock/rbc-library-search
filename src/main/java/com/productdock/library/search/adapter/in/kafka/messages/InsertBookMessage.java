@@ -16,6 +16,7 @@ public class InsertBookMessage {
     private String author;
     @Singular
     private List<Topic> topics;
+    private int bookCopies;
 
     @Data
     @Builder
