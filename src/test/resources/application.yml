@@ -10,6 +10,7 @@ spring:
     bootstrap-servers: localhost:9091
     topic:
       insert-book: embedded-insert-book-topic
+      delete-book: embedded-delete-book
       book-status: embedded-book-status
       book-rating: embedded-book-rating
       book-availability: embedded-book-availability
