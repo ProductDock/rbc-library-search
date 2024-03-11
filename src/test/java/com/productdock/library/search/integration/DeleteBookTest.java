@@ -14,7 +14,7 @@ import static com.productdock.library.search.data.provider.BookMother.defaultBoo
 import static org.awaitility.Awaitility.await;
 
 @SpringBootTest
-public class DeleteBookTest extends IntegrationTestBase {
+class DeleteBookTest extends IntegrationTestBase {
 
     private final String BOOK_ID = "1";
 

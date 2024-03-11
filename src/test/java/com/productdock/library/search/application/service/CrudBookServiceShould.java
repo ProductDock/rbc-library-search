@@ -49,9 +49,6 @@ class CrudBookServiceShould {
 
     @Test
     void deleteBook(){
-        var book = mock(Book.class);
-        given(bookRepository.findById(BOOK_ID)).willReturn(Optional.ofNullable(book));
-
         crudBookService.deleteBook(BOOK_ID);
 
         verify(bookRepository).deleteById(BOOK_ID);

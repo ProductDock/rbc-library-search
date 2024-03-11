@@ -29,7 +29,6 @@ public record CrudBookService(BookPersistenceOutPort bookPersistenceOutPort) imp
 
     @Override
     public void deleteBook(String bookId) {
-        bookPersistenceOutPort.findById(bookId).orElseThrow();
         log.debug("Delete book with id: {}", bookId);
         bookPersistenceOutPort.deleteById(bookId);
     }
