@@ -6,6 +6,7 @@ spring:
     key-serializer: org.apache.kafka.common.serialization.StringSerializer
     topic:
       insert-book: insert-book
+      delete-book: delete-book
       book-status: book-status
       book-availability: book-availability
       book-rating: book-rating

@@ -35,6 +35,11 @@ public class BookElasticRepository implements BookPersistenceOutPort {
     }
 
     @Override
+    public void deleteById(String bookId) {
+        elasticRepository.deleteById(bookId);
+    }
+
+    @Override
     public List<Book> searchBooksBy(SearchFilters searchFilters) {
         var query = queryBuilder.buildWith(searchFilters);
         var hits = queryExecutor.execute(query);
