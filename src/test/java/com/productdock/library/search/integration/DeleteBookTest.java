@@ -16,7 +16,7 @@ import static org.awaitility.Awaitility.await;
 @SpringBootTest
 class DeleteBookTest extends IntegrationTestBase {
 
-    private final String BOOK_ID = "1";
+    private static final String BOOK_ID = "1";
 
     @Autowired
     private KafkaTestProducer producer;
@@ -26,7 +26,7 @@ class DeleteBookTest extends IntegrationTestBase {
     private String topic;
 
     @Test
-    void shouldDeleteBook_WhenMessageReceived() throws Exception {
+    void shouldDeleteBook_whenMessageReceived() throws Exception {
         givenBookWithId(BOOK_ID);
 
         producer.send(topic, BOOK_ID);
