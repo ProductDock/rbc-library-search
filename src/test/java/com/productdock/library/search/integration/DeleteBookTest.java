@@ -38,6 +38,17 @@ class DeleteBookTest extends IntegrationTestBase {
         assertThat(bookDocumentRepository.findById(BOOK_ID)).isEmpty();
     }
 
+    @Test
+    void shouldDeleteBook_whenBookDoesntExist() throws Exception {
+        producer.send(topic, BOOK_ID);
+
+        await()
+                .atMost(Duration.ofSeconds(5))
+                .until(() -> bookDocumentRepository.findById(BOOK_ID).isEmpty());
+
+        assertThat(bookDocumentRepository.findById(BOOK_ID)).isEmpty();
+    }
+
     private void givenBookWithId(String bookId) {
         var book = defaultBookBuilder().id(bookId).build();
         bookDocumentRepository.save(book);
