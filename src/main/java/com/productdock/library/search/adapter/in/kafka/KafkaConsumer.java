@@ -36,7 +36,7 @@ public record KafkaConsumer(AddNewBookUseCase addNewBookUseCase, UpdateBookUseCa
     @KafkaListener(topics = "${spring.kafka.topic.delete-book}",
             clientIdPrefix = "${spring.kafka.topic.delete-book}",
             containerFactory = "deleteBookMessageKafkaListenerContainerFactory")
-    public synchronized void listen(String message, @Header(RECEIVED_TOPIC) String topic) {
+    public void listen(String message, @Header(RECEIVED_TOPIC) String topic) {
         log.debug(LOG_TEMPLATE, topic, message);
         deleteBookUseCase.deleteBook(message);
     }

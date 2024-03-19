@@ -44,7 +44,7 @@ public class KafkaConsumersConfig {
 
     @Bean
     public ConcurrentKafkaListenerContainerFactory<String, String> deleteBookMessageKafkaListenerContainerFactory(){
-        KafkaListenerAssembler<String> assembler = new KafkaListenerAssembler<>();
+        var assembler = new KafkaListenerAssembler<String>();
         return assembler.create(String.class, getProps());
     }
 
