@@ -4,6 +4,7 @@ import com.productdock.library.search.adapter.in.kafka.mappers.InsertBookMessage
 import com.productdock.library.search.adapter.in.kafka.mappers.RentalMessageMapper;
 import com.productdock.library.search.adapter.in.kafka.messages.*;
 import com.productdock.library.search.application.port.in.AddNewBookUseCase;
+import com.productdock.library.search.application.port.in.DeleteBookUseCase;
 import com.productdock.library.search.application.port.in.UpdateBookUseCase;
 import com.productdock.library.search.domain.Book;
 import com.productdock.library.search.domain.BookChanges;
@@ -17,7 +18,9 @@ import static org.springframework.kafka.support.KafkaHeaders.RECEIVED_TOPIC;
 
 @Service
 @Slf4j
-public record KafkaConsumer(AddNewBookUseCase addNewBookUseCase, UpdateBookUseCase updateBookUseCase, InsertBookMessageMapper insertBookMessageMapper, RentalMessageMapper rentalMessageMapper) {
+public record KafkaConsumer(AddNewBookUseCase addNewBookUseCase, UpdateBookUseCase updateBookUseCase,
+                            InsertBookMessageMapper insertBookMessageMapper, RentalMessageMapper rentalMessageMapper,
+                            DeleteBookUseCase deleteBookUseCase) {
 
     private static final String LOG_TEMPLATE = "On topic {} received kafka message: {}";
 
@@ -28,6 +31,14 @@ public record KafkaConsumer(AddNewBookUseCase addNewBookUseCase, UpdateBookUseCa
         log.debug(LOG_TEMPLATE, topic, message);
         var book = insertBookMessageMapper.toBook(message);
         addNewBookUseCase.addNewBook(book);
+    }
+
+    @KafkaListener(topics = "${spring.kafka.topic.delete-book}",
+            clientIdPrefix = "${spring.kafka.topic.delete-book}",
+            containerFactory = "deleteBookMessageKafkaListenerContainerFactory")
+    public void listen(String message, @Header(RECEIVED_TOPIC) String topic) {
+        log.debug(LOG_TEMPLATE, topic, message);
+        deleteBookUseCase.deleteBook(message);
     }
 
     @KafkaListener(topics = "${spring.kafka.topic.book-status}",

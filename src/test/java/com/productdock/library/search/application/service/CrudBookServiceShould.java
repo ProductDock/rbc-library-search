@@ -47,4 +47,11 @@ class CrudBookServiceShould {
         verify(bookRepository).save(book);
     }
 
+    @Test
+    void deleteBook(){
+        crudBookService.deleteBook(BOOK_ID);
+
+        verify(bookRepository).deleteById(BOOK_ID);
+    }
+
 }

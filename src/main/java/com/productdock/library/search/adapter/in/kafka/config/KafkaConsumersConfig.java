@@ -43,6 +43,12 @@ public class KafkaConsumersConfig {
     }
 
     @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, String> deleteBookMessageKafkaListenerContainerFactory(){
+        var assembler = new KafkaListenerAssembler<String>();
+        return assembler.create(String.class, getProps());
+    }
+
+    @Bean
     public ConcurrentKafkaListenerContainerFactory<String, RentalMessage> rentalMessageKafkaListenerContainerFactory() {
         KafkaListenerAssembler<RentalMessage> assembler = new KafkaListenerAssembler<>();
         return assembler.create(RentalMessage.class, getProps());

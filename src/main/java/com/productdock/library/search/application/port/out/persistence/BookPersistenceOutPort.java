@@ -12,6 +12,8 @@ public interface BookPersistenceOutPort {
 
     void save(Book book);
 
+    void deleteById(String bookId);
+
     List<Book> searchBooksBy(SearchFilters searchFilters);
 
     SearchBooksResultsPage searchBooksBy(SearchFilters searchFilters, int page);

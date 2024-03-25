@@ -78,6 +78,13 @@ class BookElasticRepositoryShould {
     }
 
     @Test
+    void deleteBookDocument(){
+        bookElasticRepository.deleteById(BOOK_ID);
+
+        verify(bookDocumentElasticRepository).deleteById(BOOK_ID);
+    }
+
+    @Test
     void searchBooksWithoutPagination() {
         given(searchQueryBuilder.buildWith(SEARCH_FILTERS)).willReturn(QUERY_BUILDER);
         given(searchQueryExecutor.execute(QUERY_BUILDER)).willReturn(HITS);
